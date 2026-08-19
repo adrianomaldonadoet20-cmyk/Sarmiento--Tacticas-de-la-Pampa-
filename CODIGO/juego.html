@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sarmiento: Tácticas de La Pampa — Instancia Jugable</title>
+
+    <link rel="stylesheet" href="juego.css">
+</head>
+
+<body>
+
+    <main class="combate" aria-label="Núcleo de combate táctico">
+
+        <!-- ============================================
+             PANEL LATERAL: UNIDAD DEL JUGADOR
+             ============================================ -->
+        <section class="panel panel--unitario" aria-label="Estado de tu unidad">
+            <h2 class="panel__titulo">Unitario</h2>
+
+            <div class="unidad-info">
+                <div class="barra-vida" role="progressbar" aria-label="Vida del Unitario"
+                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                    <div class="barra-vida__relleno barra-vida__relleno--unitario" id="vidaJugadorRelleno"></div>
+                </div>
+                <span class="unidad-info__texto" id="vidaJugadorTexto">40 / 40</span>
+            </div>
+
+            <dl class="stats">
+                <div class="stats__fila">
+                    <dt>Daño</dt>
+                    <dd id="statDanoJugador">6 – 12</dd>
+                </div>
+                <div class="stats__fila">
+                    <dt>Defensa</dt>
+                    <dd id="statDefensaJugador">2</dd>
+                </div>
+            </dl>
+        </section>
+
+        <!-- ============================================
+             TABLERO DE COMBATE
+             ============================================ -->
+        <section class="tablero-contenedor">
+
+            <header class="hud">
+                <span class="hud__turno" id="hudTurno">Turno del jugador</span>
+                <span class="hud__contador" id="hudContador">Turno 1</span>
+            </header>
+
+            <div class="tablero" id="tablero" role="grid" aria-label="Mapa de combate"></div>
+
+            <div class="banner-resultado" id="bannerResultado" hidden></div>
+
+        </section>
+
+        <!-- ============================================
+             PANEL LATERAL: BITÁCORA / REGISTRO
+             ============================================ -->
+        <section class="panel panel--registro" aria-label="Registro de combate">
+            <h2 class="panel__titulo">Registro</h2>
+            <ul class="registro" id="registro" aria-live="polite"></ul>
+        </section>
+
+    </main>
+
+    <script src="instancia.js"></script>
+
+</body>
+
+</html>

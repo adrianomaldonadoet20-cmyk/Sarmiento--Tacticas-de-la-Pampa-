@@ -1,0 +1,443 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: "Poppins", Georgia, "Times New Roman", serif;
+    background-color: #1B2733;
+    color: #F5E9D0;
+}
+
+
+/* =========================================
+   VARIABLES DE MARCA
+   (extraídas del Sistema de Diseño del producto)
+   ========================================= */
+
+:root {
+    --color-base: #2C3E50;
+    --color-unitario: #0055A5;
+    --color-federal: #A60000;
+    --color-acento: #F39C12;
+    --color-texto: #F5E9D0;
+    --color-panel: #17364A;
+}
+
+
+/* =========================================
+   LAYOUT GENERAL DEL COMBATE
+   ========================================= */
+
+.combate {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+
+    display: grid;
+    grid-template-columns: clamp(160px, 18vw, 240px) 1fr clamp(200px, 22vw, 280px);
+    gap: clamp(10px, 1.2vw, 20px);
+
+    padding: clamp(12px, 1.5vw, 24px);
+
+    background-color: var(--color-base);
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(243, 156, 18, 0.08), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(166, 0, 0, 0.10), transparent 40%);
+}
+
+
+/* =========================================
+   PANELES LATERALES (unidad / registro)
+   ========================================= */
+
+.panel {
+    background-color: var(--color-panel);
+    border: clamp(2px, 0.15vw, 3px) solid var(--color-acento);
+    border-radius: clamp(6px, 0.5vw, 10px);
+
+    padding: clamp(12px, 1.2vw, 18px);
+
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1vw, 16px);
+
+    height: fit-content;
+}
+
+.panel__titulo {
+    font-size: clamp(15px, 1.1vw, 20px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-acento);
+    border-bottom: 1px solid rgba(243, 156, 18, 0.35);
+    padding-bottom: 8px;
+}
+
+.panel--unitario .panel__titulo {
+    color: #6FA8DC;
+}
+
+
+/* =========================================
+   ESTADO DE LA UNIDAD (barra de vida + stats)
+   ========================================= */
+
+.unidad-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.barra-vida {
+    width: 100%;
+    height: clamp(14px, 1.2vw, 18px);
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(245, 233, 208, 0.25);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.barra-vida__relleno {
+    height: 100%;
+    width: 100%;
+    transition: width 0.35s ease;
+}
+
+.barra-vida__relleno--unitario {
+    background: linear-gradient(90deg, #0055A5, #3B82C4);
+}
+
+.barra-vida__relleno--federal {
+    background: linear-gradient(90deg, #A60000, #D63333);
+}
+
+.unidad-info__texto {
+    font-size: clamp(12px, 0.9vw, 14px);
+    opacity: 0.85;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: clamp(12px, 0.95vw, 14px);
+}
+
+.stats__fila {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed rgba(245, 233, 208, 0.15);
+}
+
+.stats__fila dt {
+    opacity: 0.75;
+}
+
+.stats__fila dd {
+    font-weight: bold;
+    color: var(--color-acento);
+}
+
+
+/* =========================================
+   REGISTRO DE COMBATE
+   ========================================= */
+
+.registro {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    max-height: 60vh;
+    overflow-y: auto;
+
+    font-size: clamp(11px, 0.85vw, 13px);
+    line-height: 1.4;
+}
+
+.registro li {
+    padding: 6px 8px;
+    border-left: 3px solid var(--color-acento);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    animation: aparecer 0.25s ease;
+}
+
+.registro li.registro__federal {
+    border-left-color: var(--color-federal);
+}
+
+.registro li.registro__unitario {
+    border-left-color: var(--color-unitario);
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   CONTENEDOR DEL TABLERO
+   ========================================= */
+
+.tablero-contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1vw, 16px);
+    align-items: center;
+    position: relative;
+}
+
+.hud {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: clamp(13px, 1vw, 16px);
+    font-weight: bold;
+    letter-spacing: 0.04em;
+}
+
+.hud__turno {
+    color: var(--color-acento);
+}
+
+.hud__contador {
+    opacity: 0.8;
+}
+
+
+/* =========================================
+   GRILLA / TABLERO
+   ========================================= */
+
+.tablero {
+    --columnas: 9;
+    --filas: 6;
+
+    display: grid;
+    grid-template-columns: repeat(var(--columnas), 1fr);
+    grid-template-rows: repeat(var(--filas), 1fr);
+
+    width: min(100%, 900px);
+    aspect-ratio: 9 / 6;
+
+    border: clamp(2px, 0.2vw, 4px) solid var(--color-acento);
+    border-radius: 8px;
+    overflow: hidden;
+
+    background-color: #223243;
+}
+
+.celda {
+    position: relative;
+
+    border: 1px solid rgba(245, 233, 208, 0.06);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: default;
+
+    transition: background-color 0.15s ease;
+}
+
+.celda--par {
+    background-color: rgba(245, 233, 208, 0.02);
+}
+
+.celda--movible {
+    cursor: pointer;
+    background-color: rgba(0, 85, 165, 0.28);
+}
+
+.celda--movible:hover,
+.celda--movible:focus-visible {
+    background-color: rgba(0, 85, 165, 0.5);
+}
+
+.celda--atacable {
+    cursor: pointer;
+    background-color: rgba(166, 0, 0, 0.32);
+}
+
+.celda--atacable:hover,
+.celda--atacable:focus-visible {
+    background-color: rgba(166, 0, 0, 0.55);
+}
+
+.celda:focus-visible {
+    outline: 2px solid var(--color-acento);
+    outline-offset: -2px;
+}
+
+
+/* =========================================
+   UNIDADES SOBRE EL TABLERO
+   ========================================= */
+
+.unidad {
+    position: relative;
+    width: 78%;
+    height: 78%;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+    font-size: clamp(10px, 1vw, 14px);
+    color: #fff;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+
+    transition: transform 0.25s ease, opacity 0.35s ease;
+}
+
+.unidad--unitario {
+    background: radial-gradient(circle at 35% 30%, #3B82C4, #0055A5);
+    border: 2px solid #6FA8DC;
+}
+
+.unidad--federal {
+    background: radial-gradient(circle at 35% 30%, #D63333, #A60000);
+    border: 2px solid #E88;
+}
+
+.unidad--seleccionada {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px var(--color-acento);
+}
+
+.unidad--golpeada {
+    animation: golpe 0.3s ease;
+}
+
+@keyframes golpe {
+    0% {
+        transform: scale(1);
+        filter: brightness(2);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+.unidad--caida {
+    opacity: 0;
+    transform: scale(0.3);
+}
+
+.unidad__mini-vida {
+    position: absolute;
+    top: -10px;
+    left: 8%;
+    width: 84%;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.unidad__mini-vida-relleno {
+    height: 100%;
+    background-color: var(--color-acento);
+    transition: width 0.35s ease;
+}
+
+.unidad--nueva {
+    animation: aparicion 0.5s ease;
+}
+
+@keyframes aparicion {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* =========================================
+   BANNER DE RESULTADO DE LA MECÁNICA
+   (feedback inmediato, no es una pantalla aparte)
+   ========================================= */
+
+.banner-resultado {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 14px 28px;
+    border-radius: 8px;
+
+    font-size: clamp(16px, 1.6vw, 26px);
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    text-align: center;
+
+    background-color: rgba(23, 54, 74, 0.95);
+    border: 3px solid var(--color-acento);
+
+    z-index: 10;
+}
+
+.banner-resultado--victoria {
+    border-color: #6FA8DC;
+    color: #6FA8DC;
+}
+
+.banner-resultado--derrota {
+    border-color: #D63333;
+    color: #D63333;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+    .combate {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .panel {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .registro {
+        max-height: 22vh;
+    }
+}
