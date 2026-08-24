@@ -12,7 +12,28 @@
 
 <body>
 
-    <main class="combate" aria-label="Núcleo de combate táctico">
+    <!-- ============================================
+         PANTALLA DE PRESENTACIÓN DEL NIVEL
+         ============================================ -->
+    <section class="portada" id="portadaNivel" aria-label="Presentación del nivel">
+        <div class="portada__fondo">
+            <img class="portada__imagen" id="imgPortada" src="RECURSOS GRAFICOS/historianiveluno.png" alt="Ilustración histórica del Nivel 1">
+            <div class="portada__velo"></div>
+        </div>
+
+        <div class="portada__contenido">
+            <p class="portada__eyebrow">Nivel 1</p>
+            <h1 class="portada__titulo">Nivel 1: La Ocupación Caudillista de San Juan (1831)</h1>
+            <button class="portada__cta" id="btnIniciarNivel" type="button">INICIAR</button>
+        </div>
+    </section>
+
+    <main class="combate" id="combate" aria-label="Núcleo de combate táctico" hidden>
+
+        <a class="btn-volver" href="index.html" aria-label="Volver al menú principal">
+            <span class="btn-volver__icono" aria-hidden="true">←</span>
+            <span class="btn-volver__texto">Volver</span>
+        </a>
 
         <!-- ============================================
              PANEL LATERAL: UNIDAD DEL JUGADOR
@@ -65,6 +86,56 @@
         </section>
 
     </main>
+
+    <script>
+        // --- Fallback de imagen: prueba varias extensiones/nombres comunes ---
+        (function () {
+            var img = document.getElementById('imgPortada');
+            var carpeta = 'RECURSOS GRAFICOS/';
+            var candidatos = [
+                carpeta + 'historianiveluno.png',
+                carpeta + 'historianiveluno.jpg',
+                carpeta + 'historianiveluno.jpeg',
+                carpeta + 'historianiveluno.webp',
+                carpeta + 'historianiveluno.PNG',
+                carpeta + 'historianiveluno.JPG'
+            ];
+            var i = 0;
+
+            img.addEventListener('error', function siguienteCandidato() {
+                i++;
+                if (i < candidatos.length) {
+                    img.src = candidatos[i];
+                } else {
+                    // Ninguna variante encontrada: ocultamos el <img> roto
+                    // y queda el degradé de fondo definido en CSS.
+                    img.style.display = 'none';
+                }
+            });
+        })();
+
+        // --- Transición portada -> combate (con respaldo por si la animación no dispara) ---
+        (function () {
+            var btn = document.getElementById('btnIniciarNivel');
+            var portada = document.getElementById('portadaNivel');
+            var combate = document.getElementById('combate');
+            var yaHecho = false;
+
+            function mostrarCombate() {
+                if (yaHecho) return;
+                yaHecho = true;
+                portada.hidden = true;
+                combate.hidden = false;
+            }
+
+            btn.addEventListener('click', function () {
+                portada.classList.add('portada--saliendo');
+                portada.addEventListener('animationend', mostrarCombate, { once: true });
+                // Respaldo: si la animación no dispara por algún motivo, igual avanzamos.
+                setTimeout(mostrarCombate, 450);
+            });
+        })();
+    </script>
 
     <script src="instancia.js"></script>
 
