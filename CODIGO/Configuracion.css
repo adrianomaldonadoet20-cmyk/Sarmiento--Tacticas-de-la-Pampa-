@@ -1,33 +1,34 @@
+/* =========================================
+   RESETEO Y BASES
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     height: 100%;
 }
 
 body {
     font-family: Georgia, "Times New Roman", serif;
-    background-color: #2C3E50;
+    background-color: #0E1622;
 }
 
-
 /* =========================================
-   MARCO EXTERIOR
-   Mismo criterio que Menu.css: el wrapper
-   ocupa toda la pantalla y centra el panel.
+   MARCO EXTERIOR (FONDO GENERAL)
    ========================================= */
-
 .config-wrapper {
     width: 100vw;
     height: 100vh;
     height: 100svh;
 
-    background-color: #2C3E50;
+    /* Gradiente que imita la pincelada de la imagen: Rojo Federal (izq), Pergamino (centro), Azul Unitario (der) */
+    background: radial-gradient(circle at center, #D2C4A8 0%, #151D28 85%),
+                linear-gradient(90deg, #5C1315 0%, transparent 35%, transparent 65%, #182C43 100%);
+    background-blend-mode: multiply;
 
     display: flex;
     align-items: center;
@@ -36,138 +37,160 @@ body {
     overflow: hidden;
 }
 
-
 /* =========================================
-   PANEL DE CONFIGURACIÓN
-   Por ahora sin imagen de fondo: un panel
-   sólido con el mismo esquema de color que
-   el resto del juego (azul oscuro + dorado).
-   Cuando tengan el arte final, se le puede
-   agregar background-image acá siguiendo el
-   mismo patrón de aspect-ratio de Menu.css.
+   PANEL DE CONFIGURACIÓN (PERGAMINO ENVEJECIDO)
    ========================================= */
-
 .config {
     position: relative;
 
-    width: min(90%, 640px);
+    width: min(90%, 580px);
     max-height: 90%;
 
-    padding: clamp(24px, 4vw, 48px);
+    padding: clamp(24px, 4vw, 40px);
 
-    background-color: #1B2733;
-    border: 2px solid #C9A227;
-    border-radius: 8px;
+    /* Fondo tipo pergamino claro/antiguo con bordes dorados oscuros biselados */
+    background-color: #E6D8C3;
+    background-image: radial-gradient(#F3EBDD 0%, #D8C7AD 100%);
+    border: 3px solid #8C7343;
+    outline: 2px solid #3E2F1B;
+    border-radius: 6px;
+
+    /* Sombra profunda */
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(100, 75, 40, 0.3);
 
     overflow-y: auto;
 }
 
-
 /* =========================================
    BOTÓN VOLVER
    ========================================= */
-
 .boton-volver {
     display: inline-block;
+    margin-bottom: 16px;
 
-    margin-bottom: 24px;
-
-    color: #C9A227;
+    color: #5C1315; /* Rojo oscuro federal */
     text-decoration: none;
-    font-size: clamp(14px, 1.4vw, 18px);
+    font-size: clamp(14px, 1.4vw, 16px);
+    font-weight: bold;
+    letter-spacing: 1px;
 
     transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .boton-volver:hover {
     transform: translateX(-4px);
-    filter: brightness(1.2);
+    filter: brightness(1.3);
     cursor: pointer;
 }
-
 
 /* =========================================
    TÍTULO
    ========================================= */
-
 .config-titulo {
-    color: #F5EFE0;
-    font-size: clamp(24px, 3vw, 36px);
+    color: #2A2118;
+    font-size: clamp(24px, 3.2vw, 34px);
     text-align: center;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    font-weight: bold;
 
-    margin-bottom: clamp(20px, 3vw, 32px);
+    margin-bottom: clamp(20px, 3vw, 28px);
+    border-bottom: 2px solid #8C7343;
+    padding-bottom: 8px;
 }
 
-
 /* =========================================
-   LISTA DE OPCIONES
+   GRUPOS DE OPCIONES
    ========================================= */
-
 .config-opciones {
     display: flex;
     flex-direction: column;
-    gap: clamp(16px, 2vw, 24px);
+    gap: 20px;
 }
 
+.config-grupo {
+    /* Caja azul noche sobria (idéntica a las cajas de citas e historia del juego) */
+    background-color: #172230;
+    border: 1px solid #9A804B;
+    border-radius: 4px;
+    padding: 16px 20px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.grupo-titulo {
+    color: #CBB079; /* Dorado bronce suave */
+    font-size: clamp(13px, 1.2vw, 15px);
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+/* =========================================
+   OPCIONES INDIVIDUALES
+   ========================================= */
 .opcion {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    margin-bottom: 14px;
 
-    color: #F5EFE0;
-    font-size: clamp(14px, 1.3vw, 17px);
+    color: #E6D8C3; /* Texto pergamino */
+    font-size: clamp(14px, 1.3vw, 16px);
 }
 
+.opcion:last-child {
+    margin-bottom: 0;
+}
+
+/* Sliders / Rangos */
 .opcion input[type="range"] {
-    width: 55%;
-    accent-color: #C9A227;
+    width: 50%;
+    height: 6px;
+    background: #0D141E;
+    border: 1px solid #8C7343;
+    border-radius: 3px;
+    accent-color: #7A1C1E; /* Perilla roja oscura */
+    cursor: pointer;
 }
 
-.opcion select {
-    background-color: #2C3E50;
-    color: #F5EFE0;
-    border: 1px solid #C9A227;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-family: inherit;
-}
-
+/* Checkbox / Interruptores */
 .opcion input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    accent-color: #C9A227;
+    accent-color: #7A1C1E;
+    cursor: pointer;
 }
 
-
 /* =========================================
-   BOTÓN GUARDAR
+   BOTÓN GUARDAR (Estilo Botón JUGAR)
    ========================================= */
-
 .boton-guardar {
     display: block;
 
-    margin-top: clamp(28px, 4vw, 40px);
-
+    margin-top: clamp(24px, 3vw, 32px);
     padding: 12px 0;
 
-    background-color: #8B1E1E;
-    color: #F5EFE0;
+    /* Rojo borgoña/federal profundo con borde bronce */
+    background: linear-gradient(180deg, #6B1719 0%, #4A0E10 100%);
+    color: #F3EBDD;
 
     text-align: center;
     text-decoration: none;
     font-size: clamp(15px, 1.5vw, 18px);
-    letter-spacing: 1px;
+    font-weight: bold;
+    letter-spacing: 2px;
 
+    border: 2px solid #9A804B;
     border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 
-    transition: transform 0.2s ease, filter 0.2s ease;
+    transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .boton-guardar:hover {
     transform: scale(1.02);
-    filter: brightness(1.15);
+    filter: brightness(1.25);
     cursor: pointer;
 }
 
@@ -175,17 +198,14 @@ body {
     transform: scale(0.98);
 }
 
-
 /* =========================================
-   CELULAR
+   ADAPTACIÓN A CELULARES
    ========================================= */
-
 @media (max-width: 480px) {
-
     .opcion {
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
+        gap: 8px;
     }
 
     .opcion input[type="range"] {
