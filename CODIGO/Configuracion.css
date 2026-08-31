@@ -1,0 +1,194 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background-color: #2C3E50;
+}
+
+
+/* =========================================
+   MARCO EXTERIOR
+   Mismo criterio que Menu.css: el wrapper
+   ocupa toda la pantalla y centra el panel.
+   ========================================= */
+
+.config-wrapper {
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+
+    background-color: #2C3E50;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   PANEL DE CONFIGURACIÓN
+   Por ahora sin imagen de fondo: un panel
+   sólido con el mismo esquema de color que
+   el resto del juego (azul oscuro + dorado).
+   Cuando tengan el arte final, se le puede
+   agregar background-image acá siguiendo el
+   mismo patrón de aspect-ratio de Menu.css.
+   ========================================= */
+
+.config {
+    position: relative;
+
+    width: min(90%, 640px);
+    max-height: 90%;
+
+    padding: clamp(24px, 4vw, 48px);
+
+    background-color: #1B2733;
+    border: 2px solid #C9A227;
+    border-radius: 8px;
+
+    overflow-y: auto;
+}
+
+
+/* =========================================
+   BOTÓN VOLVER
+   ========================================= */
+
+.boton-volver {
+    display: inline-block;
+
+    margin-bottom: 24px;
+
+    color: #C9A227;
+    text-decoration: none;
+    font-size: clamp(14px, 1.4vw, 18px);
+
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.boton-volver:hover {
+    transform: translateX(-4px);
+    filter: brightness(1.2);
+    cursor: pointer;
+}
+
+
+/* =========================================
+   TÍTULO
+   ========================================= */
+
+.config-titulo {
+    color: #F5EFE0;
+    font-size: clamp(24px, 3vw, 36px);
+    text-align: center;
+    letter-spacing: 1px;
+
+    margin-bottom: clamp(20px, 3vw, 32px);
+}
+
+
+/* =========================================
+   LISTA DE OPCIONES
+   ========================================= */
+
+.config-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2vw, 24px);
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    color: #F5EFE0;
+    font-size: clamp(14px, 1.3vw, 17px);
+}
+
+.opcion input[type="range"] {
+    width: 55%;
+    accent-color: #C9A227;
+}
+
+.opcion select {
+    background-color: #2C3E50;
+    color: #F5EFE0;
+    border: 1px solid #C9A227;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: inherit;
+}
+
+.opcion input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #C9A227;
+}
+
+
+/* =========================================
+   BOTÓN GUARDAR
+   ========================================= */
+
+.boton-guardar {
+    display: block;
+
+    margin-top: clamp(28px, 4vw, 40px);
+
+    padding: 12px 0;
+
+    background-color: #8B1E1E;
+    color: #F5EFE0;
+
+    text-align: center;
+    text-decoration: none;
+    font-size: clamp(15px, 1.5vw, 18px);
+    letter-spacing: 1px;
+
+    border-radius: 4px;
+
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.boton-guardar:hover {
+    transform: scale(1.02);
+    filter: brightness(1.15);
+    cursor: pointer;
+}
+
+.boton-guardar:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================
+   CELULAR
+   ========================================= */
+
+@media (max-width: 480px) {
+
+    .opcion {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .opcion input[type="range"] {
+        width: 100%;
+    }
+}

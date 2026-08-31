@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sarmiento: Tácticas de La Pampa — Configuración</title>
+
+    <link rel="stylesheet" href="Configuracion.css">
+</head>
+
+<body>
+
+    <div class="config-wrapper">
+        <main class="config">
+
+            <!-- Botón volver (esquina superior) -->
+            <a href="Menu.html" class="boton-volver" aria-label="Volver al menú">
+                ← Volver
+            </a>
+
+            <h1 class="config-titulo">Configuración</h1>
+
+            <div class="config-opciones">
+
+                <div class="opcion">
+                    <label for="volumen-general">Volumen general</label>
+                    <input type="range" id="volumen-general" name="volumen-general" min="0" max="100" value="80">
+                </div>
+
+                <div class="opcion">
+                    <label for="volumen-musica">Música</label>
+                    <input type="range" id="volumen-musica" name="volumen-musica" min="0" max="100" value="70">
+                </div>
+
+                <div class="opcion">
+                    <label for="volumen-efectos">Efectos de sonido</label>
+                    <input type="range" id="volumen-efectos" name="volumen-efectos" min="0" max="100" value="70">
+                </div>
+
+                <div class="opcion opcion-select">
+                    <label for="idioma">Idioma</label>
+                    <select id="idioma" name="idioma">
+                        <option value="es" selected>Español</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+
+                <div class="opcion opcion-toggle">
+                    <label for="pantalla-completa">Pantalla completa</label>
+                    <input type="checkbox" id="pantalla-completa" name="pantalla-completa">
+                </div>
+
+            </div>
+
+            <a href="#" class="boton-guardar">Guardar cambios</a>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
