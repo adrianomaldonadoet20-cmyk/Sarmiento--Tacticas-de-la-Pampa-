@@ -44,7 +44,7 @@ body {
 
     display: flex;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: flex-end;
 
     overflow: hidden;
     background-color: var(--color-base);
@@ -67,35 +67,48 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 30%;
+    /* La imagen trae el título y el contexto histórico "horneados" del
+       lado izquierdo. Priorizamos ese lado para que no se recorte. */
+    object-position: left center;
     display: block;
 }
 
 .portada__velo {
     position: absolute;
     inset: 0;
-    background:
-        linear-gradient(180deg, rgba(27, 39, 51, 0.35) 0%, rgba(27, 39, 51, 0.55) 55%, rgba(27, 39, 51, 0.95) 100%),
-        radial-gradient(circle at 50% 15%, rgba(243, 156, 18, 0.10), transparent 45%);
+    /* Antes oscurecía TODA la pantalla (incluyendo el texto que ya
+       trae la imagen). Ahora solo oscurece la esquina inferior derecha,
+       que es donde va el panel de "INICIAR", dejando el resto de la
+       imagen (con el contexto histórico) casi sin velo. */
+    background: linear-gradient(115deg,
+            rgba(27, 39, 51, 0) 0%,
+            rgba(27, 39, 51, 0) 50%,
+            rgba(27, 39, 51, 0.35) 72%,
+            rgba(27, 39, 51, 0.72) 100%);
 }
 
 .portada__contenido {
     position: relative;
     z-index: 1;
 
-    width: min(100%, 720px);
+    width: min(90%, 380px);
 
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: clamp(10px, 1.4vw, 18px);
+    align-items: flex-end;
+    text-align: right;
+    gap: clamp(8px, 1vw, 14px);
 
-    padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px) clamp(48px, 6vw, 72px);
+    padding: clamp(16px, 2.4vw, 28px);
+    margin: clamp(16px, 3vw, 32px);
+
+    background-color: rgba(15, 23, 31, 0.55);
+    border-radius: 12px;
+    backdrop-filter: blur(2px);
 }
 
 .portada__eyebrow {
-    font-size: clamp(13px, 1vw, 16px);
+    font-size: clamp(11px, 0.8vw, 13px);
     font-weight: bold;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -103,19 +116,19 @@ body {
 }
 
 .portada__titulo {
-    font-size: clamp(22px, 3.2vw, 38px);
-    line-height: 1.25;
+    font-size: clamp(15px, 1.5vw, 20px);
+    line-height: 1.3;
     color: var(--color-texto);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .portada__cta {
-    margin-top: clamp(8px, 1.5vw, 16px);
+    margin-top: clamp(6px, 1vw, 12px);
 
-    padding: clamp(12px, 1.4vw, 16px) clamp(36px, 5vw, 56px);
+    padding: clamp(10px, 1.1vw, 14px) clamp(28px, 4vw, 44px);
 
     font-family: inherit;
-    font-size: clamp(14px, 1.1vw, 17px);
+    font-size: clamp(12px, 1vw, 15px);
     font-weight: bold;
     letter-spacing: 0.1em;
     color: #1B2733;
@@ -162,17 +175,29 @@ body {
 
 @media (max-width: 600px) {
     .portada {
-        align-items: center;
+        justify-content: center;
+        align-items: flex-end;
     }
 
     .portada__contenido {
-        padding-bottom: clamp(24px, 6vw, 40px);
+        width: 92%;
+        align-items: center;
+        text-align: center;
+        margin-bottom: clamp(16px, 5vw, 28px);
+    }
+
+    .portada__velo {
+        /* En pantallas angostas la imagen se recorta mucho más, así que
+           agregamos un degradé suave abajo (no arriba) para que el
+           panel siga siendo legible sin tapar el contexto histórico. */
+        background:
+            linear-gradient(180deg, rgba(27, 39, 51, 0) 55%, rgba(27, 39, 51, 0.75) 100%);
     }
 }
 
 @media (max-aspect-ratio: 3/5) {
     .portada__imagen {
-        object-position: center 20%;
+        object-position: left top;
     }
 }
 
@@ -439,6 +464,22 @@ body {
 
 .hud__turno {
     color: var(--color-acento);
+    padding: 3px 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Colorea el HUD según de quién es el turno, para reforzar
+   visualmente que se trata de un juego por turnos y no de un
+   enfrentamiento simultáneo. */
+.hud__turno--jugador {
+    color: #6FA8DC;
+    background-color: rgba(0, 85, 165, 0.18);
+}
+
+.hud__turno--federal {
+    color: #ff8a8a;
+    background-color: rgba(166, 0, 0, 0.22);
 }
 
 .hud__contador {
@@ -466,6 +507,17 @@ body {
     overflow: hidden;
 
     background-color: #223243;
+
+    transition: filter 0.25s ease;
+}
+
+/* Mientras actúan los Federales, el tablero se ve "apagado" y no
+   responde a clicks: refuerza que NO es el turno del jugador, en vez
+   de dejarlo con el mismo aspecto de siempre (lo que daba la
+   sensación de que todo se movía en tiempo real). */
+.tablero--bloqueado {
+    pointer-events: none;
+    filter: brightness(0.55) saturate(0.6);
 }
 
 .celda {
@@ -642,6 +694,61 @@ body {
 
 
 /* =========================================
+   AVISO DE CAMBIO DE TURNO
+   ========================================= */
+
+.aviso-turno {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.92);
+
+    padding: 10px 26px;
+    border-radius: 8px;
+
+    font-size: clamp(15px, 1.8vw, 26px);
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+
+    background-color: rgba(15, 23, 31, 0.92);
+    border: 3px solid var(--color-acento);
+
+    z-index: 15;
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.aviso-turno--visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.aviso-turno--federal {
+    border-color: var(--color-federal);
+    color: #ff8a8a;
+}
+
+.aviso-turno--jugador {
+    border-color: var(--color-unitario);
+    color: #6FA8DC;
+}
+
+@media (max-width: 600px) {
+    .aviso-turno {
+        font-size: 14px;
+        padding: 8px 16px;
+        white-space: normal;
+        width: 80%;
+    }
+}
+
+
+/* =========================================
    RESPONSIVE
    ========================================= */
 
@@ -660,4 +767,47 @@ body {
     .registro {
         max-height: 22vh;
     }
+}
+/* RESPONSIVE ADICIONAL — agregado sin modificar el código original */
+@media (max-width: 1024px) {
+    .portada__imagen { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+    .portada__contenido { width: min(85%, 380px); margin: 20px; }
+    .combate { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+    .panel { width: 100%; }
+    .tablero-contenedor { width: 100%; }
+    .tablero { width: 100%; max-width: 900px; }
+}
+
+@media (max-width: 600px) {
+    .portada { width: 100%; min-height: 100vh; min-height: 100svh; overflow: hidden; }
+    .portada__fondo { width: 100%; height: 100%; }
+    .portada__imagen { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+    .portada__contenido { width: calc(100% - 30px); max-width: 380px; margin: 15px; padding: 16px; gap: 8px; }
+    .portada__titulo { font-size: clamp(14px, 4vw, 20px); }
+    .portada__cta { font-size: clamp(12px, 3.5vw, 15px); padding: 10px 28px; max-width: 100%; }
+    .combate { width: 100%; min-height: 100vh; min-height: 100svh; grid-template-columns: 1fr; padding: 10px; gap: 10px; }
+    .panel { width: 100%; max-width: 100%; }
+    .tablero-contenedor { width: 100%; max-width: 100%; }
+    .tablero { width: 100%; max-width: 100%; aspect-ratio: 9 / 6; }
+    .hud { width: 100%; }
+    .registro { width: 100%; max-height: 25vh; overflow-y: auto; }
+}
+
+@media (max-width: 400px) {
+    .portada__contenido { width: calc(100% - 20px); margin: 10px; padding: 12px; }
+    .portada__titulo { font-size: 14px; }
+    .portada__cta { width: 100%; padding: 10px 20px; }
+    .combate { padding: 8px; }
+    .panel { padding: 10px; }
+    .tablero { width: 100%; }
+}
+
+@media (orientation: portrait) {
+    .portada__imagen { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .portada__contenido { max-height: 90vh; overflow-y: auto; }
+    .portada__titulo { font-size: clamp(13px, 2.5vw, 18px); }
+    .portada__cta { padding: 8px 24px; }
 }

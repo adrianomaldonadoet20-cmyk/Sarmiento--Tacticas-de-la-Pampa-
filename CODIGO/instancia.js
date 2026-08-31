@@ -60,8 +60,12 @@
         multiplicadorCritico: 1.5,
 
         // Pausas para que la secuencia de turnos se pueda seguir visualmente.
-        pausaCortaMs: 260,
-        pausaLargaMs: 420,
+        pausaCortaMs: 380,
+        pausaLargaMs: 550,
+
+        // Cuánto se muestra en pantalla el aviso grande de cambio de turno
+        // ("Turno de los Federales" / "Tu turno") antes de que actúen.
+        pausaAvisoTurnoMs: 700,
     };
 
 
@@ -244,6 +248,14 @@
         actualizarHud();
         limpiarResaltados();
 
+        // Aviso grande + tablero bloqueado/oscurecido ANTES de que se
+        // mueva el primer Federal: así se ve con claridad que terminó
+        // el turno del jugador y ahora es el turno del rival, en vez
+        // de que las unidades se muevan apenas se hace click (lo que
+        // se sentía como un enfrentamiento en tiempo real).
+        mostrarAvisoTurno("Turno de los Federales", "federal");
+        await esperar(CONFIG.pausaAvisoTurnoMs);
+
         for (const federal of estado.enemigos) {
             if (federal.vida <= 0 || estado.terminado) continue;
 
@@ -288,6 +300,7 @@
         estado.fase = "jugador";
         actualizarHud();
         renderUnidades();
+        mostrarAvisoTurno("Tu turno", "jugador");
     }
 
     function gestionarAparicionDeAmenazas() {
@@ -405,6 +418,7 @@
         elementos.statDanoJugador = document.getElementById("statDanoJugador");
         elementos.statDefensaJugador = document.getElementById("statDefensaJugador");
         elementos.bannerResultado = document.getElementById("bannerResultado");
+        elementos.avisoTurno = document.getElementById("avisoTurno");
     }
 
     function construirTablero() {
@@ -476,8 +490,31 @@
     }
 
     function actualizarHud() {
-        elementos.hudTurno.textContent = estado.fase === "jugador" ? "Turno del jugador" : "Turno de los Federales";
+        const esTurnoJugador = estado.fase === "jugador";
+
+        elementos.hudTurno.textContent = esTurnoJugador ? "Turno del jugador" : "Turno de los Federales";
+        elementos.hudTurno.classList.toggle("hud__turno--jugador", esTurnoJugador);
+        elementos.hudTurno.classList.toggle("hud__turno--federal", !esTurnoJugador);
         elementos.hudContador.textContent = `Turno ${estado.turno}`;
+
+        // El tablero se oscurece y deja de responder a clicks mientras
+        // no es el turno del jugador, para que la alternancia de
+        // turnos se note a simple vista.
+        elementos.tablero.classList.toggle("tablero--bloqueado", !esTurnoJugador);
+    }
+
+    let avisoTurnoTimeout = null;
+
+    function mostrarAvisoTurno(texto, tipo) {
+        if (!elementos.avisoTurno) return;
+
+        clearTimeout(avisoTurnoTimeout);
+        elementos.avisoTurno.textContent = texto;
+        elementos.avisoTurno.className = `aviso-turno aviso-turno--visible aviso-turno--${tipo}`;
+
+        avisoTurnoTimeout = setTimeout(() => {
+            elementos.avisoTurno.classList.remove("aviso-turno--visible");
+        }, CONFIG.pausaAvisoTurnoMs + 250);
     }
 
     function registrarEvento(texto, tipo) {
