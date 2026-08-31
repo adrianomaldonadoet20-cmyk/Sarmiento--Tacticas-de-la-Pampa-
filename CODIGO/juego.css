@@ -937,6 +937,21 @@ body.modal-abierto {
     border: clamp(1.5px, 0.15vw, 2px) solid #E88;
 }
 
+/* Botón de imagen: usa el gráfico "Boton_Salir.png" tal cual, sin el
+   relleno de color ni el borde que tienen los botones de texto. */
+.modal-boton--imagen {
+    padding: 0;
+    background: none;
+    border: none;
+    overflow: hidden;
+}
+
+.modal-boton__imagen {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 @media (max-width: 400px) {
     .modal-caja__acciones {
         flex-direction: column;
