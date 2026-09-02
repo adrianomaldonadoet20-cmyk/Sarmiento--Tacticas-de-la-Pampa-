@@ -158,6 +158,29 @@ body {
     outline-offset: 3px;
 }
 
+/* Botón de imagen "Iniciar": usa el gráfico iniciar.png tal cual, sin
+   el relleno de color ni el borde redondeado del botón de texto original. */
+.portada__cta--imagen {
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.portada__cta--imagen:hover,
+.portada__cta--imagen:focus-visible {
+    background: none;
+    box-shadow: none;
+}
+
+.portada__cta__imagen {
+    display: block;
+    width: clamp(140px, 16vw, 220px);
+    height: auto;
+}
+
 .portada--saliendo {
     animation: portadaSalida 0.4s ease forwards;
     pointer-events: none;
@@ -214,33 +237,25 @@ body {
 
     display: inline-flex;
     align-items: center;
-    gap: 8px;
 
-    padding: clamp(8px, 0.9vw, 12px) clamp(14px, 1.4vw, 20px);
+    padding: 0;
 
-    font-family: inherit;
-    font-size: clamp(12px, 0.9vw, 14px);
-    font-weight: bold;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    color: var(--color-texto);
-
-    background-color: rgba(23, 54, 74, 0.9);
-    border: clamp(1.5px, 0.15vw, 2px) solid var(--color-acento);
+    background: none;
+    border: none;
     border-radius: 999px;
 
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
 
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-    transition: background-color 0.15s ease, transform 0.15s ease;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
+    transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .btn-volver:hover,
 .btn-volver:focus-visible {
-    background-color: rgba(34, 50, 67, 0.95);
     transform: translateY(-1px);
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
 }
 
 .btn-volver:active {
@@ -252,22 +267,15 @@ body {
     outline-offset: 3px;
 }
 
-.btn-volver__icono {
-    font-size: 1.1em;
-    line-height: 1;
+.btn-volver__imagen {
+    display: block;
+    width: clamp(90px, 9vw, 130px);
+    height: auto;
 }
 
 @media (max-width: 600px) {
-    .btn-volver {
-        padding: 8px 14px;
-    }
-
-    .btn-volver__texto {
-        display: none;
-    }
-
-    .btn-volver__icono {
-        font-size: 1.3em;
+    .btn-volver__imagen {
+        width: clamp(70px, 20vw, 100px);
     }
 }
 

@@ -24,15 +24,16 @@
         <div class="portada__contenido">
             <p class="portada__eyebrow">Nivel 1</p>
             <h1 class="portada__titulo">Nivel 1: La Ocupación Caudillista de San Juan (1831)</h1>
-            <button class="portada__cta" id="btnIniciarNivel" type="button">INICIAR</button>
+            <button class="portada__cta portada__cta--imagen" id="btnIniciarNivel" type="button">
+                <img class="portada__cta__imagen" src="../RECURSOS GRAFICOS/iniciar.png" alt="Iniciar">
+            </button>
         </div>
     </section>
 
     <main class="combate" id="combate" aria-label="Núcleo de combate táctico" hidden>
 
         <button class="btn-volver" id="btnVolver" type="button" aria-haspopup="dialog" aria-controls="modalConfirmarSalida">
-            <span class="btn-volver__icono" aria-hidden="true">←</span>
-            <span class="btn-volver__texto">Volver</span>
+            <img class="btn-volver__imagen" src="../RECURSOS GRAFICOS/volver.png" alt="Volver">
         </button>
 
         <!-- ============================================
@@ -98,7 +99,10 @@
             <p class="modal-caja__titulo" id="modalConfirmarSalidaTitulo">¿Salir de la partida?</p>
             <p class="modal-caja__texto">Vas a volver al inicio del nivel y perderás el progreso del combate actual.</p>
             <div class="modal-caja__acciones">
-                <button class="modal-boton modal-boton--cancelar" id="btnCancelarSalida" type="button">Cancelar</button>
+                <button class="modal-boton modal-boton--imagen" id="btnCancelarSalida" type="button"
+                    aria-label="Cancelar">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/cancelar.png" alt="Cancelar">
+                </button>
                 <button class="modal-boton modal-boton--imagen" id="btnConfirmarSalida" type="button"
                     aria-label="Sí, salir del nivel">
                     <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/Boton_Salir.png" alt="Salir">
@@ -188,14 +192,12 @@
             }
         })();
 
-        // --- Fallback para la imagen del botón "Salir" del modal ---
-        // Antes esta imagen no tenía ningún respaldo: si la ruta fallaba,
-        // quedaba un ícono roto sin avisar. Ahora prueba las mismas
-        // carpetas base que la imagen de portada.
+        // --- Fallback para las imágenes de botones (Salir, Iniciar, Cancelar) ---
+        // Antes estas imágenes no tenían ningún respaldo: si la ruta fallaba,
+        // quedaba un ícono roto sin avisar. Ahora cada botón-imagen prueba
+        // las mismas carpetas base que la imagen de portada, junto con
+        // variantes de mayúsculas/minúsculas del nombre del archivo.
         (function () {
-            var img = document.querySelector('.modal-boton__imagen');
-            if (!img) return;
-
             var carpetasBase = [
                 '../RECURSOS GRAFICOS/',
                 '../Recursos Graficos/',
@@ -203,28 +205,42 @@
                 './RECURSOS GRAFICOS/',
                 'RECURSOS GRAFICOS/'
             ];
-            var nombresArchivo = ['Boton_Salir.png', 'boton_salir.png', 'Boton_salir.png'];
 
-            var candidatos = [];
-            carpetasBase.forEach(function (carpeta) {
-                nombresArchivo.forEach(function (nombre) {
-                    candidatos.push(carpeta + nombre);
+            function candidatosParaArchivo(nombresArchivo) {
+                var lista = [];
+                carpetasBase.forEach(function (carpeta) {
+                    nombresArchivo.forEach(function (nombre) {
+                        lista.push(carpeta + nombre);
+                    });
                 });
-            });
+                return lista;
+            }
 
-            var i = 0;
-            img.addEventListener('error', function siguienteCandidato() {
-                i++;
-                if (i < candidatos.length) {
-                    img.src = candidatos[i];
-                } else {
-                    console.warn(
-                        '[Sarmiento] No se pudo cargar Boton_Salir.png. ' +
-                        'Probé estas rutas relativas a juego.html:\n' +
-                        candidatos.join('\n')
-                    );
-                }
-            });
+            function activarFallback(selector, nombresArchivo) {
+                var img = document.querySelector(selector);
+                if (!img) return;
+
+                var candidatos = candidatosParaArchivo(nombresArchivo);
+                var i = 0;
+
+                img.addEventListener('error', function siguienteCandidato() {
+                    i++;
+                    if (i < candidatos.length) {
+                        img.src = candidatos[i];
+                    } else {
+                        console.warn(
+                            '[Sarmiento] No se pudo cargar ' + nombresArchivo[0] + '. ' +
+                            'Probé estas rutas relativas a juego.html:\n' +
+                            candidatos.join('\n')
+                        );
+                    }
+                });
+            }
+
+            activarFallback('.modal-boton__imagen[alt="Salir"]', ['Boton_Salir.png', 'boton_salir.png', 'Boton_salir.png']);
+            activarFallback('.modal-boton__imagen[alt="Cancelar"]', ['cancelar.png', 'Cancelar.png', 'CANCELAR.png']);
+            activarFallback('.portada__cta__imagen', ['iniciar.png', 'Iniciar.png', 'INICIAR.png']);
+            activarFallback('.btn-volver__imagen', ['volver.png', 'Volver.png', 'VOLVER.png']);
         })();
 
         // --- Modal de confirmación al tocar "Volver" durante la partida ---
