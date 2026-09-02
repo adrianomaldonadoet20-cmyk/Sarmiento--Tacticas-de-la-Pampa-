@@ -1,169 +1,270 @@
+/* ============================================================
+   JUEGO 2
+   NIVEL 2 — EL PASO DE LAS SIERRAS
+   ============================================================ */
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
+
+/* ============================================================
+   HTML
+   ============================================================ */
+
+html {
+    width: 100%;
+    min-height: 100%;
+}
+
+
+/* ============================================================
+   BODY
+   ============================================================ */
+
 body {
     width: 100%;
-    height: 100%;
-}
+    min-height: 100vh;
+    min-height: 100dvh;
 
-body {
-    font-family: "Poppins", Georgia, "Times New Roman", serif;
-    background-color: #1B2733;
-    color: #F5E9D0;
-}
+    margin: 0;
+    padding: 0;
 
+    background: #17120e;
 
-/* =========================================
-   VARIABLES DE MARCA
-   (extraídas del Sistema de Diseño del producto)
-   ========================================= */
+    color: #efe3c8;
 
-:root {
-    --color-base: #2C3E50;
-    --color-unitario: #0055A5;
-    --color-federal: #A60000;
-    --color-acento: #F39C12;
-    --color-texto: #F5E9D0;
-    --color-panel: #17364A;
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    overflow-x: hidden;
 }
 
 
-/* =========================================
-   PORTADA DE PRESENTACIÓN DEL NIVEL
-   ========================================= */
+/* ============================================================
+   PORTADA
+   ============================================================ */
 
 .portada {
     position: relative;
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100svh;
 
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
+    width: 100vw;
+    height: 100vh;
+
+    width: 100dvw;
+    height: 100dvh;
+
+    min-height: 100dvh;
 
     overflow: hidden;
-    background-color: var(--color-base);
+
+    background: #17120e;
 }
 
-/* Mismo caso que .combate[hidden]: sin esto, cuando el JS oculta la
-   portada con portada.hidden = true, la regla .portada {display:flex}
-   de arriba la seguiría mostrando igual. */
+
 .portada[hidden] {
     display: none;
 }
 
+
+/* ============================================================
+   FONDO
+   ============================================================ */
+
 .portada__fondo {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #223243, #17364A 60%, #1B2733);
-}
 
-.portada__imagen {
+    inset: 0;
+
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    /* La imagen trae el título y el contexto histórico "horneados" del
-       lado izquierdo. Priorizamos ese lado para que no se recorte. */
-    object-position: left center;
+
+    overflow: hidden;
+}
+
+
+.portada__fondo picture {
     display: block;
+
+    width: 100%;
+    height: 100%;
 }
 
-.portada__velo {
+
+/* ============================================================
+   IMAGEN
+   ============================================================ */
+
+.portada__imagen {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center center;
+}
+
+
+/* ============================================================
+   BOTÓN DE LA PORTADA
+   ============================================================ */
+
+.portada__boton {
     position: absolute;
-    inset: 0;
-    /* Antes oscurecía TODA la pantalla (incluyendo el texto que ya
-       trae la imagen). Ahora solo oscurece la esquina inferior derecha,
-       que es donde va el panel de "INICIAR", dejando el resto de la
-       imagen (con el contexto histórico) casi sin velo. */
-    background: linear-gradient(115deg,
-            rgba(27, 39, 51, 0) 0%,
-            rgba(27, 39, 51, 0) 50%,
-            rgba(27, 39, 51, 0.35) 72%,
-            rgba(27, 39, 51, 0.72) 100%);
-}
 
-.portada__contenido {
-    position: relative;
-    z-index: 1;
+    z-index: 50;
 
-    width: min(90%, 380px);
+    right: 4vw;
+    bottom: 4vh;
+
+    width: 230px;
 
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
-    gap: clamp(8px, 1vw, 14px);
 
-    padding: clamp(16px, 2.4vw, 28px);
-    margin: clamp(16px, 3vw, 32px);
-
-    background-color: rgba(15, 23, 31, 0.55);
-    border-radius: 12px;
-    backdrop-filter: blur(2px);
+    justify-content: flex-end;
 }
 
-.portada__eyebrow {
-    font-size: clamp(11px, 0.8vw, 13px);
-    font-weight: bold;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-acento);
-}
 
-.portada__titulo {
-    font-size: clamp(15px, 1.5vw, 20px);
-    line-height: 1.3;
-    color: var(--color-texto);
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-}
+/* ============================================================
+   BOTÓN INICIAR
+   ============================================================ */
 
 .portada__cta {
-    margin-top: clamp(6px, 1vw, 12px);
+    position: relative;
 
-    padding: clamp(10px, 1.1vw, 14px) clamp(28px, 4vw, 44px);
+    width: 230px;
 
-    font-family: inherit;
-    font-size: clamp(12px, 1vw, 15px);
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    color: #1B2733;
+    min-height: 55px;
 
-    background-color: var(--color-acento);
+    padding: 13px 25px;
+
     border: none;
-    border-radius: 999px;
+
+    outline: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            #d99a4a 0%,
+            #c98738 100%
+        );
+
+    color: #1b130c;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.08em;
 
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-    box-shadow: 0 6px 18px rgba(243, 156, 18, 0.35);
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.7);
+
+    clip-path:
+        polygon(
+            10px 0,
+            calc(100% - 10px) 0,
+            100% 10px,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            10px 100%,
+            0 calc(100% - 10px),
+            0 10px
+        );
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
-.portada__cta:hover,
-.portada__cta:focus-visible {
-    background-color: #ffb02e;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(243, 156, 18, 0.45);
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+.portada__cta:hover {
+    filter: brightness(1.12);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.8);
 }
+
+
+/* ============================================================
+   CLICK
+   ============================================================ */
 
 .portada__cta:active {
-    transform: translateY(0);
+    transform:
+        translateY(0);
 }
+
+
+/* ============================================================
+   FOCUS
+   ============================================================ */
 
 .portada__cta:focus-visible {
-    outline: 2px solid var(--color-texto);
-    outline-offset: 3px;
+    outline:
+        2px solid
+        #f0d9ad;
+
+    outline-offset: 4px;
 }
 
+
+/* ============================================================
+   BOTÓN DESHABILITADO
+   ============================================================ */
+
+.portada__cta:disabled {
+    cursor: default;
+
+    opacity: 0.9;
+}
+
+
+/* ============================================================
+   DESAPARICIÓN DE PORTADA
+   ============================================================ */
+
 .portada--saliendo {
-    animation: portadaSalida 0.4s ease forwards;
+    animation:
+        desaparecerPortada
+        0.4s
+        ease
+        forwards;
+
     pointer-events: none;
 }
 
-@keyframes portadaSalida {
+
+@keyframes desaparecerPortada {
+
     from {
         opacity: 1;
     }
@@ -171,774 +272,1421 @@ body {
     to {
         opacity: 0;
     }
-}
 
-@media (max-width: 600px) {
-    .portada {
-        justify-content: center;
-        align-items: flex-end;
-    }
-
-    .portada__contenido {
-        width: 92%;
-        align-items: center;
-        text-align: center;
-        margin-bottom: clamp(16px, 5vw, 28px);
-    }
-
-    .portada__velo {
-        /* En pantallas angostas la imagen se recorta mucho más, así que
-           agregamos un degradé suave abajo (no arriba) para que el
-           panel siga siendo legible sin tapar el contexto histórico. */
-        background:
-            linear-gradient(180deg, rgba(27, 39, 51, 0) 55%, rgba(27, 39, 51, 0.75) 100%);
-    }
-}
-
-@media (max-aspect-ratio: 3/5) {
-    .portada__imagen {
-        object-position: left top;
-    }
 }
 
 
-/* =========================================
-   BOTÓN VOLVER AL MENÚ PRINCIPAL
-   ========================================= */
-
-.btn-volver {
-    position: fixed;
-    left: clamp(10px, 1.5vw, 20px);
-    bottom: clamp(10px, 1.5vw, 20px);
-    z-index: 20;
-
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: clamp(8px, 0.9vw, 12px) clamp(14px, 1.4vw, 20px);
-
-    font-family: inherit;
-    font-size: clamp(12px, 0.9vw, 14px);
-    font-weight: bold;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    color: var(--color-texto);
-
-    background-color: rgba(23, 54, 74, 0.9);
-    border: clamp(1.5px, 0.15vw, 2px) solid var(--color-acento);
-    border-radius: 999px;
-
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-    transition: background-color 0.15s ease, transform 0.15s ease;
-}
-
-.btn-volver:hover,
-.btn-volver:focus-visible {
-    background-color: rgba(34, 50, 67, 0.95);
-    transform: translateY(-1px);
-}
-
-.btn-volver:active {
-    transform: translateY(0);
-}
-
-.btn-volver:focus-visible {
-    outline: 2px solid var(--color-acento);
-    outline-offset: 3px;
-}
-
-.btn-volver__icono {
-    font-size: 1.1em;
-    line-height: 1;
-}
-
-@media (max-width: 600px) {
-    .btn-volver {
-        padding: 8px 14px;
-    }
-
-    .btn-volver__texto {
-        display: none;
-    }
-
-    .btn-volver__icono {
-        font-size: 1.3em;
-    }
-}
-
-
-/* =========================================
-   LAYOUT GENERAL DEL COMBATE
-   ========================================= */
+/* ============================================================
+   ============================================================
+   JUEGO
+   ============================================================
+   ============================================================ */
 
 .combate {
+    position: relative;
+
     width: 100%;
+
     min-height: 100vh;
-    min-height: 100svh;
+    min-height: 100dvh;
 
-    display: grid;
-    grid-template-columns: clamp(160px, 18vw, 240px) 1fr clamp(200px, 22vw, 280px);
-    gap: clamp(10px, 1.2vw, 20px);
+    padding: 20px;
 
-    padding: clamp(12px, 1.5vw, 24px);
-
-    background-color: var(--color-base);
-    background-image:
-        radial-gradient(circle at 15% 20%, rgba(243, 156, 18, 0.08), transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(166, 0, 0, 0.10), transparent 40%);
+    background:
+        radial-gradient(
+            circle at center,
+            #33251a 0%,
+            #1d1510 55%,
+            #100d0a 100%
+        );
 }
 
-/* Una regla propia con "display: grid" en .combate pisa al atributo
-   [hidden] del navegador (ambos tienen la misma prioridad de cascada,
-   pero .combate viene del autor y gana). Sin esta línea, la sección de
-   combate queda visible desde el primer instante aunque tenga el
-   atributo "hidden", y la portada nunca desaparece de verdad. */
+
 .combate[hidden] {
     display: none;
 }
 
 
-/* =========================================
-   PANELES LATERALES (unidad / registro)
-   ========================================= */
+/* ============================================================
+   ENCABEZADO
+   ============================================================ */
 
-.panel {
-    background-color: var(--color-panel);
-    border: clamp(2px, 0.15vw, 3px) solid var(--color-acento);
-    border-radius: clamp(6px, 0.5vw, 10px);
-
-    padding: clamp(12px, 1.2vw, 18px);
-
-    display: flex;
-    flex-direction: column;
-    gap: clamp(10px, 1vw, 16px);
-
-    height: fit-content;
-}
-
-.panel__titulo {
-    font-size: clamp(15px, 1.1vw, 20px);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-acento);
-    border-bottom: 1px solid rgba(243, 156, 18, 0.35);
-    padding-bottom: 8px;
-}
-
-.panel--unitario .panel__titulo {
-    color: #6FA8DC;
-}
-
-
-/* =========================================
-   ESTADO DE LA UNIDAD (barra de vida + stats)
-   ========================================= */
-
-.unidad-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.barra-vida {
+.juego-header {
     width: 100%;
-    height: clamp(14px, 1.2vw, 18px);
-    background-color: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(245, 233, 208, 0.25);
-    border-radius: 20px;
-    overflow: hidden;
-}
 
-.barra-vida__relleno {
-    height: 100%;
-    width: 100%;
-    transition: width 0.35s ease;
-}
+    max-width: 1200px;
 
-.barra-vida__relleno--unitario {
-    background: linear-gradient(90deg, #0055A5, #3B82C4);
-}
+    margin:
+        0 auto 18px;
 
-.barra-vida__relleno--federal {
-    background: linear-gradient(90deg, #A60000, #D63333);
-}
-
-.unidad-info__texto {
-    font-size: clamp(12px, 0.9vw, 14px);
-    opacity: 0.85;
-}
-
-.stats {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: clamp(12px, 0.95vw, 14px);
-}
 
-.stats__fila {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    border-bottom: 1px dashed rgba(245, 233, 208, 0.15);
-}
-
-.stats__fila dt {
-    opacity: 0.75;
-}
-
-.stats__fila dd {
-    font-weight: bold;
-    color: var(--color-acento);
-}
-
-
-/* =========================================
-   REGISTRO DE COMBATE
-   ========================================= */
-
-.registro {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-
-    max-height: 60vh;
-    overflow-y: auto;
-
-    font-size: clamp(11px, 0.85vw, 13px);
-    line-height: 1.4;
-}
-
-.registro li {
-    padding: 6px 8px;
-    border-left: 3px solid var(--color-acento);
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    animation: aparecer 0.25s ease;
-}
-
-.registro li.registro__federal {
-    border-left-color: var(--color-federal);
-}
-
-.registro li.registro__unitario {
-    border-left-color: var(--color-unitario);
-}
-
-@keyframes aparecer {
-    from {
-        opacity: 0;
-        transform: translateY(-4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================================
-   CONTENEDOR DEL TABLERO
-   ========================================= */
-
-.tablero-contenedor {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(10px, 1vw, 16px);
     align-items: center;
-    position: relative;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding:
+        15px 20px;
+
+    border:
+        1px solid
+        #765021;
+
+    background:
+        rgba(18, 13, 9, 0.95);
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.5);
 }
+
+
+.juego-header__titulo {
+    min-width: 0;
+}
+
+
+.juego-header__nivel {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #d49a47;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing:
+        0.15em;
+}
+
+
+.juego-header h1 {
+    color:
+        #efe3c8;
+
+    font-size:
+        clamp(20px, 3vw, 32px);
+
+    line-height: 1.1;
+}
+
+
+/* ============================================================
+   HUD
+   ============================================================ */
 
 .hud {
-    width: 100%;
     display: flex;
-    justify-content: space-between;
+
     align-items: center;
 
-    font-size: clamp(13px, 1vw, 16px);
-    font-weight: bold;
-    letter-spacing: 0.04em;
+    gap: 10px;
+
+    flex-shrink: 0;
 }
+
 
 .hud__turno {
-    color: var(--color-acento);
-    padding: 3px 10px;
-    border-radius: 6px;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    padding:
+        9px 14px;
+
+    border:
+        1px solid
+        #8c632d;
+
+    background:
+        #251a11;
+
+    color:
+        #d7ae6a;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    text-align: center;
 }
 
-/* Colorea el HUD según de quién es el turno, para reforzar
-   visualmente que se trata de un juego por turnos y no de un
-   enfrentamiento simultáneo. */
+
 .hud__turno--jugador {
-    color: #6FA8DC;
-    background-color: rgba(0, 85, 165, 0.18);
+    border-color:
+        #a87836;
+
+    color:
+        #e2b96d;
 }
+
 
 .hud__turno--federal {
-    color: #ff8a8a;
-    background-color: rgba(166, 0, 0, 0.22);
+    border-color:
+        #8f4031;
+
+    color:
+        #d87962;
 }
+
 
 .hud__contador {
-    opacity: 0.8;
+    padding:
+        9px 12px;
+
+    background:
+        #120e0b;
+
+    color:
+        #bda27a;
+
+    font-size: 13px;
+
+    white-space: nowrap;
 }
 
 
-/* =========================================
-   GRILLA / TABLERO
-   ========================================= */
+/* ============================================================
+   AVISO DE TURNO
+   ============================================================ */
 
-.tablero {
-    --columnas: 9;
-    --filas: 6;
+.aviso-turno {
+    position: fixed;
+
+    z-index: 100;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.95);
+
+    padding:
+        20px 35px;
+
+    border:
+        1px solid
+        #bd8638;
+
+    background:
+        rgba(15, 11, 8, 0.95);
+
+    color:
+        #ead3a5;
+
+    font-size:
+        clamp(20px, 4vw, 32px);
+
+    font-weight: bold;
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.8);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+}
+
+
+.aviso-turno--visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+
+
+.aviso-turno--federal {
+    border-color:
+        #934432;
+
+    color:
+        #d77b65;
+}
+
+
+.aviso-turno--jugador {
+    border-color:
+        #b17b32;
+
+    color:
+        #dfb86e;
+}
+
+
+/* ============================================================
+   CONTENIDO
+   ============================================================ */
+
+.juego-contenido {
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
 
     display: grid;
-    grid-template-columns: repeat(var(--columnas), 1fr);
-    grid-template-rows: repeat(var(--filas), 1fr);
 
-    width: min(100%, 900px);
-    aspect-ratio: 9 / 6;
+    grid-template-columns:
+        minmax(0, 1fr)
+        300px;
 
-    border: clamp(2px, 0.2vw, 4px) solid var(--color-acento);
-    border-radius: 8px;
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* ============================================================
+   ZONA DEL TABLERO
+   ============================================================ */
+
+.zona-tablero {
+    position: relative;
+
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 15px;
+
+    border:
+        1px solid
+        #765021;
+
+    background:
+        rgba(13, 10, 8, 0.95);
+
+    box-shadow:
+        0 5px 25px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+/* ============================================================
+   TABLERO
+   ============================================================ */
+
+.tablero {
+    --columnas: 10;
+    --filas: 6;
+
+    position: relative;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(var(--columnas), minmax(0, 1fr));
+
+    grid-template-rows:
+        repeat(var(--filas), minmax(45px, 1fr));
+
+    aspect-ratio:
+        10 / 6;
+
     overflow: hidden;
 
-    background-color: #223243;
+    border:
+        2px solid
+        #805a2b;
 
-    transition: filter 0.25s ease;
+    background:
+        #251b13;
+
+    transition:
+        filter 0.2s ease;
 }
 
-/* Mientras actúan los Federales, el tablero se ve "apagado" y no
-   responde a clicks: refuerza que NO es el turno del jugador, en vez
-   de dejarlo con el mismo aspecto de siempre (lo que daba la
-   sensación de que todo se movía en tiempo real). */
+
+/* ============================================================
+   TABLERO BLOQUEADO
+   ============================================================ */
+
 .tablero--bloqueado {
+    filter:
+        brightness(0.48);
+
     pointer-events: none;
-    filter: brightness(0.55) saturate(0.6);
 }
+
+
+/* ============================================================
+   CELDAS
+   ============================================================ */
 
 .celda {
     position: relative;
 
-    border: 1px solid rgba(245, 233, 208, 0.06);
+    min-width: 0;
+    min-height: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border:
+        1px solid
+        rgba(146, 105, 55, 0.35);
+
+    background:
+        #302318;
 
     cursor: default;
 
-    transition: background-color 0.15s ease;
+    transition:
+        background 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
+
 .celda--par {
-    background-color: rgba(245, 233, 208, 0.02);
+    background:
+        #38291b;
 }
+
+
+/* ============================================================
+   CELDA MOVIBLE
+   ============================================================ */
 
 .celda--movible {
     cursor: pointer;
-    background-color: rgba(0, 85, 165, 0.28);
+
+    background:
+        rgba(177, 132, 60, 0.32);
+
+    box-shadow:
+        inset 0 0 0 2px
+        rgba(210, 164, 83, 0.75);
 }
 
-.celda--movible:hover,
-.celda--movible:focus-visible {
-    background-color: rgba(0, 85, 165, 0.5);
+
+.celda--movible:hover {
+    background:
+        rgba(205, 157, 72, 0.55);
 }
+
+
+/* ============================================================
+   CELDA ATACABLE
+   ============================================================ */
 
 .celda--atacable {
     cursor: pointer;
-    background-color: rgba(166, 0, 0, 0.32);
-}
 
-.celda--atacable:hover,
-.celda--atacable:focus-visible {
-    background-color: rgba(166, 0, 0, 0.55);
-}
+    background:
+        rgba(151, 56, 39, 0.4);
 
-.celda:focus-visible {
-    outline: 2px solid var(--color-acento);
-    outline-offset: -2px;
+    box-shadow:
+        inset 0 0 0 2px
+        rgba(196, 83, 59, 0.8);
 }
 
 
-/* =========================================
-   UNIDADES SOBRE EL TABLERO
-   ========================================= */
+.celda--atacable:hover {
+    background:
+        rgba(175, 63, 43, 0.62);
+}
+
+
+/* ============================================================
+   UNIDADES
+   ============================================================ */
 
 .unidad {
-    position: relative;
-    width: 78%;
-    height: 78%;
-    border-radius: 50%;
+    position: absolute;
+
+    z-index: 5;
+
+    top: 50%;
+    left: 50%;
+
+    width: 58%;
+
+    aspect-ratio: 1 / 1;
+
+    transform:
+        translate(-50%, -50%);
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
+    border:
+        2px solid
+        #d2a04e;
+
+    background:
+        radial-gradient(
+            circle,
+            #403020 0%,
+            #1d1510 75%
+        );
+
+    color:
+        #ead6b1;
+
+    font-size:
+        clamp(16px, 2vw, 28px);
+
     font-weight: bold;
-    font-size: clamp(10px, 1vw, 14px);
-    color: #fff;
 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.65);
 
-    transition: transform 0.25s ease, opacity 0.35s ease;
+    user-select: none;
 }
+
 
 .unidad--unitario {
-    background: radial-gradient(circle at 35% 30%, #3B82C4, #0055A5);
-    border: 2px solid #6FA8DC;
+    border-color:
+        #d3a24d;
+
+    color:
+        #e8c47b;
 }
+
 
 .unidad--federal {
-    background: radial-gradient(circle at 35% 30%, #D63333, #A60000);
-    border: 2px solid #E88;
+    border-color:
+        #a84e3b;
+
+    color:
+        #d97963;
+
+    background:
+        radial-gradient(
+            circle,
+            #48251d 0%,
+            #21120f 75%
+        );
 }
 
-.unidad--seleccionada {
-    transform: scale(1.08);
-    box-shadow: 0 0 0 3px var(--color-acento);
-}
 
-.unidad--golpeada {
-    animation: golpe 0.3s ease;
-}
-
-@keyframes golpe {
-    0% {
-        transform: scale(1);
-        filter: brightness(2);
-    }
-
-    100% {
-        transform: scale(1);
-        filter: brightness(1);
-    }
-}
-
-.unidad--caida {
-    opacity: 0;
-    transform: scale(0.3);
-}
+/* ============================================================
+   MINI BARRA DE VIDA
+   ============================================================ */
 
 .unidad__mini-vida {
     position: absolute;
-    top: -10px;
-    left: 8%;
-    width: 84%;
-    height: 4px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 3px;
+
+    left: 10%;
+
+    right: 10%;
+
+    bottom: -7px;
+
+    height: 5px;
+
     overflow: hidden;
+
+    border:
+        1px solid
+        #0c0907;
+
+    background:
+        #180e0b;
 }
+
 
 .unidad__mini-vida-relleno {
     height: 100%;
-    background-color: var(--color-acento);
-    transition: width 0.35s ease;
+
+    background:
+        #b45a43;
+
+    transition:
+        width 0.25s ease;
 }
 
-.unidad--nueva {
-    animation: aparicion 0.5s ease;
+
+.unidad--unitario
+.unidad__mini-vida-relleno {
+    background:
+        #bd9140;
 }
 
-@keyframes aparicion {
+
+/* ============================================================
+   ANIMACIÓN DE GOLPE
+   ============================================================ */
+
+.unidad--golpeada {
+    animation:
+        recibirGolpe
+        0.3s
+        ease;
+}
+
+
+@keyframes recibirGolpe {
+
+    0% {
+        transform:
+            translate(-50%, -50%);
+    }
+
+    25% {
+        transform:
+            translate(-56%, -50%);
+    }
+
+    50% {
+        transform:
+            translate(-44%, -50%);
+    }
+
+    75% {
+        transform:
+            translate(-53%, -50%);
+    }
+
+    100% {
+        transform:
+            translate(-50%, -50%);
+    }
+
+}
+
+
+/* ============================================================
+   ANIMACIÓN DE CAÍDA
+   ============================================================ */
+
+.unidad--caida {
+    animation:
+        caerUnidad
+        0.45s
+        ease
+        forwards;
+}
+
+
+@keyframes caerUnidad {
+
     from {
-        opacity: 0;
-        transform: scale(0);
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg)
+            scale(1);
     }
 
     to {
-        opacity: 1;
-        transform: scale(1);
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            rotate(20deg)
+            scale(0.7);
     }
+
 }
 
 
-/* =========================================
-   BANNER DE RESULTADO DE LA MECÁNICA
-   (feedback inmediato, no es una pantalla aparte)
-   ========================================= */
+/* ============================================================
+   PANEL LATERAL
+   ============================================================ */
+
+.panel-juego {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    min-width: 0;
+}
+
+
+.panel {
+    padding: 16px;
+
+    border:
+        1px solid
+        #765021;
+
+    background:
+        rgba(19, 14, 10, 0.96);
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.4);
+}
+
+
+.panel__titulo {
+    margin-bottom: 12px;
+
+    color:
+        #d39a43;
+
+    font-size: 15px;
+
+    letter-spacing:
+        0.12em;
+
+    border-bottom:
+        1px solid
+        rgba(165, 117, 52, 0.4);
+
+    padding-bottom: 8px;
+}
+
+
+/* ============================================================
+   BARRA DE VIDA
+   ============================================================ */
+
+.barra-vida {
+    position: relative;
+
+    width: 100%;
+
+    height: 15px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #654323;
+
+    background:
+        #160f0b;
+}
+
+
+.barra-vida__relleno {
+    width: 100%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8e3b2c,
+            #bd7540
+        );
+
+    transition:
+        width 0.25s ease;
+}
+
+
+.vida-texto {
+    margin-top: 6px;
+
+    color:
+        #cdb58d;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* ============================================================
+   ESTADÍSTICAS
+   ============================================================ */
+
+.estadisticas {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+
+.estadistica {
+    padding: 9px;
+
+    background:
+        #211710;
+
+    border:
+        1px solid
+        #49331d;
+
+    text-align: center;
+}
+
+
+.estadistica__etiqueta {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #a8834e;
+
+    font-size: 10px;
+
+    letter-spacing:
+        0.08em;
+}
+
+
+.estadistica__valor {
+    color:
+        #e1c083;
+
+    font-size: 15px;
+
+    font-weight: bold;
+}
+
+
+/* ============================================================
+   OBJETIVO
+   ============================================================ */
+
+.panel-objetivo p {
+    color:
+        #cdbb9e;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+}
+
+
+/* ============================================================
+   REGISTRO
+   ============================================================ */
+
+.panel-registro {
+    min-height: 220px;
+}
+
+
+.registro {
+    height: 180px;
+
+    overflow-y: auto;
+
+    padding-left: 20px;
+
+    color:
+        #bfae92;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.registro li {
+    margin-bottom: 7px;
+}
+
+
+.registro__unitario {
+    color:
+        #d7b16b;
+}
+
+
+.registro__federal {
+    color:
+        #c8735d;
+}
+
+
+/* ============================================================
+   SCROLL DEL REGISTRO
+   ============================================================ */
+
+.registro::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.registro::-webkit-scrollbar-track {
+    background:
+        #130e0a;
+}
+
+
+.registro::-webkit-scrollbar-thumb {
+    background:
+        #725025;
+}
+
+
+/* ============================================================
+   RESULTADO
+   ============================================================ */
 
 .banner-resultado {
     position: absolute;
+
+    z-index: 20;
+
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
 
-    padding: 14px 28px;
-    border-radius: 8px;
+    width: min(
+        90%,
+        600px
+    );
 
-    font-size: clamp(16px, 1.6vw, 26px);
+    transform:
+        translate(-50%, -50%);
+
+    padding:
+        25px;
+
+    border:
+        2px solid
+        #c49448;
+
+    background:
+        rgba(14, 10, 7, 0.96);
+
+    color:
+        #ead0a0;
+
+    font-size:
+        clamp(18px, 3vw, 28px);
+
     font-weight: bold;
-    letter-spacing: 0.05em;
+
     text-align: center;
 
-    background-color: rgba(23, 54, 74, 0.95);
-    border: 3px solid var(--color-acento);
-
-    z-index: 10;
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.8);
 }
+
 
 .banner-resultado--victoria {
-    border-color: #6FA8DC;
-    color: #6FA8DC;
+    border-color:
+        #c99b4e;
+
+    color:
+        #e1bd78;
 }
+
 
 .banner-resultado--derrota {
-    border-color: #D63333;
-    color: #D63333;
+    border-color:
+        #984635;
+
+    color:
+        #d47761;
 }
 
 
-/* =========================================
-   AVISO DE CAMBIO DE TURNO
-   ========================================= */
-
-.aviso-turno {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.92);
-
-    padding: 10px 26px;
-    border-radius: 8px;
-
-    font-size: clamp(15px, 1.8vw, 26px);
-    font-weight: bold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-align: center;
-    white-space: nowrap;
-
-    background-color: rgba(15, 23, 31, 0.92);
-    border: 3px solid var(--color-acento);
-
-    z-index: 15;
-    opacity: 0;
-    pointer-events: none;
-
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.aviso-turno--visible {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-.aviso-turno--federal {
-    border-color: var(--color-federal);
-    color: #ff8a8a;
-}
-
-.aviso-turno--jugador {
-    border-color: var(--color-unitario);
-    color: #6FA8DC;
-}
-
-@media (max-width: 600px) {
-    .aviso-turno {
-        font-size: 14px;
-        padding: 8px 16px;
-        white-space: normal;
-        width: 80%;
-    }
-}
-
-
-/* =========================================
-   RESPONSIVE
-   ========================================= */
-
-@media (max-width: 900px) {
-    .combate {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-    }
-
-    .panel {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .registro {
-        max-height: 22vh;
-    }
-}
-/* RESPONSIVE ADICIONAL — agregado sin modificar el código original */
-@media (max-width: 1024px) {
-    .portada__imagen { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
-    .portada__contenido { width: min(85%, 380px); margin: 20px; }
-    .combate { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
-    .panel { width: 100%; }
-    .tablero-contenedor { width: 100%; }
-    .tablero { width: 100%; max-width: 900px; }
-}
-
-@media (max-width: 600px) {
-    .portada { width: 100%; min-height: 100vh; min-height: 100svh; overflow: hidden; }
-    .portada__fondo { width: 100%; height: 100%; }
-    .portada__imagen { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
-    .portada__contenido { width: calc(100% - 30px); max-width: 380px; margin: 15px; padding: 16px; gap: 8px; }
-    .portada__titulo { font-size: clamp(14px, 4vw, 20px); }
-    .portada__cta { font-size: clamp(12px, 3.5vw, 15px); padding: 10px 28px; max-width: 100%; }
-    .combate { width: 100%; min-height: 100vh; min-height: 100svh; grid-template-columns: 1fr; padding: 10px; gap: 10px; }
-    .panel { width: 100%; max-width: 100%; }
-    .tablero-contenedor { width: 100%; max-width: 100%; }
-    .tablero { width: 100%; max-width: 100%; aspect-ratio: 9 / 6; }
-    .hud { width: 100%; }
-    .registro { width: 100%; max-height: 25vh; overflow-y: auto; }
-}
-
-@media (max-width: 400px) {
-    .portada__contenido { width: calc(100% - 20px); margin: 10px; padding: 12px; }
-    .portada__titulo { font-size: 14px; }
-    .portada__cta { width: 100%; padding: 10px 20px; }
-    .combate { padding: 8px; }
-    .panel { padding: 10px; }
-    .tablero { width: 100%; }
-}
-
-@media (orientation: portrait) {
-    .portada__imagen { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
-}
-
-@media (max-height: 600px) and (orientation: landscape) {
-    .portada__contenido { max-height: 90vh; overflow-y: auto; }
-    .portada__titulo { font-size: clamp(13px, 2.5vw, 18px); }
-    .portada__cta { padding: 8px 24px; }
-}
-
-
-/* =========================================
-   MODAL: CONFIRMACIÓN DE SALIDA
-   ========================================= */
-
-body.modal-abierto {
-    overflow: hidden;
-}
+/* ============================================================
+   MODAL
+   ============================================================ */
 
 .modal-overlay {
     position: fixed;
+
     inset: 0;
-    z-index: 100;
+
+    z-index: 200;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     padding: 20px;
 
-    background-color: rgba(15, 23, 31, 0.75);
-    backdrop-filter: blur(2px);
+    background:
+        rgba(0, 0, 0, 0.8);
 }
+
 
 .modal-overlay[hidden] {
     display: none;
 }
 
-.modal-caja {
-    width: min(100%, 380px);
 
-    padding: clamp(20px, 3vw, 28px);
+.modal {
+    width:
+        min(100%, 420px);
 
-    background-color: var(--color-panel);
-    border: clamp(2px, 0.15vw, 3px) solid var(--color-acento);
-    border-radius: clamp(8px, 0.6vw, 12px);
+    padding:
+        25px;
+
+    border:
+        1px solid
+        #a67332;
+
+    background:
+        #1b130d;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.8);
 
     text-align: center;
-
-    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
-    animation: modalAparicion 0.2s ease;
 }
 
-@keyframes modalAparicion {
-    from {
-        opacity: 0;
-        transform: scale(0.94);
-    }
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+.modal__titulo {
+    margin-bottom: 12px;
+
+    color:
+        #d6a052;
+
+    font-size: 22px;
 }
 
-.modal-caja__titulo {
-    font-size: clamp(16px, 1.6vw, 20px);
-    font-weight: bold;
-    color: var(--color-texto);
-    margin-bottom: 10px;
+
+.modal__texto {
+    margin-bottom: 22px;
+
+    color:
+        #d6c5a8;
+
+    line-height: 1.5;
 }
 
-.modal-caja__texto {
-    font-size: clamp(13px, 1.05vw, 15px);
-    line-height: 1.45;
-    color: rgba(245, 233, 208, 0.8);
-    margin-bottom: clamp(18px, 2vw, 24px);
-}
 
-.modal-caja__acciones {
+.modal__acciones {
     display: flex;
+
     gap: 12px;
-    justify-content: center;
 }
 
-.modal-boton {
+
+.modal__boton {
     flex: 1;
 
-    padding: clamp(9px, 0.9vw, 12px) clamp(12px, 1.2vw, 18px);
+    min-height: 45px;
+
+    border: none;
 
     font-family: inherit;
-    font-size: clamp(12px, 0.95vw, 14px);
+
+    font-size: 14px;
+
     font-weight: bold;
-    letter-spacing: 0.04em;
 
-    border-radius: 999px;
-
-    appearance: none;
-    -webkit-appearance: none;
     cursor: pointer;
-
-    transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-.modal-boton:hover,
-.modal-boton:focus-visible {
-    filter: brightness(1.15);
-    transform: translateY(-1px);
+
+.modal__boton--cancelar {
+    background:
+        transparent;
+
+    color:
+        #d8c8ad;
+
+    border:
+        1px solid
+        #8a622e;
 }
 
-.modal-boton:active {
-    transform: translateY(0);
+
+.modal__boton--confirmar {
+    background:
+        #873729;
+
+    color:
+        #ffffff;
 }
 
-.modal-boton:focus-visible {
-    outline: 2px solid var(--color-texto);
-    outline-offset: 2px;
+
+/* ============================================================
+   ============================================================
+   TABLET
+   ============================================================
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    .juego-contenido {
+        grid-template-columns:
+            minmax(0, 1fr)
+            250px;
+    }
+
+
+    .panel {
+        padding: 13px;
+    }
+
 }
 
-.modal-boton--cancelar {
-    background-color: transparent;
-    color: var(--color-texto);
-    border: clamp(1.5px, 0.15vw, 2px) solid var(--color-acento);
-}
 
-.modal-boton--confirmar {
-    background-color: var(--color-federal);
-    color: #fff;
-    border: clamp(1.5px, 0.15vw, 2px) solid #E88;
-}
+/* ============================================================
+   ============================================================
+   MÓVIL
+   ============================================================
+   ============================================================ */
 
-@media (max-width: 400px) {
-    .modal-caja__acciones {
+@media (max-width: 600px) {
+
+
+    /* --------------------------------------------------------
+       PORTADA MÓVIL
+       -------------------------------------------------------- */
+
+    .portada {
+
+        width: 100vw;
+
+        height: 100vh;
+
+        height: 100svh;
+
+        min-height: 100svh;
+
+        overflow: hidden;
+    }
+
+
+    .portada__fondo {
+
+        width: 100%;
+
+        height: 100%;
+    }
+
+
+    .portada__fondo picture {
+
+        width: 100%;
+
+        height: 100%;
+    }
+
+
+    .portada__imagen {
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
+
+        object-position:
+            center center;
+    }
+
+
+    /*
+     * BOTÓN ABAJO A LA DERECHA
+     *
+     * Este es el comportamiento que querías.
+     */
+
+    .portada__boton {
+
+        right: 20px;
+
+        bottom: 20px;
+
+        width: 170px;
+
+        display: flex;
+
+        justify-content: flex-end;
+    }
+
+
+    .portada__cta {
+
+        width: 170px;
+
+        min-height: 48px;
+
+        padding:
+            11px 18px;
+
+        font-size: 16px;
+
+        letter-spacing:
+            0.06em;
+    }
+
+
+    /* --------------------------------------------------------
+       JUEGO MÓVIL
+       -------------------------------------------------------- */
+
+    .combate {
+
+        padding: 10px;
+
+        min-height: 100svh;
+    }
+
+
+    .juego-header {
+
+        margin-bottom: 10px;
+
+        padding:
+            12px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 10px;
+    }
+
+
+    .juego-header h1 {
+
+        font-size: 22px;
+
+        text-align: center;
+    }
+
+
+    .juego-header__nivel {
+
+        text-align: center;
+    }
+
+
+    .hud {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .hud__turno {
+
+        flex: 1;
+
+        font-size: 12px;
+    }
+
+
+    .hud__contador {
+
+        font-size: 12px;
+    }
+
+
+    /* --------------------------------------------------------
+       CONTENIDO DEL JUEGO
+       -------------------------------------------------------- */
+
+    .juego-contenido {
+
+        display: flex;
+
+        flex-direction: column;
+
+        width: 100%;
+
+        gap: 10px;
+    }
+
+
+    .zona-tablero {
+
+        width: 100%;
+
+        padding: 7px;
+    }
+
+
+    .tablero {
+
+        width: 100%;
+
+        aspect-ratio: 10 / 6;
+
+        grid-template-rows:
+            repeat(
+                var(--filas),
+                minmax(35px, 1fr)
+            );
+    }
+
+
+    .unidad {
+
+        width: 65%;
+
+        font-size: 15px;
+    }
+
+
+    /* --------------------------------------------------------
+       PANEL
+       -------------------------------------------------------- */
+
+    .panel-juego {
+
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 10px;
+    }
+
+
+    .panel {
+
+        width: 100%;
+
+        padding: 12px;
+    }
+
+
+    .panel-jugador {
+
+        grid-column:
+            1 / -1;
+    }
+
+
+    .panel-objetivo {
+
+        grid-column:
+            1 / -1;
+    }
+
+
+    .panel-registro {
+
+        grid-column:
+            1 / -1;
+
+        min-height: 180px;
+    }
+
+
+    .registro {
+
+        height: 130px;
+
+        font-size: 11px;
+    }
+
+
+    /* --------------------------------------------------------
+       AVISO
+       -------------------------------------------------------- */
+
+    .aviso-turno {
+
+        width:
+            calc(100% - 40px);
+
+        padding:
+            16px 20px;
+
+        font-size: 22px;
+    }
+
+
+    /* --------------------------------------------------------
+       MODAL
+       -------------------------------------------------------- */
+
+    .modal {
+
+        width:
+            calc(100% - 30px);
+
+        padding:
+            20px;
+    }
+
+
+    .modal__acciones {
+
         flex-direction: column;
     }
+
+}
+
+
+/* ============================================================
+   TELÉFONOS MUY PEQUEÑOS
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .portada__boton {
+
+        right: 15px;
+
+        bottom: 15px;
+
+        width: 155px;
+    }
+
+
+    .portada__cta {
+
+        width: 155px;
+
+        min-height: 45px;
+
+        padding:
+            10px 14px;
+
+        font-size: 15px;
+    }
+
+
+    .combate {
+
+        padding: 7px;
+    }
+
+
+    .juego-header h1 {
+
+        font-size: 19px;
+    }
+
+
+    .tablero {
+
+        grid-template-rows:
+            repeat(
+                var(--filas),
+                minmax(30px, 1fr)
+            );
+    }
+
+
+    .unidad {
+
+        font-size: 13px;
+    }
+
 }

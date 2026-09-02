@@ -3,211 +3,428 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Sarmiento: Tácticas de La Pampa — Nivel 2</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="juego2.css">
+    <title>Nivel 2 - El Paso de las Sierras</title>
+
+    <link
+        rel="stylesheet"
+        href="juego2.css"
+    >
 </head>
 
 <body>
 
-    <!-- ============================================
-         PANTALLA DE PRESENTACIÓN DEL NIVEL
-         ============================================ -->
-    <section class="portada" id="portadaNivel" aria-label="Presentación del nivel">
+    <!-- =========================================================
+         PORTADA DEL NIVEL 2
+         ========================================================= -->
+
+    <section
+        id="portadaNivel"
+        class="portada"
+        aria-label="Presentación del Nivel 2"
+    >
+
         <div class="portada__fondo">
-            <img class="portada__imagen" id="imgPortada" src="../RECURSOS GRAFICOS/niveldos.png" alt="Ilustración histórica del Nivel 2">
-            <div class="portada__velo"></div>
+
+            <picture>
+
+                <!--
+                    MÓVIL
+                    Esta imagen se utiliza automáticamente
+                    cuando la pantalla tiene 600px o menos.
+                -->
+                <source
+                    media="(max-width: 600px)"
+                    srcset="../RECURSOS_GRÁFICOS/imgPortada2Movil.png"
+                >
+
+                <!--
+                    PC / TABLET
+                -->
+                <img
+                    id="imgPortada2"
+                    class="portada__imagen"
+                    src="../RECURSOS_GRÁFICOS/imgPortada2.png"
+                    alt="Nivel 2: El Paso de las Sierras"
+                >
+
+            </picture>
+
         </div>
 
-        <div class="portada__contenido">
-            <p class="portada__eyebrow">Nivel 2</p>
-            <h1 class="portada__titulo">Nivel 2: Emboscada en la Frontera de La Pampa (1840)</h1>
-            <button class="portada__cta" id="btnIniciarNivel" type="button">INICIAR</button>
+
+        <!-- =====================================================
+             BOTÓN INICIAR
+             ===================================================== -->
+
+        <div class="portada__boton">
+
+            <button
+                id="btnIniciarNivel"
+                class="portada__cta"
+                type="button"
+            >
+                INICIAR
+            </button>
+
         </div>
+
     </section>
 
-    <main class="combate" id="combate" aria-label="Núcleo de combate táctico" hidden>
 
-        <button class="btn-volver" id="btnVolver" type="button" aria-haspopup="dialog" aria-controls="modalConfirmarSalida">
-            <span class="btn-volver__icono" aria-hidden="true">←</span>
-            <span class="btn-volver__texto">Volver</span>
-        </button>
+    <!-- =========================================================
+         JUEGO
+         ========================================================= -->
 
-        <!-- ============================================
-             PANEL LATERAL: UNIDAD DEL JUGADOR
-             ============================================ -->
-        <section class="panel panel--unitario" aria-label="Estado de tu unidad">
-            <h2 class="panel__titulo">Unitario</h2>
+    <main
+        id="combate"
+        class="combate"
+        aria-label="Núcleo de combate táctico"
+        hidden
+    >
 
-            <div class="unidad-info">
-                <div class="barra-vida" role="progressbar" aria-label="Vida del Unitario"
-                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-                    <div class="barra-vida__relleno barra-vida__relleno--unitario" id="vidaJugadorRelleno"></div>
-                </div>
-                <span class="unidad-info__texto" id="vidaJugadorTexto">40 / 40</span>
+        <!-- =====================================================
+             ENCABEZADO DEL JUEGO
+             ===================================================== -->
+
+        <header class="juego-header">
+
+            <div class="juego-header__titulo">
+
+                <span class="juego-header__nivel">
+                    NIVEL 2
+                </span>
+
+                <h1>
+                    El Paso de las Sierras
+                </h1>
+
             </div>
 
-            <dl class="stats">
-                <div class="stats__fila">
-                    <dt>Daño</dt>
-                    <dd id="statDanoJugador">6 – 12</dd>
+
+            <div class="hud">
+
+                <div
+                    id="hudTurno"
+                    class="hud__turno hud__turno--jugador"
+                >
+                    Turno del jugador
                 </div>
-                <div class="stats__fila">
-                    <dt>Defensa</dt>
-                    <dd id="statDefensaJugador">2</dd>
+
+                <div
+                    id="hudContador"
+                    class="hud__contador"
+                >
+                    Turno 1
                 </div>
-            </dl>
-        </section>
 
-        <!-- ============================================
-             TABLERO DE COMBATE
-             ============================================ -->
-        <section class="tablero-contenedor">
+            </div>
 
-            <header class="hud">
-                <span class="hud__turno" id="hudTurno">Turno del jugador</span>
-                <span class="hud__contador" id="hudContador">Turno 1</span>
-            </header>
+        </header>
 
-            <div class="tablero" id="tablero" role="grid" aria-label="Mapa de combate"></div>
 
-            <div class="aviso-turno" id="avisoTurno" aria-live="polite"></div>
+        <!-- =====================================================
+             AVISO DE CAMBIO DE TURNO
+             ===================================================== -->
 
-            <div class="banner-resultado" id="bannerResultado" hidden></div>
+        <div
+            id="avisoTurno"
+            class="aviso-turno"
+            aria-live="polite"
+        >
+        </div>
 
-        </section>
 
-        <!-- ============================================
-             PANEL LATERAL: BITÁCORA / REGISTRO
-             ============================================ -->
-        <section class="panel panel--registro" aria-label="Registro de combate">
-            <h2 class="panel__titulo">Registro</h2>
-            <ul class="registro" id="registro" aria-live="polite"></ul>
-        </section>
+        <!-- =====================================================
+             CONTENEDOR PRINCIPAL
+             ===================================================== -->
+
+        <div class="juego-contenido">
+
+
+            <!-- =================================================
+                 TABLERO
+                 ================================================= -->
+
+            <section
+                class="zona-tablero"
+                aria-label="Tablero de combate"
+            >
+
+                <div
+                    id="tablero"
+                    class="tablero"
+                    role="grid"
+                    aria-label="Tablero táctico"
+                >
+                </div>
+
+
+                <!-- =============================================
+                     RESULTADO
+                     ============================================= -->
+
+                <div
+                    id="bannerResultado"
+                    class="banner-resultado"
+                    hidden
+                >
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PANEL LATERAL
+                 ================================================= -->
+
+            <aside class="panel-juego">
+
+
+                <!-- =============================================
+                     INFORMACIÓN DEL JUGADOR
+                     ============================================= -->
+
+                <section class="panel panel-jugador">
+
+                    <h2 class="panel__titulo">
+                        UNITARIO
+                    </h2>
+
+
+                    <div class="barra-vida">
+
+                        <div
+                            id="vidaJugadorRelleno"
+                            class="barra-vida__relleno"
+                            style="width: 100%;"
+                        >
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="vidaJugadorTexto"
+                        class="vida-texto"
+                    >
+                        40 / 40
+                    </div>
+
+
+                    <div class="estadisticas">
+
+                        <div class="estadistica">
+
+                            <span class="estadistica__etiqueta">
+                                DAÑO
+                            </span>
+
+                            <span
+                                id="statDanoJugador"
+                                class="estadistica__valor"
+                            >
+                                6 – 12
+                            </span>
+
+                        </div>
+
+
+                        <div class="estadistica">
+
+                            <span class="estadistica__etiqueta">
+                                DEFENSA
+                            </span>
+
+                            <span
+                                id="statDefensaJugador"
+                                class="estadistica__valor"
+                            >
+                                2
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     OBJETIVO
+                     ============================================= -->
+
+                <section class="panel panel-objetivo">
+
+                    <h2 class="panel__titulo">
+                        OBJETIVO
+                    </h2>
+
+                    <p>
+                        Mantener la posición y repeler
+                        el ataque de la caballería.
+                    </p>
+
+                </section>
+
+
+                <!-- =============================================
+                     REGISTRO DE EVENTOS
+                     ============================================= -->
+
+                <section class="panel panel-registro">
+
+                    <h2 class="panel__titulo">
+                        REGISTRO
+                    </h2>
+
+                    <ul
+                        id="registro"
+                        class="registro"
+                    >
+                    </ul>
+
+                </section>
+
+            </aside>
+
+        </div>
 
     </main>
 
-    <!-- ============================================
-         MODAL: CONFIRMACIÓN DE SALIDA
-         ============================================ -->
-    <div class="modal-overlay" id="modalConfirmarSalida" role="dialog" aria-modal="true"
-        aria-labelledby="modalConfirmarSalidaTitulo" hidden>
-        <div class="modal-caja">
-            <p class="modal-caja__titulo" id="modalConfirmarSalidaTitulo">¿Salir de la partida?</p>
-            <p class="modal-caja__texto">Vas a volver al inicio del nivel y perderás el progreso del combate actual.</p>
-            <div class="modal-caja__acciones">
-                <button class="modal-boton modal-boton--cancelar" id="btnCancelarSalida" type="button">Cancelar</button>
-                <button class="modal-boton modal-boton--confirmar" id="btnConfirmarSalida" type="button">Sí, salir</button>
+
+    <!-- =========================================================
+         MODAL DE SALIDA
+         ========================================================= -->
+
+    <div
+        id="modalConfirmarSalida"
+        class="modal-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalConfirmarSalidaTitulo"
+        hidden
+    >
+
+        <div class="modal">
+
+            <h2
+                id="modalConfirmarSalidaTitulo"
+                class="modal__titulo"
+            >
+                ¿Salir de la partida?
+            </h2>
+
+
+            <p class="modal__texto">
+                ¿Seguro que querés salir del Nivel 2?
+            </p>
+
+
+            <div class="modal__acciones">
+
+                <button
+                    id="btnCancelarSalida"
+                    class="modal__boton modal__boton--cancelar"
+                    type="button"
+                >
+                    CANCELAR
+                </button>
+
+
+                <button
+                    id="btnConfirmarSalida"
+                    class="modal__boton modal__boton--confirmar"
+                    type="button"
+                >
+                    SALIR
+                </button>
+
             </div>
+
         </div>
+
     </div>
 
+
+    <!-- =========================================================
+         CONTROL DE LA PORTADA
+         ========================================================= -->
+
     <script>
-        // --- Selección responsive de imagen de portada (PC / Móvil) ---
-        // + Fallback: prueba varias extensiones/nombres comunes.
-        (function () {
-            var img = document.getElementById('imgPortada');
-            var carpeta = '../RECURSOS GRAFICOS/';
-            var mediaMovil = window.matchMedia('(max-width: 768px)');
 
-            var candidatos = [];
-            var i = 0;
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
 
-            function candidatosPara(nombreBase) {
-                return [
-                    carpeta + nombreBase + '.png',
-                    carpeta + nombreBase + '.jpg',
-                    carpeta + nombreBase + '.jpeg',
-                    carpeta + nombreBase + '.webp',
-                    carpeta + nombreBase + '.PNG',
-                    carpeta + nombreBase + '.JPG'
-                ];
+                const portada =
+                    document.getElementById(
+                        "portadaNivel"
+                    );
+
+                const combate =
+                    document.getElementById(
+                        "combate"
+                    );
+
+                const botonIniciar =
+                    document.getElementById(
+                        "btnIniciarNivel"
+                    );
+
+
+                botonIniciar.addEventListener(
+                    "click",
+                    function () {
+
+                        /*
+                         * Evitamos que se pueda pulsar
+                         * varias veces.
+                         */
+                        botonIniciar.disabled = true;
+
+
+                        /*
+                         * Comienza la transición.
+                         */
+                        portada.classList.add(
+                            "portada--saliendo"
+                        );
+
+
+                        /*
+                         * Después de la transición,
+                         * ocultamos la portada y
+                         * mostramos el juego.
+                         */
+                        setTimeout(
+                            function () {
+
+                                portada.hidden = true;
+
+                                combate.hidden = false;
+
+                            },
+                            400
+                        );
+
+                    }
+                );
+
             }
+        );
 
-            function cargarImagenSegunDispositivo() {
-                var nombreBase = mediaMovil.matches ? 'niveldosMOVIL' : 'niveldos';
-                candidatos = candidatosPara(nombreBase);
-                i = 0;
-                img.style.display = '';
-                img.src = candidatos[0];
-            }
-
-            img.addEventListener('error', function siguienteCandidato() {
-                i++;
-                if (i < candidatos.length) {
-                    img.src = candidatos[i];
-                } else {
-                    img.style.display = 'none';
-                }
-            });
-
-            cargarImagenSegunDispositivo();
-
-            if (mediaMovil.addEventListener) {
-                mediaMovil.addEventListener('change', cargarImagenSegunDispositivo);
-            } else if (mediaMovil.addListener) {
-                mediaMovil.addListener(cargarImagenSegunDispositivo);
-            }
-        })();
-
-        // --- Modal de confirmación al tocar "Volver" durante la partida ---
-        (function () {
-            var btnVolver = document.getElementById('btnVolver');
-            var modal = document.getElementById('modalConfirmarSalida');
-            var btnCancelar = document.getElementById('btnCancelarSalida');
-            var btnConfirmar = document.getElementById('btnConfirmarSalida');
-
-            function abrirModal() {
-                modal.hidden = false;
-                document.body.classList.add('modal-abierto');
-                btnCancelar.focus();
-            }
-
-            function cerrarModal() {
-                modal.hidden = true;
-                document.body.classList.remove('modal-abierto');
-                btnVolver.focus();
-            }
-
-            btnVolver.addEventListener('click', abrirModal);
-            btnCancelar.addEventListener('click', cerrarModal);
-
-            btnConfirmar.addEventListener('click', function () {
-                window.location.reload();
-            });
-
-            modal.addEventListener('click', function (evento) {
-                if (evento.target === modal) cerrarModal();
-            });
-
-            document.addEventListener('keydown', function (evento) {
-                if (evento.key === 'Escape' && !modal.hidden) cerrarModal();
-            });
-        })();
-
-        // --- Transición portada -> combate (con respaldo por si la animación no dispara) ---
-        (function () {
-            var btn = document.getElementById('btnIniciarNivel');
-            var portada = document.getElementById('portadaNivel');
-            var combate = document.getElementById('combate');
-            var yaHecho = false;
-
-            function mostrarCombate() {
-                if (yaHecho) return;
-                yaHecho = true;
-                portada.hidden = true;
-                combate.hidden = false;
-            }
-
-            btn.addEventListener('click', function () {
-                portada.classList.add('portada--saliendo');
-                portada.addEventListener('animationend', mostrarCombate, { once: true });
-                setTimeout(mostrarCombate, 450);
-            });
-        })();
     </script>
+
+
+    <!-- =========================================================
+         INSTANCIA DEL NIVEL 2
+         ========================================================= -->
 
     <script src="instancia2.js"></script>
 
