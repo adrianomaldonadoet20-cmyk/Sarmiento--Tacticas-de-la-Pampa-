@@ -1,0 +1,362 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background-color: #2C3E50;
+}
+
+
+/* =========================================
+   MARCO EXTERIOR (ocupa toda la pantalla)
+   Actúa de "letterbox": si la proporción del
+   viewport no coincide con la de la imagen,
+   acá aparecen franjas del color de fondo,
+   NUNCA recorte ni desincronización.
+   ========================================= */
+
+.menu-wrapper {
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    /* ↑ "height: 100svh" pisa a "100vh" en navegadores que lo soportan.
+       svh = "small viewport height": en mobile, evita que la barra de
+       direcciones del navegador (que aparece/desaparece al hacer scroll)
+       cambie el alto disponible y "salte" el layout. Es un fallback
+       progresivo: los navegadores viejos usan 100vh, los nuevos 100svh. */
+
+    background-color: #2C3E50;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centra a .menu (que tiene tamaño fijo por aspect-ratio) tanto
+       horizontal como verticalmente dentro de toda la pantalla. */
+
+    overflow: hidden;
+    /* Por si algún hijo se pasa por redondeos de píxeles, no genera
+       scrollbars ni desborde visual. */
+}
+
+
+/* =========================================
+   MENÚ PRINCIPAL — LA "ANCLA" DE TODO
+   ========================================= */
+
+.menu {
+    position: relative;
+    /* ⚠️ CLAVE: todos los botones e imágenes de adentro usan
+       "position: absolute", y absolute siempre se posiciona respecto
+       al ancestro más cercano que tenga "position" distinto de
+       "static". Al poner "relative" acá, .menu se convierte en ese
+       "contenedor de referencia" para .boton-config y .botones. */
+
+    width: 100%;
+    height: 100%;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    aspect-ratio: 1920 / 1080;
+    /* Fuerza a .menu a mantener SIEMPRE esta proporción ancho/alto,
+       sin importar cuánto espacio le den width/height al 100%.
+       Como los botones se posicionan en % de .menu (no de la pantalla),
+       al escalar .menu, todo lo de adentro escala proporcionalmente
+       y en el mismo punto relativo a la imagen de fondo. Por eso el
+       comentario original insiste en poner el ratio REAL del PNG. */
+
+    background-image: url("../RECURSOS GRAFICOS/PantallainiciodesesionPC.png");
+
+    background-size: 100% 100%;
+    /* Estira la imagen para llenar EXACTAMENTE la caja. Esto solo es
+       seguro/no-distorsiona porque aspect-ratio ya garantiza que la
+       caja tiene la misma proporción que el PNG. Si el aspect-ratio
+       estuviera mal, acá se vería la imagen "estirada". */
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+
+/* =========================================
+   BOTÓN DE CONFIGURACIÓN (engranaje)
+   ========================================= */
+
+.boton-config {
+    position: absolute;
+    /* Se posiciona respecto a .menu (el ancestro relative más cercano). */
+
+    top: 2.2%;
+    right: 2.2%;
+    /* % relativo al ANCHO/ALTO de .menu, no del viewport. Esto es lo
+       que hace que el engranaje quede siempre "pegado" al mismo lugar
+       visual de la imagen de fondo, sin importar el tamaño de pantalla. */
+
+    width: 3.2%;
+    aspect-ratio: 1 / 1;
+    /* El alto se calcula automáticamente a partir del ancho (1:1 = cuadrado),
+       así el ícono nunca se deforma aunque .menu cambie de tamaño. */
+
+    display: block;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+    /* Anima suavemente los cambios de :hover / :active en vez de que
+       salten de golpe. */
+
+    z-index: 10;
+    /* Se asegura de quedar por encima de otros elementos superpuestos
+       (por si .botones u otra capa se solapara visualmente). */
+}
+
+.boton-config img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    /* La imagen interna llena el cuadrado (100%/100%) pero "contain"
+       evita que se deforme si el PNG del ícono no es perfectamente
+       cuadrado: lo encoge para que entre completo, manteniendo su
+       propia proporción interna. */
+}
+
+.boton-config:hover {
+    transform: scale(1.1) rotate(25deg);
+    filter: brightness(1.2);
+    cursor: pointer;
+    /* Efecto "engranaje que gira y crece" al pasar el mouse: feedback
+       visual típico de un ícono de configuración/settings. */
+}
+
+.boton-config:active {
+    transform: scale(0.95) rotate(25deg);
+    /* Al hacer click (mientras se mantiene apretado) se encoge un
+       poco, dando sensación de "botón presionado" físicamente,
+       pero mantiene la rotación para que no se vea un salto raro. */
+}
+
+
+/* =========================================
+   CONTENEDOR DE BOTONES (Jugar / Ayuda / etc.)
+   ========================================= */
+
+.botones {
+    position: absolute;
+    /* También referenciado a .menu. */
+
+    width: 25%;
+    /* Ancho del BLOQUE completo de botones, en % de .menu. */
+
+    left: 50%;
+    top: 39%;
+    transform: translateX(-50%);
+    /* Truco de centrado horizontal: "left: 50%" mueve el borde
+       izquierdo del bloque al centro de .menu, y "translateX(-50%)"
+       lo corre hacia atrás la mitad de SU PROPIO ancho. El resultado
+       es que el bloque queda perfectamente centrado sin necesitar
+       saber su ancho exacto en píxeles. */
+
+    display: flex;
+    flex-direction: column;
+    /* Apila los botones verticalmente, uno debajo del otro. */
+}
+
+
+/* =========================================
+   BOTONES — ESTILOS BASE COMUNES
+   (aplica a TODOS los .boton, tengan o no
+   la clase .boton-imagen)
+   ========================================= */
+
+.boton {
+    display: flex;
+    width: 100%;
+    /* Cada botón ocupa el 100% del ancho de .botones (que ya está
+       definido en % de .menu). Así, todos los botones dentro del
+       bloque quedan del mismo ancho entre sí. */
+
+    margin-bottom: 3%;
+    /* OJO: en CSS, el % de "margin" (vertical) se calcula sobre el
+       ANCHO del elemento contenedor, no sobre el alto. Como .botones
+       tiene un ancho fijo en % de .menu, este margen termina escalando
+       proporcionalmente igual que el resto — es la razón por la que
+       el comentario original dice que "escala junto con todo lo demás". */
+
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.boton:hover {
+    transform: scale(1.05);
+    filter: brightness(1.15);
+    cursor: pointer;
+    /* Mismo patrón de feedback que .boton-config: crece un poco y
+       se ilumina al pasar el mouse. */
+}
+
+.boton:active {
+    transform: scale(0.98);
+    /* Se encoge levemente al hacer click, sensación de "presionado". */
+}
+
+
+/* =========================================
+   BOTONES CON IMAGEN PROPIA
+   (Jugar / Ayuda-Manual / Créditos / Salir)
+   Esta clase se suma a .boton, ej:
+   <a class="boton boton-imagen"><img .../></a>
+   ========================================= */
+
+.boton-imagen {
+    aspect-ratio: 458 / 88;
+    /* Fija la proporción de CADA botón individual según las
+       dimensiones reales del PNG de ese botón (458x88 px).
+       Como el ancho ya viene heredado de .boton (100% de .botones),
+       el alto se calcula solo para respetar esta proporción, evitando
+       que el botón quede "aplastado" o "estirado". */
+}
+
+.boton-imagen img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    /* Igual que en .boton-config img: llena el espacio disponible
+       sin deformarse. */
+
+    pointer-events: none;
+    /* Los clicks "atraviesan" la imagen y los recibe el <a> o
+       elemento padre (.boton). Esto evita bugs donde el click
+       registra sobre la imagen pero no dispara el evento del link. */
+
+    user-select: none;
+    /* Evita que el usuario seleccione la imagen como si fuera texto
+       (por ejemplo al hacer doble-click o arrastrar sin querer). */
+}
+
+
+/* =========================================
+   TABLET — 769px a 1024px
+   Solo se ajusta el bloque de botones; el
+   fondo sigue siendo el de PC.
+   ========================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .menu {
+        background-image: url("../RECURSOS GRAFICOS/PantallainiciodesesionPC.png");
+        aspect-ratio: 1920 / 1080;
+        /* Redundante con la regla base, pero explícito por claridad:
+           en tablet se usa el mismo PNG y ratio que en PC. */
+    }
+
+    .botones {
+        width: 34%;
+        /* Los botones se agrandan proporcionalmente (25% -> 34%)
+           porque en pantallas más chicas que una PC de escritorio,
+           el mismo 25% se vería demasiado pequeño para tocar/leer. */
+        top: 40%;
+    }
+}
+
+
+/* =========================================
+   CELULAR — hasta 768px
+   Acá cambia la IMAGEN DE FONDO a la
+   versión vertical/móvil.
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .menu {
+        background-image: url("../RECURSOS GRAFICOS/PantallainiciodesesionMOVIL.png");
+        aspect-ratio: 1080 / 1920;
+        /* Al cambiar de PNG horizontal a uno vertical, es OBLIGATORIO
+           actualizar el aspect-ratio acá también: si no, la imagen
+           se vería distorsionada porque .menu seguiría midiendo
+           16:9 en vez de 9:16. */
+    }
+
+    .botones {
+        width: 78%;
+        /* Mucho más ancho relativo porque en el PNG móvil los botones
+           suelen ocupar más espacio horizontal de la imagen. */
+        top: 51%;
+    }
+
+    .boton {
+        margin-bottom: 2.5%;
+        /* Levemente menor separación entre botones en mobile. */
+    }
+
+    .boton-config {
+        top: 2%;
+        right: 2%;
+        width: 8%;
+        /* El engranaje se agranda bastante (3.2% -> 8%) porque en
+           pantallas táctiles necesita un área de toque más grande
+           para ser usable con el dedo. */
+    }
+}
+
+
+/* =========================================
+   CELULAR PEQUEÑO — hasta 400px
+   Ajuste fino extra sobre la regla de
+   "CELULAR" (hereda todo lo demás de ahí).
+   ========================================= */
+
+@media (max-width: 400px) {
+
+    .botones {
+        width: 82%;
+        top: 50%;
+        /* En pantallas muy angostas, agranda un poco más el bloque
+           de botones para que sigan siendo legibles/tocables. */
+    }
+}
+
+
+/* =========================================
+   CELULAR HORIZONTAL (landscape)
+   Vuelve a usar el PNG de PC porque en
+   horizontal la pantalla es más ancha que
+   alta, similar proporción a desktop.
+   ========================================= */
+
+@media (max-width: 900px) and (orientation: landscape) {
+
+    .menu {
+        background-image: url("../RECURSOS GRAFICOS/PantallainiciodesesionPC.png");
+        aspect-ratio: 1920 / 1080;
+    }
+
+    .botones {
+        width: 25%;
+        top: 22%;
+        /* Vuelve al 25% de PC, pero "top" cambia a 22% (más arriba)
+           porque en landscape el alto disponible es menor y hay que
+           reacomodar la posición vertical del bloque de botones. */
+    }
+
+    .boton-config {
+        width: 4%;
+        /* Un punto intermedio entre el 3.2% de PC y el 8% de mobile
+           vertical: en landscape el dedo sigue siendo el input, pero
+           hay más espacio horizontal disponible. */
+    }
+}

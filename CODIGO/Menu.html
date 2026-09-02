@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ↑ "initial-scale=1.0" es clave junto al CSS: evita que el
+         navegador mobile haga zoom-out automático de la página,
+         lo cual arruinaría los cálculos en % del CSS (.menu, .botones). -->
+
+    <title>Sarmiento: Tácticas de La Pampa</title>
+
+    <link rel="stylesheet" href="Menu.css">
+</head>
+
+<body>
+
+    <div class="menu-wrapper">
+        <!-- .menu-wrapper: el "marco" de pantalla completa (100vw/100svh)
+             que centra a .menu. Ver Menu_anotado.css para el detalle. -->
+
+        <main class="menu">
+            <!-- .menu: la caja "ancla" con aspect-ratio fijo y la imagen
+                 de fondo (PantallainiciodesesionPC.png / MOVIL.png).
+                 Todo lo de adentro se posiciona en % relativo A ESTA caja,
+                 no al viewport, por eso "position: relative" en el CSS. -->
+
+            <!-- Botón de configuración (esquina superior) -->
+            <a href="Configuracion.html" class="boton-config" aria-label="Configuración">
+                <!--
+                 Es un <a>, no un <button>: al hacer click navega
+                     directamente a Configuracion.html.
+                     aria-label="Configuración": como el botón es solo un
+                     ícono (sin texto visible), este atributo le da un
+                     nombre accesible para lectores de pantalla — sin él,
+                     un lector de pantalla no sabría qué hace este link. -->
+                <img src="../RECURSOS GRAFICOS/Bontondeconfiguracion.png" alt="Configuración">
+                <!-- alt="Configuración": texto alternativo por si la
+                     imagen no carga, y también leído por lectores de
+                     pantalla (funciona junto con el aria-label de arriba,
+                     son redundantes a propósito para asegurar accesibilidad). -->
+            </a>
+
+            <div class="botones">
+                <!-- Contenedor que agrupa y centra verticalmente los tres
+                     botones principales del menú (ver .botones en el CSS:
+                     flex-direction column + centrado horizontal). -->
+
+                <a href="#" class="boton boton-imagen boton-jugar">
+                    <!-- href="#" : todavía no apunta a ninguna pantalla real
+                         (placeholder). Cuando el nivel/juego esté listo,
+                         acá va la URL real, ej: href="Juego.html".
+                         Clases: "boton" da el comportamiento base (hover,
+                         ancho 100%, etc.), "boton-imagen" fija su aspect-ratio
+                         (458/88) según el PNG, y "boton-jugar" es un gancho
+                         extra por si más adelante se le quiere dar un
+                         estilo o comportamiento específico solo a este botón
+                         (hoy no tiene reglas propias en el CSS). -->
+                    <img src="../RECURSOS GRAFICOS/Botondejugar.png" alt="Jugar">
+                </a>
+
+                <a href="#" class="boton boton-imagen boton-ayuda">
+                    <!-- Mismo patrón que el botón de Jugar. "boton-ayuda"
+                         es el gancho específico para este botón, también
+                         sin reglas propias por ahora. -->
+                    <img src="../RECURSOS GRAFICOS/BotonAyudaManual.png" alt="Ayuda / Manual">
+                </a>
+
+                <a href="#" class="boton boton-imagen boton-salir">
+                    <!-- Mismo patrón. "boton-salir": normalmente un botón
+                         de "Salir" cierra la app/pestaña o vuelve a una
+                         pantalla anterior; con href="#" todavía no hace
+                         nada real. -->
+                    <img src="../RECURSOS GRAFICOS/BotonSalir.png" alt="Salir">
+                </a>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
