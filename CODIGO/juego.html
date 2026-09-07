@@ -243,6 +243,81 @@
             activarFallback('.btn-volver__imagen', ['volver.png', 'Volver.png', 'VOLVER.png']);
         })();
 
+        // --- Fondo responsive del tablero de combate (PC / Móvil) ---
+        // A diferencia de las imágenes de botones/portada (que son <img>
+        // y usan el evento "error" para pasar al siguiente candidato),
+        // este fondo se aplica como CSS (background-image) para que quede
+        // detrás de los paneles sin pelear con z-index. Por eso acá
+        // "probamos" cada candidato precargándolo con new Image() antes
+        // de aplicarlo: si carga bien, lo usamos; si no, seguimos con el
+        // siguiente.
+        (function () {
+            var combate = document.querySelector('.combate');
+            if (!combate) return;
+
+            var mediaMovil = window.matchMedia('(max-width: 768px)');
+
+            var carpetasBase = [
+                '../RECURSOS GRAFICOS/',
+                '../Recursos Graficos/',
+                '../recursos graficos/',
+                './RECURSOS GRAFICOS/',
+                'RECURSOS GRAFICOS/'
+            ];
+            var extensiones = ['.png', '.jpg', '.jpeg', '.webp', '.PNG', '.JPG'];
+
+            function candidatosPara(nombresBase) {
+                var lista = [];
+                carpetasBase.forEach(function (carpeta) {
+                    nombresBase.forEach(function (nombre) {
+                        extensiones.forEach(function (ext) {
+                            lista.push(carpeta + nombre + ext);
+                        });
+                    });
+                });
+                return lista;
+            }
+
+            function probarCandidatos(candidatos, indice, alEncontrar) {
+                if (indice >= candidatos.length) {
+                    console.warn(
+                        '[Sarmiento] No se pudo cargar el fondo del combate. ' +
+                        'Probé estas rutas relativas a juego.html:\n' +
+                        candidatos.join('\n')
+                    );
+                    return;
+                }
+                var probador = new Image();
+                probador.onload = function () {
+                    alEncontrar(candidatos[indice]);
+                };
+                probador.onerror = function () {
+                    probarCandidatos(candidatos, indice + 1, alEncontrar);
+                };
+                probador.src = candidatos[indice];
+            }
+
+            function aplicarFondoSegunDispositivo() {
+                // Además del nombre exacto que me pasaste (con guion),
+                // pruebo también la variante con guion bajo por las dudas.
+                var nombresBase = mediaMovil.matches
+                    ? ['fondo_nivel1-MOVIL', 'fondo_nivel1_MOVIL', 'fondo_nivel1MOVIL']
+                    : ['fondo_nivel1'];
+
+                probarCandidatos(candidatosPara(nombresBase), 0, function (rutaEncontrada) {
+                    combate.style.setProperty('--combate-fondo-imagen', 'url("' + rutaEncontrada + '")');
+                });
+            }
+
+            aplicarFondoSegunDispositivo();
+
+            if (mediaMovil.addEventListener) {
+                mediaMovil.addEventListener('change', aplicarFondoSegunDispositivo);
+            } else if (mediaMovil.addListener) {
+                mediaMovil.addListener(aplicarFondoSegunDispositivo);
+            }
+        })();
+
         // --- Modal de confirmación al tocar "Volver" durante la partida ---
         (function () {
             var btnVolver = document.getElementById('btnVolver');

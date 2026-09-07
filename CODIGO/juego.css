@@ -29,6 +29,18 @@ body {
     --color-acento: #F39C12;
     --color-texto: #F5E9D0;
     --color-panel: #17364A;
+
+    /* ---- Paleta "de época" (San Juan, 1831): pergamino, cuero y
+       bronce viejo, para que el tablero y el HUD lean como un mapa
+       de campaña real y no como una UI de videojuego genérica. ---- */
+    --color-pergamino: #E6CE9D;
+    --color-pergamino-sombra: #CDAE79;
+    --color-pergamino-quemado: #B8905A;
+    --color-cuero: #5B3A22;
+    --color-cuero-oscuro: #33200F;
+    --color-tinta: #3A2711;
+    --color-bronce: #C08A2E;
+    --color-bronce-claro: #EFC372;
 }
 
 
@@ -285,6 +297,12 @@ body {
    ========================================= */
 
 .combate {
+    /* Contiene la url() del fondo responsive, seteada por JS una vez
+       que confirma cuál de las rutas candidatas carga bien. Si por
+       algún motivo no encuentra ninguna, queda en "none" y el fondo
+       cae de vuelta a los degradés de siempre. */
+    --combate-fondo-imagen: none;
+
     width: 100%;
     min-height: 100vh;
     min-height: 100svh;
@@ -296,9 +314,16 @@ body {
     padding: clamp(12px, 1.5vw, 24px);
 
     background-color: var(--color-base);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     background-image:
         radial-gradient(circle at 15% 20%, rgba(243, 156, 18, 0.08), transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(166, 0, 0, 0.10), transparent 40%);
+        radial-gradient(circle at 85% 80%, rgba(166, 0, 0, 0.10), transparent 40%),
+        /* Velo oscuro entre el fondo histórico y el HUD/tablero, para
+           que el texto y las celdas se sigan leyendo bien encima. */
+        linear-gradient(180deg, rgba(27, 39, 51, 0.6), rgba(27, 39, 51, 0.82)),
+        var(--combate-fondo-imagen);
 }
 
 /* Una regla propia con "display: grid" en .combate pisa al atributo
@@ -316,9 +341,22 @@ body {
    ========================================= */
 
 .panel {
+    position: relative;
+
     background-color: var(--color-panel);
-    border: clamp(2px, 0.15vw, 3px) solid var(--color-acento);
-    border-radius: clamp(6px, 0.5vw, 10px);
+    background-image:
+        radial-gradient(circle 3px at 10px 10px, var(--color-bronce-claro) 55%, transparent 60%),
+        radial-gradient(circle 3px at calc(100% - 10px) 10px, var(--color-bronce-claro) 55%, transparent 60%),
+        radial-gradient(circle 3px at 10px calc(100% - 10px), var(--color-bronce-claro) 55%, transparent 60%),
+        radial-gradient(circle 3px at calc(100% - 10px) calc(100% - 10px), var(--color-bronce-claro) 55%, transparent 60%),
+        linear-gradient(155deg, rgba(192, 138, 46, 0.08), transparent 40%),
+        linear-gradient(180deg, #1b3c52, #143045);
+
+    border: clamp(2px, 0.15vw, 3px) solid var(--color-cuero);
+    border-radius: 3px;
+    box-shadow:
+        inset 0 0 0 2px rgba(192, 138, 46, 0.35),
+        0 8px 20px rgba(0, 0, 0, 0.35);
 
     padding: clamp(12px, 1.2vw, 18px);
 
@@ -330,12 +368,30 @@ body {
 }
 
 .panel__titulo {
+    position: relative;
+
     font-size: clamp(15px, 1.1vw, 20px);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-acento);
-    border-bottom: 1px solid rgba(243, 156, 18, 0.35);
-    padding-bottom: 8px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+
+    border-bottom: 2px solid var(--color-bronce);
+    padding-bottom: 10px;
+}
+
+/* Pequeño rombo centrado bajo el título, a modo de filete
+   ornamental de mapa de campaña antiguo. */
+.panel__titulo::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-panel);
+    border: 2px solid var(--color-bronce);
+    transform: translateX(-50%) rotate(45deg);
 }
 
 .panel--unitario .panel__titulo {
@@ -463,6 +519,28 @@ body {
     position: relative;
 }
 
+/* Rosa de los vientos de bronce, como en los mapas de campaña de
+   la época, apoyada sobre la esquina inferior del tablero. */
+.tablero-contenedor::after {
+    content: "";
+    position: absolute;
+    right: clamp(4px, 1vw, 14px);
+    bottom: clamp(-6px, -1vw, 2px);
+    width: clamp(46px, 6vw, 72px);
+    height: clamp(46px, 6vw, 72px);
+    pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23C08A2E' stroke-width='2'%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='30'/%3E%3C/g%3E%3Cg fill='%23C08A2E'%3E%3Cpath d='M50 6 L58 42 L50 50 L42 42 Z'/%3E%3Cpath d='M50 94 L58 58 L50 50 L42 58 Z' fill-opacity='0.6'/%3E%3Cpath d='M6 50 L42 42 L50 50 L42 58 Z' fill-opacity='0.6'/%3E%3Cpath d='M94 50 L58 58 L50 50 L58 42 Z' fill-opacity='0.6'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+@media (max-width: 600px) {
+    .tablero-contenedor::after {
+        display: none;
+    }
+}
+
 .hud {
     width: 100%;
     display: flex;
@@ -472,12 +550,26 @@ body {
     font-size: clamp(13px, 1vw, 16px);
     font-weight: bold;
     letter-spacing: 0.04em;
+
+    padding: clamp(8px, 0.9vw, 12px) clamp(14px, 1.6vw, 22px);
+
+    color: var(--color-tinta);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 30%),
+        linear-gradient(180deg, var(--color-pergamino), var(--color-pergamino-sombra));
+    border: 2px solid var(--color-cuero);
+    border-radius: 4px;
+    box-shadow:
+        inset 0 0 0 1px rgba(192, 138, 46, 0.55),
+        0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .hud__turno {
-    color: var(--color-acento);
-    padding: 3px 10px;
-    border-radius: 6px;
+    color: var(--color-tinta);
+    padding: 4px 12px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-size: 0.9em;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -485,17 +577,31 @@ body {
    visualmente que se trata de un juego por turnos y no de un
    enfrentamiento simultáneo. */
 .hud__turno--jugador {
-    color: #6FA8DC;
-    background-color: rgba(0, 85, 165, 0.18);
+    color: #0A3B66;
+    background-color: rgba(0, 85, 165, 0.20);
+    box-shadow: inset 0 0 0 1px rgba(0, 85, 165, 0.35);
 }
 
 .hud__turno--federal {
-    color: #ff8a8a;
-    background-color: rgba(166, 0, 0, 0.22);
+    color: #5E0000;
+    background-color: rgba(166, 0, 0, 0.20);
+    box-shadow: inset 0 0 0 1px rgba(166, 0, 0, 0.35);
 }
 
+/* El contador de turno queda como una pequeña medalla de bronce,
+   en vez de texto plano al costado del HUD. */
 .hud__contador {
-    opacity: 0.8;
+    opacity: 1;
+    padding: 4px 14px;
+    font-size: 0.85em;
+    letter-spacing: 0.08em;
+    color: #2A1A0C;
+    background: radial-gradient(circle at 35% 25%, var(--color-bronce-claro), var(--color-bronce) 65%, var(--color-cuero-oscuro) 100%);
+    border: 1px solid var(--color-cuero-oscuro);
+    border-radius: 999px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 
@@ -514,11 +620,28 @@ body {
     width: min(100%, 900px);
     aspect-ratio: 9 / 6;
 
-    border: clamp(2px, 0.2vw, 4px) solid var(--color-acento);
-    border-radius: 8px;
+    border: clamp(5px, 0.5vw, 8px) solid var(--color-cuero-oscuro);
+    border-radius: 4px;
     overflow: hidden;
 
-    background-color: #223243;
+    background-color: var(--color-pergamino);
+    background-image:
+        /* Remaches de bronce en las cuatro esquinas, como un mapa
+           clavado sobre una mesa de campaña. */
+        radial-gradient(circle 5px at 14px 14px, var(--color-bronce-claro) 55%, var(--color-cuero-oscuro) 75%, transparent 78%),
+        radial-gradient(circle 5px at calc(100% - 14px) 14px, var(--color-bronce-claro) 55%, var(--color-cuero-oscuro) 75%, transparent 78%),
+        radial-gradient(circle 5px at 14px calc(100% - 14px), var(--color-bronce-claro) 55%, var(--color-cuero-oscuro) 75%, transparent 78%),
+        radial-gradient(circle 5px at calc(100% - 14px) calc(100% - 14px), var(--color-bronce-claro) 55%, var(--color-cuero-oscuro) 75%, transparent 78%),
+        /* Manchas y vetas del pergamino curtido por el sol cuyano. */
+        radial-gradient(circle at 20% 30%, rgba(184, 144, 90, 0.55), transparent 32%),
+        radial-gradient(circle at 78% 68%, rgba(184, 144, 90, 0.5), transparent 30%),
+        radial-gradient(circle at 85% 18%, rgba(91, 58, 34, 0.25), transparent 26%),
+        linear-gradient(160deg, var(--color-pergamino) 0%, var(--color-pergamino-sombra) 100%);
+
+    box-shadow:
+        inset 0 0 0 2px var(--color-bronce),
+        inset 0 0 30px rgba(91, 58, 34, 0.45),
+        0 12px 30px rgba(0, 0, 0, 0.5);
 
     transition: filter 0.25s ease;
 }
@@ -535,7 +658,7 @@ body {
 .celda {
     position: relative;
 
-    border: 1px solid rgba(245, 233, 208, 0.06);
+    border: 1px solid rgba(58, 39, 17, 0.22);
 
     display: flex;
     align-items: center;
@@ -543,16 +666,19 @@ body {
 
     cursor: default;
 
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+/* Parcelas alternadas más oscuras, como el sombreado a pluma de
+   un plano de campaña antiguo, en vez de una simple grilla pareja. */
 .celda--par {
-    background-color: rgba(245, 233, 208, 0.02);
+    background-color: rgba(91, 58, 34, 0.14);
 }
 
 .celda--movible {
     cursor: pointer;
-    background-color: rgba(0, 85, 165, 0.28);
+    background-color: rgba(0, 85, 165, 0.32);
+    box-shadow: inset 0 0 0 2px rgba(0, 85, 165, 0.55);
 }
 
 .celda--movible:hover,
@@ -562,7 +688,8 @@ body {
 
 .celda--atacable {
     cursor: pointer;
-    background-color: rgba(166, 0, 0, 0.32);
+    background-color: rgba(166, 0, 0, 0.34);
+    box-shadow: inset 0 0 0 2px rgba(166, 0, 0, 0.6);
 }
 
 .celda--atacable:hover,
@@ -571,7 +698,7 @@ body {
 }
 
 .celda:focus-visible {
-    outline: 2px solid var(--color-acento);
+    outline: 2px solid var(--color-cuero-oscuro);
     outline-offset: -2px;
 }
 
@@ -601,12 +728,14 @@ body {
 
 .unidad--unitario {
     background: radial-gradient(circle at 35% 30%, #3B82C4, #0055A5);
-    border: 2px solid #6FA8DC;
+    border: 2px solid var(--color-bronce-claro);
+    box-shadow: 0 0 0 2px var(--color-cuero-oscuro), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .unidad--federal {
     background: radial-gradient(circle at 35% 30%, #D63333, #A60000);
-    border: 2px solid #E88;
+    border: 2px solid var(--color-bronce-claro);
+    box-shadow: 0 0 0 2px var(--color-cuero-oscuro), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .unidad--seleccionada {
@@ -680,28 +809,31 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 
-    padding: 14px 28px;
-    border-radius: 8px;
+    padding: 16px 32px;
+    border-radius: 4px;
 
     font-size: clamp(16px, 1.6vw, 26px);
     font-weight: bold;
     letter-spacing: 0.05em;
     text-align: center;
 
-    background-color: rgba(23, 54, 74, 0.95);
-    border: 3px solid var(--color-acento);
+    background: linear-gradient(180deg, var(--color-pergamino), var(--color-pergamino-sombra));
+    border: 3px solid var(--color-cuero);
+    box-shadow:
+        inset 0 0 0 2px var(--color-bronce),
+        0 14px 34px rgba(0, 0, 0, 0.55);
 
     z-index: 10;
 }
 
 .banner-resultado--victoria {
-    border-color: #6FA8DC;
-    color: #6FA8DC;
+    border-color: var(--color-unitario);
+    color: #0A3B66;
 }
 
 .banner-resultado--derrota {
-    border-color: #D63333;
-    color: #D63333;
+    border-color: var(--color-federal);
+    color: #5E0000;
 }
 
 
@@ -715,8 +847,8 @@ body {
     left: 50%;
     transform: translate(-50%, -50%) scale(0.92);
 
-    padding: 10px 26px;
-    border-radius: 8px;
+    padding: 12px 30px;
+    border-radius: 3px;
 
     font-size: clamp(15px, 1.8vw, 26px);
     font-weight: bold;
@@ -725,8 +857,11 @@ body {
     text-align: center;
     white-space: nowrap;
 
-    background-color: rgba(15, 23, 31, 0.92);
-    border: 3px solid var(--color-acento);
+    background: linear-gradient(180deg, var(--color-pergamino), var(--color-pergamino-sombra));
+    border: 3px solid var(--color-cuero);
+    box-shadow:
+        inset 0 0 0 2px var(--color-bronce),
+        0 14px 34px rgba(0, 0, 0, 0.5);
 
     z-index: 15;
     opacity: 0;
@@ -742,12 +877,12 @@ body {
 
 .aviso-turno--federal {
     border-color: var(--color-federal);
-    color: #ff8a8a;
+    color: #5E0000;
 }
 
 .aviso-turno--jugador {
     border-color: var(--color-unitario);
-    color: #6FA8DC;
+    color: #0A3B66;
 }
 
 @media (max-width: 600px) {
