@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarmiento: Tácticas de La Pampa — Mapa de Campaña</title>
+    <link rel="stylesheet" href="Mapa.css">
+</head>
+
+<body>
+
+    <div class="mapa-wrapper">
+
+        <!-- Botón volver al menú principal -->
+        <a href="Menu.html" class="boton-volver" aria-label="Volver al menú">
+            ‹ Volver
+        </a>
+
+        <!-- <picture> elige sola la imagen correcta según el ancho de
+             pantalla: la versión "responsible" (responsive) en celulares
+             (hasta 768px) y la normal en todo lo demás. Hoy ambas
+             imágenes tienen la misma composición; el día que se agreguen
+             más provincias/niveles, cada una se puede ajustar por
+             separado sin tocar el HTML. -->
+        <picture>
+            <source media="(max-width: 768px)" srcset="../RECURSOS GRAFICOS/imagendelmapadeljuegoresponsible.png">
+            <img src="../RECURSOS GRAFICOS/imagendelmapadeljuego.png"
+                alt="Mapa de campaña de Argentina con las provincias jugables: San Juan (Nivel 1) y Paso de las Sierras (Nivel 2)"
+                class="mapa-imagen" id="imgMapa">
+        </picture>
+
+        <!-- Botón Iniciar: por ahora manda directo al Nivel 1 (San Juan).
+             Más adelante, cuando el mapa tenga selección de provincia,
+             este botón puede reemplazarse por click directo sobre cada
+             hexágono/marcador del mapa. -->
+        <a href="juego.html" class="boton-iniciar" aria-label="Iniciar Nivel 1: San Juan">
+            <img src="../RECURSOS GRAFICOS/iniciar.png" alt="Iniciar">
+        </a>
+
+    </div>
+
+    <!-- Misma música de fondo que el resto del juego, continúa desde
+         donde iba gracias a audio.js. -->
+    <audio id="musica-fondo" src="../RECURSOS GRAFICOS/SONIDOS/Folk Round.mp3" loop></audio>
+    <script src="audio.js"></script>
+
+</body>
+
+</html>
