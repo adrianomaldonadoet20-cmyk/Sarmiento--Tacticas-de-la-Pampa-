@@ -544,11 +544,19 @@
         limpiarResaltados();
         actualizarHud();
 
-        elementos.bannerResultado.hidden = false;
-        elementos.bannerResultado.textContent = gano
-            ? "¡Victoria táctica! Amenazas neutralizadas."
-            : "Unidad caída. El combate ha terminado.";
-        elementos.bannerResultado.classList.add(gano ? "banner-resultado--victoria" : "banner-resultado--derrota");
+        if (gano) {
+            // La pantalla de victoria (con sus botones) la maneja el modal
+            // definido en juego.html; acá no hace falta el banner de texto.
+            if (window.mostrarVictoria) window.mostrarVictoria();
+        } else {
+            elementos.bannerResultado.hidden = false;
+            elementos.bannerResultado.textContent = "Unidad caída. El combate ha terminado.";
+            elementos.bannerResultado.classList.add("banner-resultado--derrota");
+
+            // La pantalla de derrota (con el botón de "Volver a intentar")
+            // la maneja el modal definido en juego.html.
+            if (window.mostrarDerrota) window.mostrarDerrota();
+        }
 
         registrarEvento(gano ? "Combate finalizado: victoria." : "Combate finalizado: derrota.", null);
     }
