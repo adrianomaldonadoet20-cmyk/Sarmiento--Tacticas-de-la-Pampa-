@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background-color: #0E1622;
+}
+
+/* =========================================
+   MARCO EXTERIOR
+   ========================================= */
+.ayuda-wrapper {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+
+    background-color: #0E1622;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+/* =========================================
+   IMAGEN DEL MANUAL
+   La imagen ya trae su propio marco/pergamino
+   dibujado adentro, así que acá solo la
+   centramos y evitamos que se deforme.
+   ========================================= */
+.ayuda-imagen {
+    max-width: 92%;
+    max-height: 92%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* =========================================
+   BOTÓN VOLVER
+   ========================================= */
+.boton-volver {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    z-index: 10;
+
+    color: #E6D8C3;
+    text-decoration: none;
+    font-size: clamp(14px, 1.4vw, 16px);
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    background-color: rgba(23, 34, 48, 0.75);
+    border: 1px solid #9A804B;
+    border-radius: 4px;
+    padding: 6px 14px;
+
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.boton-volver:hover {
+    transform: translateX(-4px);
+    filter: brightness(1.3);
+    cursor: pointer;
+}
+
+/* =========================================
+   ADAPTACIÓN A CELULARES
+   ========================================= */
+@media (max-width: 768px) {
+    .ayuda-imagen {
+        max-width: 96%;
+        max-height: 94%;
+    }
+
+    .boton-volver {
+        top: 2%;
+        left: 2%;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+}
