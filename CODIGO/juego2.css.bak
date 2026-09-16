@@ -1,0 +1,1865 @@
+/* ============================================================
+   JUEGO 2
+   NIVEL 2 — EL PASO DE LAS SIERRAS
+   ============================================================ */
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   HTML
+   ============================================================ */
+
+html {
+    width: 100%;
+    min-height: 100%;
+}
+
+
+/* ============================================================
+   BODY
+   ============================================================ */
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    background: #17120e;
+
+    color: #efe3c8;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    overflow-x: hidden;
+}
+
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+
+.portada {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    width: 100dvw;
+    height: 100dvh;
+
+    min-height: 100dvh;
+
+    overflow: hidden;
+
+    background: #17120e;
+}
+
+
+.portada[hidden] {
+    display: none;
+}
+
+
+/* ============================================================
+   FONDO
+   ============================================================ */
+
+.portada__fondo {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+
+.portada__fondo picture {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ============================================================
+   IMAGEN
+   ============================================================ */
+
+.portada__imagen {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center center;
+}
+
+
+/* ============================================================
+   BOTÓN DE LA PORTADA
+   ============================================================ */
+
+.portada__boton {
+    position: absolute;
+
+    z-index: 50;
+
+    right: 4vw;
+    bottom: 4vh;
+
+    width: 230px;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+
+/* ============================================================
+   BOTÓN INICIAR
+   ============================================================ */
+
+.portada__cta {
+    position: relative;
+
+    width: 230px;
+
+    min-height: 55px;
+
+    padding: 13px 25px;
+
+    border: none;
+
+    outline: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            #d99a4a 0%,
+            #c98738 100%
+        );
+
+    color: #1b130c;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.7);
+
+    clip-path:
+        polygon(
+            10px 0,
+            calc(100% - 10px) 0,
+            100% 10px,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            10px 100%,
+            0 calc(100% - 10px),
+            0 10px
+        );
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+.portada__cta:hover {
+    filter: brightness(1.12);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.8);
+}
+
+
+/* ============================================================
+   CLICK
+   ============================================================ */
+
+.portada__cta:active {
+    transform:
+        translateY(0);
+}
+
+
+/* ============================================================
+   FOCUS
+   ============================================================ */
+
+.portada__cta:focus-visible {
+    outline:
+        2px solid
+        #f0d9ad;
+
+    outline-offset: 4px;
+}
+
+
+/* ============================================================
+   BOTÓN DESHABILITADO
+   ============================================================ */
+
+.portada__cta:disabled {
+    cursor: default;
+
+    opacity: 0.9;
+}
+
+
+/* ============================================================
+   DESAPARICIÓN DE PORTADA
+   ============================================================ */
+
+.portada--saliendo {
+    animation:
+        desaparecerPortada
+        0.4s
+        ease
+        forwards;
+
+    pointer-events: none;
+}
+
+
+@keyframes desaparecerPortada {
+
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+
+}
+
+
+/* ============================================================
+   ============================================================
+   JUEGO
+   ============================================================
+   ============================================================ */
+
+.combate {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #33251a 0%,
+            #1d1510 55%,
+            #100d0a 100%
+        );
+}
+
+
+.combate[hidden] {
+    display: none;
+}
+
+
+/* ============================================================
+   ENCABEZADO
+   ============================================================ */
+
+.juego-header {
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin:
+        0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding:
+        15px 20px;
+
+    border:
+        1px solid
+        #765021;
+
+    background:
+        rgba(18, 13, 9, 0.95);
+
+    box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.5);
+}
+
+
+.juego-header__titulo {
+    min-width: 0;
+}
+
+
+.juego-header__nivel {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #d49a47;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing:
+        0.15em;
+}
+
+
+.juego-header h1 {
+    color:
+        #efe3c8;
+
+    font-size:
+        clamp(20px, 3vw, 32px);
+
+    line-height: 1.1;
+}
+
+
+/* ============================================================
+   HUD
+   ============================================================ */
+
+.hud {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.hud__turno {
+    padding:
+        9px 14px;
+
+    border:
+        1px solid
+        #8c632d;
+
+    background:
+        #251a11;
+
+    color:
+        #d7ae6a;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    text-align: center;
+}
+
+
+.hud__turno--jugador {
+    border-color:
+        #a87836;
+
+    color:
+        #e2b96d;
+}
+
+
+.hud__turno--federal {
+    border-color:
+        #8f4031;
+
+    color:
+        #d87962;
+}
+
+
+.hud__contador {
+    padding:
+        9px 12px;
+
+    background:
+        #120e0b;
+
+    color:
+        #bda27a;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   AVISO DE TURNO
+   ============================================================ */
+
+.aviso-turno {
+    position: fixed;
+
+    z-index: 100;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.95);
+
+    padding:
+        20px 35px;
+
+    border:
+        1px solid
+        #bd8638;
+
+    background:
+        rgba(15, 11, 8, 0.95);
+
+    color:
+        #ead3a5;
+
+    font-size:
+        clamp(20px, 4vw, 32px);
+
+    font-weight: bold;
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.8);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+}
+
+
+.aviso-turno--visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+
+
+.aviso-turno--federal {
+    border-color:
+        #934432;
+
+    color:
+        #d77b65;
+}
+
+
+.aviso-turno--jugador {
+    border-color:
+        #b17b32;
+
+    color:
+        #dfb86e;
+}
+
+
+/* ============================================================
+   CONTENIDO
+   ============================================================ */
+
+.juego-contenido {
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        300px;
+
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* ============================================================
+   ZONA DEL TABLERO
+   ============================================================ */
+
+.zona-tablero {
+    position: relative;
+
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 15px;
+
+    border:
+        1px solid
+        #765021;
+
+    background:
+        rgba(13, 10, 8, 0.95);
+
+    box-shadow:
+        0 5px 25px
+        rgba(0, 0, 0, 0.55);
+}
+
+
+/* ============================================================
+   TABLERO
+   ============================================================ */
+
+.tablero {
+    --columnas: 10;
+    --filas: 6;
+
+    position: relative;
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(var(--columnas), minmax(0, 1fr));
+
+    grid-template-rows:
+        repeat(var(--filas), minmax(45px, 1fr));
+
+    aspect-ratio:
+        10 / 6;
+
+    overflow: hidden;
+
+    border:
+        2px solid
+        #805a2b;
+
+    background:
+        #251b13;
+
+    transition:
+        filter 0.2s ease;
+}
+
+
+/* ============================================================
+   TABLERO BLOQUEADO
+   ============================================================ */
+
+.tablero--bloqueado {
+    filter:
+        brightness(0.48);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   CELDAS
+   ============================================================ */
+
+.celda {
+    position: relative;
+
+    min-width: 0;
+    min-height: 0;
+
+    border:
+        1px solid
+        rgba(146, 105, 55, 0.35);
+
+    background:
+        #302318;
+
+    cursor: default;
+
+    transition:
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.celda--par {
+    background:
+        #38291b;
+}
+
+
+/* ============================================================
+   CELDA MOVIBLE
+   ============================================================ */
+
+.celda--movible {
+    cursor: pointer;
+
+    background:
+        rgba(177, 132, 60, 0.32);
+
+    box-shadow:
+        inset 0 0 0 2px
+        rgba(210, 164, 83, 0.75);
+}
+
+
+.celda--movible:hover {
+    background:
+        rgba(205, 157, 72, 0.55);
+}
+
+
+/* ============================================================
+   CELDA ATACABLE
+   ============================================================ */
+
+.celda--atacable {
+    cursor: pointer;
+
+    background:
+        rgba(151, 56, 39, 0.4);
+
+    box-shadow:
+        inset 0 0 0 2px
+        rgba(196, 83, 59, 0.8);
+}
+
+
+.celda--atacable:hover {
+    background:
+        rgba(175, 63, 43, 0.62);
+}
+
+
+/* ============================================================
+   UNIDADES
+   ============================================================ */
+
+.unidad {
+    position: absolute;
+
+    z-index: 5;
+
+    top: 50%;
+    left: 50%;
+
+    width: 58%;
+
+    aspect-ratio: 1 / 1;
+
+    transform:
+        translate(-50%, -50%);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        2px solid
+        #d2a04e;
+
+    background:
+        radial-gradient(
+            circle,
+            #403020 0%,
+            #1d1510 75%
+        );
+
+    color:
+        #ead6b1;
+
+    font-size:
+        clamp(16px, 2vw, 28px);
+
+    font-weight: bold;
+
+    box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.65);
+
+    user-select: none;
+}
+
+
+.unidad--unitario {
+    border-color:
+        #d3a24d;
+
+    color:
+        #e8c47b;
+}
+
+
+.unidad--federal {
+    border-color:
+        #a84e3b;
+
+    color:
+        #d97963;
+
+    background:
+        radial-gradient(
+            circle,
+            #48251d 0%,
+            #21120f 75%
+        );
+}
+
+
+/* ============================================================
+   MINI BARRA DE VIDA
+   ============================================================ */
+
+.unidad__mini-vida {
+    position: absolute;
+
+    left: 10%;
+
+    right: 10%;
+
+    bottom: -7px;
+
+    height: 5px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #0c0907;
+
+    background:
+        #180e0b;
+}
+
+
+.unidad__mini-vida-relleno {
+    height: 100%;
+
+    background:
+        #b45a43;
+
+    transition:
+        width 0.25s ease;
+}
+
+
+.unidad--unitario
+.unidad__mini-vida-relleno {
+    background:
+        #bd9140;
+}
+
+
+/* ============================================================
+   ANIMACIÓN DE GOLPE
+   ============================================================ */
+
+.unidad--golpeada {
+    animation:
+        recibirGolpe
+        0.3s
+        ease;
+}
+
+
+@keyframes recibirGolpe {
+
+    0% {
+        transform:
+            translate(-50%, -50%);
+    }
+
+    25% {
+        transform:
+            translate(-56%, -50%);
+    }
+
+    50% {
+        transform:
+            translate(-44%, -50%);
+    }
+
+    75% {
+        transform:
+            translate(-53%, -50%);
+    }
+
+    100% {
+        transform:
+            translate(-50%, -50%);
+    }
+
+}
+
+
+/* ============================================================
+   ANIMACIÓN DE CAÍDA
+   ============================================================ */
+
+.unidad--caida {
+    animation:
+        caerUnidad
+        0.45s
+        ease
+        forwards;
+}
+
+
+@keyframes caerUnidad {
+
+    from {
+        opacity: 1;
+
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg)
+            scale(1);
+    }
+
+    to {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -50%)
+            rotate(20deg)
+            scale(0.7);
+    }
+
+}
+
+
+/* ============================================================
+   PANEL LATERAL
+   ============================================================ */
+
+.panel-juego {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    min-width: 0;
+}
+
+
+.panel {
+    padding: 16px;
+
+    border:
+        1px solid
+        #765021;
+
+    background:
+        rgba(19, 14, 10, 0.96);
+
+    box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.4);
+}
+
+
+.panel__titulo {
+    margin-bottom: 12px;
+
+    color:
+        #d39a43;
+
+    font-size: 15px;
+
+    letter-spacing:
+        0.12em;
+
+    border-bottom:
+        1px solid
+        rgba(165, 117, 52, 0.4);
+
+    padding-bottom: 8px;
+}
+
+
+/* ============================================================
+   BARRA DE VIDA
+   ============================================================ */
+
+.barra-vida {
+    position: relative;
+
+    width: 100%;
+
+    height: 15px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #654323;
+
+    background:
+        #160f0b;
+}
+
+
+.barra-vida__relleno {
+    width: 100%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8e3b2c,
+            #bd7540
+        );
+
+    transition:
+        width 0.25s ease;
+}
+
+
+.vida-texto {
+    margin-top: 6px;
+
+    color:
+        #cdb58d;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* ============================================================
+   ESTADÍSTICAS
+   ============================================================ */
+
+.estadisticas {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+
+.estadistica {
+    padding: 9px;
+
+    background:
+        #211710;
+
+    border:
+        1px solid
+        #49331d;
+
+    text-align: center;
+}
+
+
+.estadistica__etiqueta {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #a8834e;
+
+    font-size: 10px;
+
+    letter-spacing:
+        0.08em;
+}
+
+
+.estadistica__valor {
+    color:
+        #e1c083;
+
+    font-size: 15px;
+
+    font-weight: bold;
+}
+
+
+/* ============================================================
+   OBJETIVO
+   ============================================================ */
+
+.panel-objetivo p {
+    color:
+        #cdbb9e;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+}
+
+
+/* ============================================================
+   REGISTRO
+   ============================================================ */
+
+.panel-registro {
+    min-height: 220px;
+}
+
+
+.registro {
+    height: 180px;
+
+    overflow-y: auto;
+
+    padding-left: 20px;
+
+    color:
+        #bfae92;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.registro li {
+    margin-bottom: 7px;
+}
+
+
+.registro__unitario {
+    color:
+        #d7b16b;
+}
+
+
+.registro__federal {
+    color:
+        #c8735d;
+}
+
+
+/* ============================================================
+   SCROLL DEL REGISTRO
+   ============================================================ */
+
+.registro::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.registro::-webkit-scrollbar-track {
+    background:
+        #130e0a;
+}
+
+
+.registro::-webkit-scrollbar-thumb {
+    background:
+        #725025;
+}
+
+
+/* ============================================================
+   RESULTADO
+   ============================================================ */
+
+.banner-resultado {
+    position: absolute;
+
+    z-index: 20;
+
+    top: 50%;
+    left: 50%;
+
+    width: min(
+        90%,
+        600px
+    );
+
+    transform:
+        translate(-50%, -50%);
+
+    padding:
+        25px;
+
+    border:
+        2px solid
+        #c49448;
+
+    background:
+        rgba(14, 10, 7, 0.96);
+
+    color:
+        #ead0a0;
+
+    font-size:
+        clamp(18px, 3vw, 28px);
+
+    font-weight: bold;
+
+    text-align: center;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.8);
+}
+
+
+.banner-resultado--victoria {
+    border-color:
+        #c99b4e;
+
+    color:
+        #e1bd78;
+}
+
+
+.banner-resultado--derrota {
+    border-color:
+        #984635;
+
+    color:
+        #d47761;
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 200;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0, 0, 0, 0.8);
+}
+
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+
+.modal {
+    width:
+        min(100%, 420px);
+
+    padding:
+        25px;
+
+    border:
+        1px solid
+        #a67332;
+
+    background:
+        #1b130d;
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.8);
+
+    text-align: center;
+}
+
+
+.modal__titulo {
+    margin-bottom: 12px;
+
+    color:
+        #d6a052;
+
+    font-size: 22px;
+}
+
+
+.modal__texto {
+    margin-bottom: 22px;
+
+    color:
+        #d6c5a8;
+
+    line-height: 1.5;
+}
+
+
+.modal__acciones {
+    display: flex;
+
+    gap: 12px;
+}
+
+
+.modal__boton {
+    flex: 1;
+
+    min-height: 45px;
+
+    border: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.modal__boton--cancelar {
+    background:
+        transparent;
+
+    color:
+        #d8c8ad;
+
+    border:
+        1px solid
+        #8a622e;
+}
+
+
+.modal__boton--confirmar {
+    background:
+        #873729;
+
+    color:
+        #ffffff;
+}
+
+
+/* ============================================================
+   ============================================================
+   TABLET
+   ============================================================
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    .juego-contenido {
+        grid-template-columns:
+            minmax(0, 1fr)
+            250px;
+    }
+
+
+    .panel {
+        padding: 13px;
+    }
+
+}
+
+
+/* ============================================================
+   ============================================================
+   MÓVIL
+   ============================================================
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+
+    /* --------------------------------------------------------
+       PORTADA MÓVIL
+       -------------------------------------------------------- */
+
+    .portada {
+
+        width: 100vw;
+
+        height: 100vh;
+
+        height: 100svh;
+
+        min-height: 100svh;
+
+        overflow: hidden;
+    }
+
+
+    .portada__fondo {
+
+        width: 100%;
+
+        height: 100%;
+    }
+
+
+    .portada__fondo picture {
+
+        width: 100%;
+
+        height: 100%;
+    }
+
+
+    .portada__imagen {
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
+
+        object-position:
+            center center;
+    }
+
+
+    /*
+     * BOTÓN ABAJO A LA DERECHA
+     *
+     * Este es el comportamiento que querías.
+     */
+
+    .portada__boton {
+
+        right: 20px;
+
+        bottom: 20px;
+
+        width: 170px;
+
+        display: flex;
+
+        justify-content: flex-end;
+    }
+
+
+    .portada__cta {
+
+        width: 170px;
+
+        min-height: 48px;
+
+        padding:
+            11px 18px;
+
+        font-size: 16px;
+
+        letter-spacing:
+            0.06em;
+    }
+
+
+    /* --------------------------------------------------------
+       JUEGO MÓVIL
+       -------------------------------------------------------- */
+
+    .combate {
+
+        padding: 10px;
+
+        min-height: 100svh;
+    }
+
+
+    .juego-header {
+
+        margin-bottom: 10px;
+
+        padding:
+            12px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 10px;
+    }
+
+
+    .juego-header h1 {
+
+        font-size: 22px;
+
+        text-align: center;
+    }
+
+
+    .juego-header__nivel {
+
+        text-align: center;
+    }
+
+
+    .hud {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .hud__turno {
+
+        flex: 1;
+
+        font-size: 12px;
+    }
+
+
+    .hud__contador {
+
+        font-size: 12px;
+    }
+
+
+    /* --------------------------------------------------------
+       CONTENIDO DEL JUEGO
+       -------------------------------------------------------- */
+
+    .juego-contenido {
+
+        display: flex;
+
+        flex-direction: column;
+
+        width: 100%;
+
+        gap: 10px;
+    }
+
+
+    .zona-tablero {
+
+        width: 100%;
+
+        padding: 7px;
+    }
+
+
+    .tablero {
+
+        width: 100%;
+
+        aspect-ratio: 10 / 6;
+
+        grid-template-rows:
+            repeat(
+                var(--filas),
+                minmax(35px, 1fr)
+            );
+    }
+
+
+    .unidad {
+
+        width: 65%;
+
+        font-size: 15px;
+    }
+
+
+    /* --------------------------------------------------------
+       PANEL
+       -------------------------------------------------------- */
+
+    .panel-juego {
+
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 10px;
+    }
+
+
+    .panel {
+
+        width: 100%;
+
+        padding: 12px;
+    }
+
+
+    .panel-jugador {
+
+        grid-column:
+            1 / -1;
+    }
+
+
+    .panel-objetivo {
+
+        grid-column:
+            1 / -1;
+    }
+
+
+    .panel-registro {
+
+        grid-column:
+            1 / -1;
+
+        min-height: 180px;
+    }
+
+
+    .registro {
+
+        height: 130px;
+
+        font-size: 11px;
+    }
+
+
+    /* --------------------------------------------------------
+       AVISO
+       -------------------------------------------------------- */
+
+    .aviso-turno {
+
+        width:
+            calc(100% - 40px);
+
+        padding:
+            16px 20px;
+
+        font-size: 22px;
+    }
+
+
+    /* --------------------------------------------------------
+       MODAL
+       -------------------------------------------------------- */
+
+    .modal {
+
+        width:
+            calc(100% - 30px);
+
+        padding:
+            20px;
+    }
+
+
+    .modal__acciones {
+
+        flex-direction: column;
+    }
+
+}
+
+
+/* ============================================================
+   TELÉFONOS MUY PEQUEÑOS
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .portada__boton {
+
+        right: 15px;
+
+        bottom: 15px;
+
+        width: 155px;
+    }
+
+
+    .portada__cta {
+
+        width: 155px;
+
+        min-height: 45px;
+
+        padding:
+            10px 14px;
+
+        font-size: 15px;
+    }
+
+
+    .combate {
+
+        padding: 7px;
+    }
+
+
+    .juego-header h1 {
+
+        font-size: 19px;
+    }
+
+
+    .tablero {
+
+        grid-template-rows:
+            repeat(
+                var(--filas),
+                minmax(30px, 1fr)
+            );
+    }
+
+
+    .unidad {
+
+        font-size: 13px;
+    }
+
+}
+
+/* ============================================================
+   AJUSTES DEFINITIVOS — PANTALLA COMPLETA Y SALIDA
+   ============================================================ */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+.combate {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.juego-header {
+    flex: 0 0 auto;
+    margin: 0 auto 8px;
+    padding: 8px 14px 8px 155px;
+}
+
+.juego-contenido {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.zona-tablero {
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.tablero {
+    width: min(100%, calc((100dvh - 105px) * 1.6666667));
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 10 / 6;
+    grid-template-rows: repeat(var(--filas), minmax(0, 1fr));
+}
+
+.panel-juego {
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.panel-registro {
+    min-height: 0;
+}
+
+.registro {
+    max-height: 105px;
+    overflow-y: auto;
+}
+
+.btn-volver {
+    position: absolute;
+    z-index: 60;
+    top: 10px;
+    left: 16px;
+    min-width: 125px;
+    min-height: 48px;
+    padding: 10px 18px;
+    border: 2px solid #a67332;
+    background: linear-gradient(180deg, #3a2818 0%, #21160e 100%);
+    color: #ead3a5;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: .06em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,.55);
+}
+
+.btn-volver::after {
+    content: "← SALIR";
+}
+
+.btn-volver__imagen {
+    display: none;
+}
+
+.btn-volver:hover {
+    background: #50351d;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 1000px) and (min-width: 601px) {
+    .combate {
+        padding: 8px 10px;
+    }
+
+    .juego-header {
+        padding-left: 150px;
+    }
+
+    .btn-volver {
+        left: 10px;
+        top: 8px;
+    }
+
+    .juego-contenido {
+        grid-template-columns: minmax(0, 1fr) 250px;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    html,
+    body {
+        overflow: auto;
+    }
+
+    .combate {
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
+        padding: 8px;
+    }
+
+    .juego-header {
+        padding-top: 58px;
+    }
+
+    .btn-volver {
+        top: 8px;
+        left: 8px;
+        min-width: 115px;
+        min-height: 46px;
+    }
+
+    .juego-contenido {
+        flex: none;
+        height: auto;
+        overflow: visible;
+    }
+
+    .zona-tablero {
+        height: auto;
+        overflow: visible;
+    }
+
+    .tablero {
+        width: 100%;
+        max-height: none;
+    }
+
+    .panel-juego {
+        height: auto;
+        overflow: visible;
+    }
+
+    .registro {
+        max-height: 130px;
+    }
+}
