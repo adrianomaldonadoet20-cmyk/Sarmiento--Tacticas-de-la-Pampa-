@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sarmiento: Tácticas de La Pampa — Instancia Jugable</title>
+
+    <link rel="stylesheet" href="juego.css">
+</head>
+
+<body>
+
+    <!-- Botón de configuración (esquina superior derecha).
+         Está fuera de las <section>/<main> del nivel para que se vea
+         en TODAS las etapas: portada, tutorial y combate.
+         Es un <a> porque navega directo a Configuracion.html. -->
+    <a href="Configuracion.html" class="btn-config" aria-label="Configuración">
+        <img class="btn-config__imagen" src="../RECURSOS GRAFICOS/Bontondeconfiguracion.png" alt="Configuración">
+    </a>
+
+    <!-- ============================================
+         PANTALLA DE PRESENTACIÓN DEL NIVEL
+         ============================================ -->
+    <section class="portada" id="portadaNivel" aria-label="Presentación del nivel">
+        <div class="portada__fondo">
+            <img class="portada__imagen" id="imgPortada" src="../RECURSOS GRAFICOS/niveluno.png" alt="Ilustración histórica del Nivel 1">
+            <div class="portada__velo"></div>
+        </div>
+
+        <div class="portada__contenido">
+            <p class="portada__eyebrow">Nivel 1</p>
+            <h1 class="portada__titulo">Nivel 1: La Ocupación Caudillista de San Juan (1831)</h1>
+            <button class="portada__cta portada__cta--imagen" id="btnIniciarNivel" type="button">
+                <img class="portada__cta__imagen" src="../RECURSOS GRAFICOS/iniciar.png" alt="Iniciar">
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         INSTRUCCIÓN DE CAMPAÑA (TUTORIAL INTERACTIVO)
+         ============================================ -->
+    <section class="tutorial" id="tutorialNivel" aria-label="Instrucción de campaña" hidden>
+        <div class="tutorial__velo"></div>
+
+        <div class="tutorial__contenedor">
+            <header class="tutorial__cabecera">
+                <span class="tutorial__paso" id="tutorialPasoActual">Instrucción 1 de 4</span>
+                <button class="tutorial__omitir" id="btnOmitirTutorial" type="button">Omitir instrucción</button>
+            </header>
+
+            <div class="tutorial__tablero-contenedor">
+                <div class="tutorial__tablero" id="tutorialTablero" role="grid" aria-label="Tablero de instrucción"></div>
+            </div>
+
+            <div class="tutorial__narracion" aria-live="polite">
+                <p class="tutorial__texto" id="tutorialTexto"></p>
+                <button class="tutorial__siguiente" id="btnTutorialSiguiente" type="button">Comenzar instrucción</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="combate" id="combate" aria-label="Núcleo de combate táctico" hidden>
+
+        <button class="btn-volver" id="btnVolver" type="button" aria-haspopup="dialog" aria-controls="modalConfirmarSalida">
+            <img class="btn-volver__imagen" src="../RECURSOS GRAFICOS/volver.png" alt="Volver">
+        </button>
+
+        <!-- ============================================
+             PANEL LATERAL: UNIDAD DEL JUGADOR
+             ============================================ -->
+        <section class="panel panel--unitario" aria-label="Estado de tu unidad">
+            <h2 class="panel__titulo">Unitario</h2>
+
+            <div class="unidad-info">
+                <div class="barra-vida" role="progressbar" aria-label="Vida del Unitario"
+                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                    <div class="barra-vida__relleno barra-vida__relleno--unitario" id="vidaJugadorRelleno"></div>
+                </div>
+                <span class="unidad-info__texto" id="vidaJugadorTexto">40 / 40</span>
+            </div>
+
+            <dl class="stats">
+                <div class="stats__fila">
+                    <dt>Daño</dt>
+                    <dd id="statDanoJugador">6 – 12</dd>
+                </div>
+                <div class="stats__fila">
+                    <dt>Defensa</dt>
+                    <dd id="statDefensaJugador">2</dd>
+                </div>
+            </dl>
+        </section>
+
+        <!-- ============================================
+             TABLERO DE COMBATE
+             ============================================ -->
+        <section class="tablero-contenedor">
+
+            <header class="hud">
+                <span class="hud__turno" id="hudTurno">Turno del jugador</span>
+                <span class="hud__contador" id="hudContador">Turno 1</span>
+            </header>
+
+            <div class="tablero" id="tablero" role="grid" aria-label="Mapa de combate"></div>
+
+            <div class="aviso-turno" id="avisoTurno" aria-live="polite"></div>
+
+            <div class="banner-resultado" id="bannerResultado" hidden></div>
+
+        </section>
+
+        <!-- ============================================
+             PANEL LATERAL: BITÁCORA / REGISTRO
+             ============================================ -->
+        <section class="panel panel--registro" aria-label="Registro de combate">
+            <h2 class="panel__titulo">Registro</h2>
+            <ul class="registro" id="registro" aria-live="polite"></ul>
+        </section>
+
+    </main>
+
+    <!-- ============================================
+         MODAL: CONFIRMACIÓN DE SALIDA
+         ============================================ -->
+    <div class="modal-overlay" id="modalConfirmarSalida" role="dialog" aria-modal="true"
+        aria-labelledby="modalConfirmarSalidaTitulo" hidden>
+        <div class="modal-caja">
+            <p class="modal-caja__titulo" id="modalConfirmarSalidaTitulo">¿Salir de la partida?</p>
+            <p class="modal-caja__texto">Vas a volver al inicio del nivel y perderás el progreso del combate actual.</p>
+            <div class="modal-caja__acciones">
+                <button class="modal-boton modal-boton--imagen" id="btnCancelarSalida" type="button"
+                    aria-label="Cancelar">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/cancelar.png" alt="Cancelar">
+                </button>
+                <button class="modal-boton modal-boton--imagen" id="btnConfirmarSalida" type="button"
+                    aria-label="Sí, salir del nivel">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/Boton_Salir.png" alt="Salir">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         MODAL: VICTORIA DEL NIVEL
+         ============================================ -->
+    <div class="modal-overlay" id="modalVictoria" role="dialog" aria-modal="true"
+        aria-labelledby="modalVictoriaTitulo" hidden>
+        <div class="modal-caja">
+            <p class="modal-caja__titulo" id="modalVictoriaTitulo">¡Victoria táctica!</p>
+            <p class="modal-caja__texto">Neutralizaste a todas las fuerzas Federales. San Juan respira, por ahora.</p>
+            <!-- Los dos botones son gráficos (banners largos), por eso van
+                 apilados en columna y no uno al lado del otro. -->
+            <div class="modal-caja__acciones modal-caja__acciones--apiladas">
+                <button class="modal-boton modal-boton--imagen" id="btnVictoriaInicio" type="button"
+                    aria-label="Volver al inicio">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/volver_al_inicio.png"
+                        alt="Volver al inicio">
+                </button>
+                <!-- OJO: cambiá "data-siguiente-nivel" por la ruta real del Nivel 2
+                     cuando esté armada esa carpeta/archivo. -->
+                <button class="modal-boton modal-boton--imagen" id="btnVictoriaSiguiente" type="button"
+                    data-siguiente-nivel="../NIVEL 2/juego.html" aria-label="Ir al nivel dos">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/nivel_dos.png" alt="Nivel dos">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         MODAL: DERROTA DEL NIVEL
+         ============================================ -->
+    <div class="modal-overlay" id="modalDerrota" role="dialog" aria-modal="true"
+        aria-labelledby="modalDerrotaTitulo" hidden>
+        <div class="modal-caja">
+            <p class="modal-caja__titulo" id="modalDerrotaTitulo">Unidad caída</p>
+            <p class="modal-caja__texto">Tu Unitario no resistió el embate Federal. El combate ha terminado.</p>
+            <div class="modal-caja__acciones">
+                <button class="modal-boton modal-boton--confirmar" id="btnDerrotaReintentar" type="button">
+                    Volver a intentar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Selección responsive de imagen de portada (PC / Móvil) ---
+        // + Fallback: prueba varias CARPETAS BASE, varios NOMBRES de
+        //   carpeta (mayúsculas/minúsculas) y varias extensiones.
+        // Reacciona a cambios de tamaño (no solo a la carga inicial), para
+        // que funcione también al activar la vista responsive de las
+        // herramientas de desarrollador sin recargar la página.
+        (function () {
+            var img = document.getElementById('imgPortada');
+            var mediaMovil = window.matchMedia('(max-width: 768px)');
+
+            // Distintas ubicaciones posibles de la carpeta de recursos,
+            // por si "RECURSOS GRAFICOS" no está exactamente un nivel
+            // arriba de la carpeta CODIGO, o cambia mayúsculas/minúsculas
+            // (esto último importa en servidores Linux, aunque no en
+            // Windows).
+            var carpetasBase = [
+                '../RECURSOS GRAFICOS/',
+                '../Recursos Graficos/',
+                '../recursos graficos/',
+                './RECURSOS GRAFICOS/',
+                'RECURSOS GRAFICOS/'
+            ];
+            var extensiones = ['.png', '.jpg', '.jpeg', '.webp', '.PNG', '.JPG'];
+
+            var candidatos = [];
+            var i = 0;
+
+            function candidatosPara(nombreBase) {
+                var lista = [];
+                for (var c = 0; c < carpetasBase.length; c++) {
+                    for (var e = 0; e < extensiones.length; e++) {
+                        lista.push(carpetasBase[c] + nombreBase + extensiones[e]);
+                    }
+                }
+                return lista;
+            }
+
+            function cargarImagenSegunDispositivo() {
+                var nombreBase = mediaMovil.matches ? 'nivelunoMOVIL' : 'niveluno';
+                candidatos = candidatosPara(nombreBase);
+                i = 0;
+                img.style.display = '';
+                img.src = candidatos[0];
+            }
+
+            img.addEventListener('error', function siguienteCandidato() {
+                i++;
+                if (i < candidatos.length) {
+                    img.src = candidatos[i];
+                } else {
+                    // Ninguna variante encontrada en ninguna carpeta: ocultamos
+                    // el <img> roto (queda el degradé de fondo del CSS) y
+                    // avisamos por consola para poder depurarlo fácil.
+                    img.style.display = 'none';
+                    console.warn(
+                        '[Sarmiento] No se pudo cargar la imagen de portada. ' +
+                        'Probé estas rutas relativas a juego.html:\n' +
+                        candidatos.join('\n') +
+                        '\nRevisá en la pestaña Network del navegador cuál 404 ' +
+                        'y comparala con la ubicación real de la carpeta ' +
+                        '"RECURSOS GRAFICOS".'
+                    );
+                }
+            });
+
+            // Carga inicial según el tamaño de pantalla actual.
+            cargarImagenSegunDispositivo();
+
+            // Si cambia el modo (PC <-> Móvil) en caliente —al redimensionar
+            // la ventana, rotar el dispositivo, o alternar el panel de
+            // dispositivo en las devtools— volvemos a elegir la imagen
+            // correcta sin necesitar un F5.
+            if (mediaMovil.addEventListener) {
+                mediaMovil.addEventListener('change', cargarImagenSegunDispositivo);
+            } else if (mediaMovil.addListener) {
+                // Compatibilidad con navegadores más antiguos.
+                mediaMovil.addListener(cargarImagenSegunDispositivo);
+            }
+        })();
+
+        // --- Fallback para las imágenes de botones (Salir, Iniciar, Cancelar) ---
+        // Antes estas imágenes no tenían ningún respaldo: si la ruta fallaba,
+        // quedaba un ícono roto sin avisar. Ahora cada botón-imagen prueba
+        // las mismas carpetas base que la imagen de portada, junto con
+        // variantes de mayúsculas/minúsculas del nombre del archivo.
+        (function () {
+            var carpetasBase = [
+                '../RECURSOS GRAFICOS/',
+                '../Recursos Graficos/',
+                '../recursos graficos/',
+                './RECURSOS GRAFICOS/',
+                'RECURSOS GRAFICOS/'
+            ];
+
+            function candidatosParaArchivo(nombresArchivo) {
+                var lista = [];
+                carpetasBase.forEach(function (carpeta) {
+                    nombresArchivo.forEach(function (nombre) {
+                        lista.push(carpeta + nombre);
+                    });
+                });
+                return lista;
+            }
+
+            function activarFallback(selector, nombresArchivo) {
+                var img = document.querySelector(selector);
+                if (!img) return;
+
+                var candidatos = candidatosParaArchivo(nombresArchivo);
+                var i = 0;
+
+                img.addEventListener('error', function siguienteCandidato() {
+                    i++;
+                    if (i < candidatos.length) {
+                        img.src = candidatos[i];
+                    } else {
+                        console.warn(
+                            '[Sarmiento] No se pudo cargar ' + nombresArchivo[0] + '. ' +
+                            'Probé estas rutas relativas a juego.html:\n' +
+                            candidatos.join('\n')
+                        );
+                    }
+                });
+            }
+
+            activarFallback('.modal-boton__imagen[alt="Salir"]', ['Boton_Salir.png', 'boton_salir.png', 'Boton_salir.png']);
+            activarFallback('.modal-boton__imagen[alt="Cancelar"]', ['cancelar.png', 'Cancelar.png', 'CANCELAR.png']);
+            activarFallback('.portada__cta__imagen', ['iniciar.png', 'Iniciar.png', 'INICIAR.png']);
+            activarFallback('.btn-volver__imagen', ['volver.png', 'Volver.png', 'VOLVER.png']);
+            activarFallback('.modal-boton__imagen[alt="Volver al inicio"]',
+                ['volver_al_inicio.png', 'Volver_al_inicio.png', 'VOLVER_AL_INICIO.png', 'volver al inicio.png']);
+            activarFallback('.modal-boton__imagen[alt="Nivel dos"]',
+                ['nivel_dos.png', 'Nivel_dos.png', 'NIVEL_DOS.png', 'nivel dos.png']);
+        })();
+
+        // --- Fondo responsive del tablero de combate (PC / Móvil) ---
+        // A diferencia de las imágenes de botones/portada (que son <img>
+        // y usan el evento "error" para pasar al siguiente candidato),
+        // este fondo se aplica como CSS (background-image) para que quede
+        // detrás de los paneles sin pelear con z-index. Por eso acá
+        // "probamos" cada candidato precargándolo con new Image() antes
+        // de aplicarlo: si carga bien, lo usamos; si no, seguimos con el
+        // siguiente.
+        (function () {
+            var combate = document.querySelector('.combate');
+            if (!combate) return;
+
+            var mediaMovil = window.matchMedia('(max-width: 768px)');
+
+            var carpetasBase = [
+                '../RECURSOS GRAFICOS/',
+                '../Recursos Graficos/',
+                '../recursos graficos/',
+                './RECURSOS GRAFICOS/',
+                'RECURSOS GRAFICOS/'
+            ];
+            var extensiones = ['.png', '.jpg', '.jpeg', '.webp', '.PNG', '.JPG'];
+
+            function candidatosPara(nombresBase) {
+                var lista = [];
+                carpetasBase.forEach(function (carpeta) {
+                    nombresBase.forEach(function (nombre) {
+                        extensiones.forEach(function (ext) {
+                            lista.push(carpeta + nombre + ext);
+                        });
+                    });
+                });
+                return lista;
+            }
+
+            function probarCandidatos(candidatos, indice, alEncontrar) {
+                if (indice >= candidatos.length) {
+                    console.warn(
+                        '[Sarmiento] No se pudo cargar el fondo del combate. ' +
+                        'Probé estas rutas relativas a juego.html:\n' +
+                        candidatos.join('\n')
+                    );
+                    return;
+                }
+                var probador = new Image();
+                probador.onload = function () {
+                    alEncontrar(candidatos[indice]);
+                };
+                probador.onerror = function () {
+                    probarCandidatos(candidatos, indice + 1, alEncontrar);
+                };
+                probador.src = candidatos[indice];
+            }
+
+            function aplicarFondoSegunDispositivo() {
+                // Además del nombre exacto que me pasaste (con guion),
+                // pruebo también la variante con guion bajo por las dudas.
+                var nombresBase = mediaMovil.matches
+                    ? ['fondo_nivel1-MOVIL', 'fondo_nivel1_MOVIL', 'fondo_nivel1MOVIL']
+                    : ['fondo_nivel1'];
+
+                probarCandidatos(candidatosPara(nombresBase), 0, function (rutaEncontrada) {
+                    combate.style.setProperty('--combate-fondo-imagen', 'url("' + rutaEncontrada + '")');
+                });
+            }
+
+            aplicarFondoSegunDispositivo();
+
+            if (mediaMovil.addEventListener) {
+                mediaMovil.addEventListener('change', aplicarFondoSegunDispositivo);
+            } else if (mediaMovil.addListener) {
+                mediaMovil.addListener(aplicarFondoSegunDispositivo);
+            }
+        })();
+
+        // --- Modal de confirmación al tocar "Volver" durante la partida ---
+        (function () {
+            var btnVolver = document.getElementById('btnVolver');
+            var modal = document.getElementById('modalConfirmarSalida');
+            var btnCancelar = document.getElementById('btnCancelarSalida');
+            var btnConfirmar = document.getElementById('btnConfirmarSalida');
+
+            function abrirModal() {
+                modal.hidden = false;
+                document.body.classList.add('modal-abierto');
+                btnCancelar.focus();
+            }
+
+            function cerrarModal() {
+                modal.hidden = true;
+                document.body.classList.remove('modal-abierto');
+                btnVolver.focus();
+            }
+
+            btnVolver.addEventListener('click', abrirModal);
+            btnCancelar.addEventListener('click', cerrarModal);
+
+            // Confirmar salida: vuelve al inicio del nivel (la portada),
+            // reiniciando la partida.
+            btnConfirmar.addEventListener('click', function () {
+                window.location.reload();
+            });
+
+            // Cerrar al hacer click fuera de la caja del modal.
+            modal.addEventListener('click', function (evento) {
+                if (evento.target === modal) cerrarModal();
+            });
+
+            // Cerrar con la tecla Escape.
+            document.addEventListener('keydown', function (evento) {
+                if (evento.key === 'Escape' && !modal.hidden) cerrarModal();
+            });
+
+            // --- Interceptar la flechita "Atrás" del navegador ---
+            // Ni bien se entra al nivel, sembramos una entrada extra en el
+            // historial. Si el jugador toca el botón "Atrás" del navegador
+            // (arriba a la izquierda de la ventana), en vez de sacarlo de la
+            // página de una, se dispara "popstate": ahí mostramos el mismo
+            // aviso de "¿Salir de la partida?" y volvemos a sembrar la
+            // entrada, para que si cancela, se quede donde estaba.
+            function sembrarEntradaHistorial() {
+                history.pushState({ sarmientoAvisoSalida: true }, '', location.href);
+            }
+
+            sembrarEntradaHistorial();
+
+            window.addEventListener('popstate', function () {
+                sembrarEntradaHistorial();
+                abrirModal();
+            });
+        })();
+
+        // --- Modal de Victoria: aparece al ganar el combate ---
+        (function () {
+            var modal = document.getElementById('modalVictoria');
+            var btnInicio = document.getElementById('btnVictoriaInicio');
+            var btnSiguiente = document.getElementById('btnVictoriaSiguiente');
+
+            window.mostrarVictoria = function mostrarVictoria() {
+                modal.hidden = false;
+                document.body.classList.add('modal-abierto');
+                btnInicio.focus();
+            };
+
+            // "Volver al inicio": reinicia el nivel desde la portada.
+            btnInicio.addEventListener('click', function () {
+                window.location.reload();
+            });
+
+            // "Siguiente nivel": navega a la ruta configurada en
+            // data-siguiente-nivel (ver comentario en el HTML de este botón).
+            btnSiguiente.addEventListener('click', function () {
+                var destino = btnSiguiente.dataset.siguienteNivel;
+                if (destino) window.location.href = destino;
+            });
+        })();
+
+        // --- Modal de Derrota: aparece al perder el combate ---
+        (function () {
+            var modal = document.getElementById('modalDerrota');
+            var btnReintentar = document.getElementById('btnDerrotaReintentar');
+
+            window.mostrarDerrota = function mostrarDerrota() {
+                modal.hidden = false;
+                document.body.classList.add('modal-abierto');
+                btnReintentar.focus();
+            };
+
+            // "Volver a intentar": reinicia el nivel desde la portada
+            // (mismo comportamiento que "Volver al inicio" en victoria).
+            btnReintentar.addEventListener('click', function () {
+                window.location.reload();
+            });
+        })();
+
+        // --- Transición portada -> instrucción de campaña (con respaldo por si la animación no dispara) ---
+        (function () {
+            var btn = document.getElementById('btnIniciarNivel');
+            var portada = document.getElementById('portadaNivel');
+            var tutorial = document.getElementById('tutorialNivel');
+            var yaHecho = false;
+
+            function mostrarTutorial() {
+                if (yaHecho) return;
+                yaHecho = true;
+                portada.hidden = true;
+                tutorial.hidden = false;
+                if (window.iniciarTutorialSarmiento) window.iniciarTutorialSarmiento();
+            }
+
+            btn.addEventListener('click', function () {
+                portada.classList.add('portada--saliendo');
+                portada.addEventListener('animationend', mostrarTutorial, { once: true });
+                // Respaldo: si la animación no dispara por algún motivo, igual avanzamos.
+                setTimeout(mostrarTutorial, 450);
+            });
+        })();
+
+        // --- Transición instrucción de campaña -> combate ---
+        (function () {
+            var tutorial = document.getElementById('tutorialNivel');
+            var combate = document.getElementById('combate');
+            var yaHecho = false;
+
+            window.mostrarCombateReal = function mostrarCombateReal() {
+                if (yaHecho) return;
+                yaHecho = true;
+                tutorial.hidden = true;
+                combate.hidden = false;
+            };
+        })();
+
+        // ============================================
+        // INSTRUCCIÓN DE CAMPAÑA (TUTORIAL INTERACTIVO)
+        // ----------------------------------------------
+        // Mini-tablero aislado (no comparte estado con instancia.js) que
+        // le enseña al jugador, con la misma temática de época (San Juan,
+        // 1831 — causa unitaria contra los caudillos federales), a mover
+        // y atacar antes de soltarlo en el combate real.
+        // ============================================
+        (function () {
+            var COLUMNAS = 5;
+            var FILAS = 3;
+
+            var posicionUnitario = { x: 0, y: 1 };
+            var posicionFederal = { x: 2, y: 1 };
+            var federalDerrotado = false;
+
+            var elTablero = document.getElementById('tutorialTablero');
+            var elTexto = document.getElementById('tutorialTexto');
+            var elBotonSiguiente = document.getElementById('btnTutorialSiguiente');
+            var elBotonOmitir = document.getElementById('btnOmitirTutorial');
+            var elPaso = document.getElementById('tutorialPasoActual');
+
+            var pasoActual = 0; // índice del guion (ver PASOS)
+            var esperandoClickCelda = null; // "mover" | "atacar" | null
+            var iniciado = false;
+
+            var PASOS = [
+                {
+                    etiqueta: 'Instrucción 1 de 4',
+                    texto: 'San Juan, 1831. Antes de salir a campo abierto, un veterano de la causa unitaria te va a enseñar lo esencial. De esto depende tu vida en el combate.',
+                    boton: 'Comenzar instrucción',
+                    accion: null,
+                },
+                {
+                    etiqueta: 'Instrucción 2 de 4 — Avanzar',
+                    texto: 'La celda resaltada en azul es donde podés mover a tu Unitario. Hacé click sobre ella para avanzar.',
+                    boton: null, // se avanza haciendo click en el tablero, no con el botón
+                    accion: 'mover',
+                },
+                {
+                    etiqueta: 'Instrucción 3 de 4 — Atacar',
+                    texto: 'Ahí tenés a un recluta Federal de instrucción. La celda en rojo indica que podés cargar contra él. Hacé click sobre su posición para atacar.',
+                    boton: null,
+                    accion: 'atacar',
+                },
+                {
+                    etiqueta: 'Instrucción 4 de 4 — Los turnos',
+                    texto: 'Recordá: vos y los Federales se turnan para actuar. Cuando el cartel de "Turno de los Federales" aparezca y el mapa se oscurezca, esperá tu turno antes de volver a mover ficha.',
+                    boton: 'Entendido',
+                    accion: null,
+                },
+                {
+                    etiqueta: '¡A la carga!',
+                    texto: 'Ya estás listo, soldado. ¡Ahora andá y derrotalos!',
+                    boton: 'Comenzar combate',
+                    accion: 'finalizar',
+                },
+            ];
+
+            function construirTablero() {
+                elTablero.innerHTML = '';
+                elTablero.style.setProperty('--tut-columnas', COLUMNAS);
+                elTablero.style.setProperty('--tut-filas', FILAS);
+
+                for (var y = 0; y < FILAS; y += 1) {
+                    for (var x = 0; x < COLUMNAS; x += 1) {
+                        var celda = document.createElement('div');
+                        celda.className = 'tutorial-celda' + (((x + y) % 2 === 0) ? ' tutorial-celda--par' : '');
+                        celda.dataset.tutClave = x + ',' + y;
+                        celda.setAttribute('role', 'gridcell');
+                        celda.addEventListener('click', function () {
+                            manejarClickTutorial(this.dataset.tutClave);
+                        });
+                        elTablero.appendChild(celda);
+                    }
+                }
+            }
+
+            function celdaEn(x, y) {
+                return elTablero.querySelector('.tutorial-celda[data-tut-clave="' + x + ',' + y + '"]');
+            }
+
+            function renderUnidades() {
+                elTablero.querySelectorAll('.tutorial-unidad').forEach(function (n) { n.remove(); });
+
+                var unitario = document.createElement('div');
+                unitario.className = 'tutorial-unidad tutorial-unidad--unitario';
+                unitario.textContent = 'U';
+                var celdaU = celdaEn(posicionUnitario.x, posicionUnitario.y);
+                if (celdaU) celdaU.appendChild(unitario);
+
+                if (!federalDerrotado) {
+                    var federal = document.createElement('div');
+                    federal.className = 'tutorial-unidad tutorial-unidad--federal';
+                    federal.id = 'tutorialFederalRecluta';
+                    federal.textContent = 'F';
+                    var celdaF = celdaEn(posicionFederal.x, posicionFederal.y);
+                    if (celdaF) celdaF.appendChild(federal);
+                }
+            }
+
+            function limpiarResaltados() {
+                elTablero.querySelectorAll('.tutorial-celda--movible, .tutorial-celda--atacable').forEach(function (c) {
+                    c.classList.remove('tutorial-celda--movible', 'tutorial-celda--atacable');
+                });
+            }
+
+            function pintarCeldaObjetivo(accion) {
+                limpiarResaltados();
+                if (accion === 'mover') {
+                    var destino = { x: posicionUnitario.x + 1, y: posicionUnitario.y };
+                    var celda = celdaEn(destino.x, destino.y);
+                    if (celda) celda.classList.add('tutorial-celda--movible');
+                } else if (accion === 'atacar') {
+                    var celdaAtaque = celdaEn(posicionFederal.x, posicionFederal.y);
+                    if (celdaAtaque) celdaAtaque.classList.add('tutorial-celda--atacable');
+                }
+            }
+
+            function manejarClickTutorial(clave) {
+                if (!esperandoClickCelda) return;
+
+                var partes = clave.split(',');
+                var x = parseInt(partes[0], 10);
+                var y = parseInt(partes[1], 10);
+
+                if (esperandoClickCelda === 'mover' && x === posicionUnitario.x + 1 && y === posicionUnitario.y) {
+                    posicionUnitario = { x: x, y: y };
+                    esperandoClickCelda = null;
+                    limpiarResaltados();
+                    renderUnidades();
+                    setTimeout(function () { avanzarPaso(); }, 350);
+                } else if (esperandoClickCelda === 'atacar' && x === posicionFederal.x && y === posicionFederal.y) {
+                    esperandoClickCelda = null;
+                    var nodoFederal = document.getElementById('tutorialFederalRecluta');
+                    if (nodoFederal) nodoFederal.classList.add('tutorial-unidad--golpeada');
+                    limpiarResaltados();
+                    setTimeout(function () {
+                        federalDerrotado = true;
+                        renderUnidades();
+                        setTimeout(function () { avanzarPaso(); }, 300);
+                    }, 300);
+                }
+            }
+
+            function mostrarPaso(indice) {
+                pasoActual = indice;
+                var paso = PASOS[indice];
+
+                elPaso.textContent = paso.etiqueta;
+                elTexto.textContent = paso.texto;
+
+                if (paso.boton) {
+                    elBotonSiguiente.hidden = false;
+                    elBotonSiguiente.textContent = paso.boton;
+                } else {
+                    elBotonSiguiente.hidden = true;
+                }
+
+                if (paso.accion === 'mover' || paso.accion === 'atacar') {
+                    esperandoClickCelda = paso.accion;
+                    pintarCeldaObjetivo(paso.accion);
+                } else {
+                    esperandoClickCelda = null;
+                    limpiarResaltados();
+                }
+
+                if (paso.accion === 'finalizar') {
+                    // El botón "Comenzar combate" se resuelve aparte, ver click listener.
+                }
+            }
+
+            function avanzarPaso() {
+                var siguiente = pasoActual + 1;
+                if (siguiente >= PASOS.length) return;
+                mostrarPaso(siguiente);
+            }
+
+            elBotonSiguiente.addEventListener('click', function () {
+                var paso = PASOS[pasoActual];
+                if (paso.accion === 'finalizar') {
+                    if (window.mostrarCombateReal) window.mostrarCombateReal();
+                    return;
+                }
+                avanzarPaso();
+            });
+
+            elBotonOmitir.addEventListener('click', function () {
+                if (window.mostrarCombateReal) window.mostrarCombateReal();
+            });
+
+            window.iniciarTutorialSarmiento = function iniciarTutorialSarmiento() {
+                if (iniciado) return;
+                iniciado = true;
+                construirTablero();
+                renderUnidades();
+                mostrarPaso(0);
+            };
+        })();
+    </script>
+
+    <!-- Música de fondo del nivel (la misma del menú) y el script
+         compartido, que además reactiva la pantalla completa si el
+         jugador la dejó activada en Configuración. -->
+    <audio id="musica-fondo" src="../RECURSOS GRAFICOS/SONIDOS/Folk Round.mp3" loop></audio>
+    <script src="audio.js"></script>
+
+    <script src="instancia.js"></script>
+
+</body>
+
+</html>
