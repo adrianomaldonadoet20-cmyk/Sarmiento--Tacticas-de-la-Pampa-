@@ -142,15 +142,19 @@
         <div class="modal-caja">
             <p class="modal-caja__titulo" id="modalVictoriaTitulo">¡Victoria táctica!</p>
             <p class="modal-caja__texto">Neutralizaste a todas las fuerzas Federales. San Juan respira, por ahora.</p>
-            <div class="modal-caja__acciones">
-                <button class="modal-boton modal-boton--cancelar" id="btnVictoriaInicio" type="button">
-                    Volver al inicio
+            <!-- Los dos botones son gráficos (banners largos), por eso van
+                 apilados en columna y no uno al lado del otro. -->
+            <div class="modal-caja__acciones modal-caja__acciones--apiladas">
+                <button class="modal-boton modal-boton--imagen" id="btnVictoriaInicio" type="button"
+                    aria-label="Volver al inicio">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/volver_al_inicio.png"
+                        alt="Volver al inicio">
                 </button>
                 <!-- OJO: cambiá "data-siguiente-nivel" por la ruta real del Nivel 2
                      cuando esté armada esa carpeta/archivo. -->
-                <button class="modal-boton modal-boton--confirmar" id="btnVictoriaSiguiente" type="button"
-                    data-siguiente-nivel="../NIVEL 2/juego.html">
-                    Siguiente nivel
+                <button class="modal-boton modal-boton--imagen" id="btnVictoriaSiguiente" type="button"
+                    data-siguiente-nivel="../NIVEL 2/juego.html" aria-label="Ir al nivel dos">
+                    <img class="modal-boton__imagen" src="../RECURSOS GRAFICOS/nivel_dos.png" alt="Nivel dos">
                 </button>
             </div>
         </div>
@@ -302,6 +306,10 @@
             activarFallback('.modal-boton__imagen[alt="Cancelar"]', ['cancelar.png', 'Cancelar.png', 'CANCELAR.png']);
             activarFallback('.portada__cta__imagen', ['iniciar.png', 'Iniciar.png', 'INICIAR.png']);
             activarFallback('.btn-volver__imagen', ['volver.png', 'Volver.png', 'VOLVER.png']);
+            activarFallback('.modal-boton__imagen[alt="Volver al inicio"]',
+                ['volver_al_inicio.png', 'Volver_al_inicio.png', 'VOLVER_AL_INICIO.png', 'volver al inicio.png']);
+            activarFallback('.modal-boton__imagen[alt="Nivel dos"]',
+                ['nivel_dos.png', 'Nivel_dos.png', 'NIVEL_DOS.png', 'nivel dos.png']);
         })();
 
         // --- Fondo responsive del tablero de combate (PC / Móvil) ---
