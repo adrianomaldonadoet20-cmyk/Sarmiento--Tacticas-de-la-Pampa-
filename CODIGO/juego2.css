@@ -1,0 +1,69 @@
+/* =========================================================
+   NIVEL 2 — EL PASO DE LAS SIERRAS
+   Diseño renovado
+   ========================================================= */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;min-height:100%;overflow:hidden}
+body{font-family:Georgia,"Times New Roman",serif;color:#ead9b7;background:#17110c}
+button{font:inherit}
+[hidden]{display:none!important}
+
+/* PORTADA */
+.portada{position:fixed;inset:0;width:100vw;height:100dvh;overflow:hidden;background:#17110c;z-index:100}
+.portada__fondo,.portada__fondo picture{position:absolute;inset:0;width:100%;height:100%;display:block}
+.portada__imagen{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+.portada__velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 35%,rgba(15,9,5,.35) 72%,rgba(15,9,5,.75) 100%)}
+.portada__boton{position:absolute;left:50%;bottom:7%;transform:translateX(-50%)}
+.portada__cta{min-width:210px;padding:15px 42px;border:2px solid #c79a55;background:linear-gradient(#553a20,#2a1b10);color:#f2dfb7;font-size:21px;font-weight:bold;letter-spacing:.14em;cursor:pointer;box-shadow:0 7px 25px rgba(0,0,0,.55);transition:.2s}
+.portada__cta:hover{transform:translateY(-2px);background:linear-gradient(#694927,#352315)}
+.portada--saliendo{animation:salirPortada .35s forwards}
+@keyframes salirPortada{to{opacity:0;transform:scale(1.025)}}
+
+/* ESTRUCTURA */
+.combate{position:relative;width:100%;height:100dvh;padding:10px 18px 12px;display:flex;flex-direction:column;background:radial-gradient(circle at 40% 20%,#3a2818 0,#211810 35%,#120d09 100%);overflow:hidden}
+.combate:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:24px 24px}
+.juego-header{position:relative;z-index:2;flex:0 0 auto;min-height:58px;display:flex;align-items:center;justify-content:space-between;max-width:1500px;width:100%;margin:0 auto 8px;padding:5px 12px 5px 120px;border-bottom:1px solid rgba(188,145,76,.35)}
+.titulo-juego__nivel{font-size:11px;letter-spacing:.2em;color:#c79a55;font-weight:bold}
+.titulo-juego h1{font-size:23px;color:#f0dfbc;font-weight:normal;margin-top:2px}
+.hud{display:flex;align-items:center;gap:10px}.hud__turno,.hud__contador{padding:7px 12px;border:1px solid rgba(199,154,85,.35);background:rgba(24,15,9,.7);font-size:12px;text-transform:uppercase;letter-spacing:.07em}.hud__turno--jugador{color:#d8c08e}.hud__turno--federal{color:#c8795c}.hud__contador{color:#a99b82}
+.btn-volver{position:absolute;z-index:10;top:14px;left:18px;min-width:90px;height:38px;border:1px solid #8e6839;background:#24170e;color:#dcbf8d;font-size:12px;font-weight:bold;letter-spacing:.1em;cursor:pointer;transition:.2s}.btn-volver span{font-size:16px;margin-right:5px}.btn-volver:hover{background:#3c2717;border-color:#c79a55}
+.aviso-turno{position:fixed;inset:0;z-index:150;display:flex;align-items:center;justify-content:center;width:100vw;height:100dvh;padding:30px;text-align:center;background:rgba(10,6,3,.6);opacity:0;visibility:hidden;pointer-events:none;transform:none;text-transform:uppercase;letter-spacing:.16em;font-size:clamp(24px,4vw,52px);font-weight:bold;color:#ead9b7;text-shadow:0 3px 8px #000;transition:opacity .15s,visibility .15s}.aviso-turno--visible{opacity:1;visibility:visible;transform:none}.aviso-turno--federal{color:#d59a7d;border-color:#9b743e}.aviso-turno--jugador{color:#e2c98f}
+
+.juego-contenido{position:relative;z-index:1;flex:1;min-height:0;width:100%;max-width:1500px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:14px}
+
+/* TABLERO */
+.zona-tablero{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center}
+.tablero-marco{width:min(100%,calc((100dvh - 105px)*1.55));height:auto;max-height:100%;padding:9px;background:linear-gradient(145deg,#4a321d,#24170e 60%,#3b2818);border:1px solid #8c6638;box-shadow:0 10px 35px rgba(0,0,0,.45),inset 0 0 0 1px rgba(225,188,126,.08)}
+.tablero-cabecera,.tablero-pie{height:25px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;color:#bba37a;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.tablero-pie{height:23px;justify-content:flex-start;gap:18px;font-size:9px}.tablero-pie span{display:flex;align-items:center;gap:5px}.leyenda-movimiento,.leyenda-ataque{width:9px;height:9px;border:1px solid #b99b63;display:inline-block}.leyenda-movimiento{background:rgba(193,157,89,.25)}.leyenda-ataque{background:rgba(150,65,42,.38)}
+.tablero{position:relative;width:100%;aspect-ratio:10/6;display:grid;grid-template-columns:repeat(var(--columnas),minmax(0,1fr));grid-template-rows:repeat(var(--filas),minmax(0,1fr));overflow:hidden;border:1px solid #674824;background:#806542;box-shadow:inset 0 0 35px rgba(0,0,0,.35)}
+.celda-tablero{position:relative;min-width:0;min-height:0;padding:0;border:1px solid rgba(45,29,16,.35);background:linear-gradient(145deg,rgba(139,112,73,.96),rgba(101,78,48,.96));cursor:pointer;overflow:hidden;transition:filter .15s,box-shadow .15s}.celda-tablero:nth-child(odd){background:linear-gradient(145deg,rgba(145,116,75,.96),rgba(106,81,49,.96))}.celda-tablero:hover{filter:brightness(1.1)}.celda--movimiento{box-shadow:inset 0 0 0 3px rgba(222,190,123,.65);background:rgba(198,165,101,.35)!important}.celda--ataque{box-shadow:inset 0 0 0 3px rgba(157,67,45,.8);background:rgba(157,67,45,.3)!important}.tablero--bloqueado .celda-tablero{cursor:default}
+
+/* UNIDADES */
+.unidad{position:absolute;inset:8%;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:3;pointer-events:none;text-shadow:0 2px 3px #000}.unidad__figura{width:65%;height:65%;display:flex;align-items:center;justify-content:center}.unidad--unitario .unidad__figura img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.65))}.unidad--federal .unidad__figura{width:68%;height:68%;font-family:Georgia,serif;font-size:clamp(22px,3vw,42px);font-weight:bold;color:#e8d8b7;background:rgba(58,28,20,.85);border:2px solid #8d553d;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.5)}.unidad__nombre{font-size:clamp(7px,.7vw,10px);font-weight:bold;letter-spacing:.08em;text-transform:uppercase;color:#f1dfbb;margin-top:-2px}.unidad__mini-vida{width:70%;height:4px;background:#2b1b13;border:1px solid #1b100a;margin-top:2px}.unidad__mini-vida-relleno{height:100%;background:#ad7c45}.unidad--golpeada{animation:golpe .28s}.unidad--caida{opacity:.25;filter:grayscale(1);transform:scale(.82);transition:.35s}@keyframes golpe{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* PANEL LATERAL */
+.panel-juego{min-height:0;height:100%;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+.soldado-card{flex:0 0 auto;display:flex;min-height:112px;background:linear-gradient(135deg,#302016,#1d130d);border:1px solid #73522e;box-shadow:0 5px 18px rgba(0,0,0,.28)}.soldado-card__imagen{width:98px;overflow:hidden;border-right:1px solid #73522e;background:#15100b}.soldado-card__imagen img{width:100%;height:100%;object-fit:cover}.soldado-card__datos{padding:10px 12px;flex:1}.etiqueta,.seccion-titulo span,.objetivo-card__etiqueta{font-size:9px;letter-spacing:.16em;color:#ae8750;font-weight:bold}.soldado-card h2{font-size:17px;color:#efdfc0;margin:2px 0 7px}.vida-linea{display:flex;align-items:center;gap:8px}.vida-linea__barra{height:7px;flex:1;background:#160e09;border:1px solid #5b4226}.vida-linea__relleno{height:100%;width:100%;background:#b58a4d;transition:width .25s}.vida-linea strong{font-size:10px;color:#d8c49f;white-space:nowrap}.soldado-stats{display:flex;gap:14px;margin-top:8px}.soldado-stats span{display:flex;gap:4px;font-size:9px;color:#827663}.soldado-stats b{font-weight:normal}.soldado-stats em{font-style:normal;color:#d9c49b}
+
+.armas-panel{flex:0 0 auto;padding:11px;background:rgba(30,19,12,.88);border:1px solid #73522e}.seccion-titulo{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.seccion-titulo h2{font-size:16px;font-weight:normal;color:#efdfc0;margin-top:1px}.seccion-titulo small{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#796b58}.armas{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.arma{position:relative;min-width:0;padding:0;display:flex;flex-direction:column;background:#20150d;border:1px solid #604425;color:#e9d7b5;text-align:left;cursor:pointer;overflow:hidden;transition:.18s}.arma:hover{transform:translateY(-2px);border-color:#9b713d;background:#2a1b10}.arma--activa{border-color:#c29450;box-shadow:0 0 0 1px rgba(194,148,80,.3),0 5px 14px rgba(0,0,0,.3)}.arma__imagen{height:78px;background:#16100b;overflow:hidden;border-bottom:1px solid #5d4225}.arma__imagen img{width:100%;height:100%;object-fit:cover;display:block;transition:.2s}.arma:hover .arma__imagen img{transform:scale(1.04)}.arma__info{padding:7px 7px 8px}.arma__top{display:flex;align-items:center;justify-content:space-between;gap:3px}.arma h3{font-size:12px;color:#f0dfbd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.arma__check{opacity:0;width:17px;height:17px;border-radius:50%;background:#a87940;color:#21150d;align-items:center;justify-content:center;font-size:10px;font-weight:bold}.arma--activa .arma__check{display:flex;opacity:1}.arma p{font-size:8px;color:#a99a83;margin-top:3px;white-space:nowrap}.arma__uso{display:block;margin-top:7px;padding-top:5px;border-top:1px solid rgba(159,123,72,.22);font-size:8px;color:#c6a66f;text-transform:uppercase;letter-spacing:.04em}.arma__uso--infinito{color:#9fb080}
+
+.objetivo-card{flex:0 0 auto;padding:9px 11px;background:rgba(38,24,15,.65);border-left:2px solid #99703b}.objetivo-card p{font-size:10px;line-height:1.35;color:#b6a68d;margin-top:3px}.objetivo-card b{color:#d9c49d}
+.registro-panel{flex:1;min-height:0;padding:10px 11px;background:rgba(24,15,9,.9);border:1px solid #49321d;overflow:hidden}.seccion-titulo--registro{margin-bottom:5px}.registro{height:calc(100% - 30px);max-height:100px;overflow-y:auto;list-style:none;padding-right:3px}.registro li{font-family:Arial,sans-serif;font-size:9px;line-height:1.35;color:#8e8270;padding:3px 0;border-bottom:1px solid rgba(141,104,57,.1)}.registro__unitario{color:#c8ae7e!important}.registro__federal{color:#b47d67!important}
+
+/* RESULTADO */
+.banner-resultado{position:absolute;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);padding:20px 30px;background:#21140c;border:2px solid #bb8b49;color:#f0dfbd;font-size:22px;text-align:center;box-shadow:0 12px 40px #000}.banner-resultado--derrota{border-color:#8b4a39}
+
+/* MODAL */
+.modal-overlay{position:fixed;z-index:200;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,3,2,.78);backdrop-filter:blur(3px)}.modal{width:min(410px,90vw);padding:25px;background:linear-gradient(145deg,#302016,#1b1009);border:1px solid #8e6839;box-shadow:0 18px 50px #000;text-align:center}.modal__marca{font-size:9px;letter-spacing:.18em;color:#b4874c}.modal h2{font-size:22px;font-weight:normal;color:#efdfbd;margin:6px 0 10px}.modal p{font-size:12px;line-height:1.5;color:#aa9a82}.modal__acciones{display:flex;gap:9px;justify-content:center;margin-top:20px}.modal__boton{min-width:125px;padding:10px;border:1px solid #76542e;cursor:pointer;font-size:11px;font-weight:bold;letter-spacing:.08em}.modal__boton--cancelar{background:#21150d;color:#c2ad8b}.modal__boton--confirmar{background:#70402b;color:#f0d8b7}.modal__boton:hover{filter:brightness(1.15)}
+
+/* TABLET */
+@media(max-width:1050px){.juego-contenido{grid-template-columns:minmax(0,1fr) 335px}.arma__imagen{height:65px}.soldado-card__imagen{width:82px}.soldado-stats{gap:8px}.tablero-marco{width:min(100%,calc((100dvh - 105px)*1.4))}}
+
+/* CELULAR */
+@media(max-width:700px){html,body{overflow:auto}.combate{height:auto;min-height:100dvh;overflow:visible;padding:8px}.juego-header{padding:52px 5px 7px;min-height:100px;align-items:flex-end}.titulo-juego h1{font-size:19px}.hud{gap:5px}.hud__turno,.hud__contador{font-size:9px;padding:6px 7px}.btn-volver{top:8px;left:8px}.juego-contenido{display:flex;flex-direction:column;height:auto;overflow:visible}.zona-tablero{height:auto}.tablero-marco{width:100%}.panel-juego{height:auto;overflow:visible}.armas{grid-template-columns:1fr}.arma{flex-direction:row}.arma__imagen{width:95px;height:78px;flex-shrink:0;border-right:1px solid #5d4225;border-bottom:0}.registro-panel{min-height:150px}.registro{max-height:120px}.soldado-card__imagen{width:90px}.portada__cta{min-width:175px;font-size:17px}}
+
+
+/* AVISO DE CAMBIO DE TURNO A PANTALLA COMPLETA */
+.aviso-turno--federal::after,.aviso-turno--jugador::after{content:"";position:absolute;inset:12px;border:1px solid rgba(199,154,85,.22);pointer-events:none}
+@media(max-width:600px){.aviso-turno{padding:24px;font-size:clamp(22px,8vw,38px);letter-spacing:.1em}}
