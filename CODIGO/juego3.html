@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nivel 3 - La Batalla de Zonda</title>
     <link rel="stylesheet" href="juego2.css">
+    <link rel="stylesheet" href="config-nivel.css">
     <link rel="stylesheet" href="juego3.css">
 </head>
 <body>
 
 <!-- Música de fondo (la controla audio.js). Cambiá el src si tu mp3 tiene otro nombre/ruta -->
-<audio id="musica-fondo" src="../AUDIO/musica.mp3" loop preload="auto"></audio>
+<audio id="musica-fondo" src="../RECURSOS%20GRAFICOS/SONIDOS/Folk%20Round.mp3" loop preload="auto"></audio>
 
 <section id="portadaNivel" class="portada" aria-label="Presentación del Nivel 3">
     <div class="portada__fondo">
         <picture>
-            <source media="(max-width: 600px)" srcset="../RECURSOS GRAFICOS/imgPortada3Movil.png">
+            <source media="(max-width: 600px)" srcset="../RECURSOS%20GRAFICOS/imgPortada3Movil.png">
             <img class="portada__imagen" src="../RECURSOS GRAFICOS/imgPortada3.png" alt="Nivel 3: La Batalla de Zonda">
         </picture>
         <div class="portada__velo"></div>
@@ -57,6 +58,9 @@
             <h1>La Batalla de Zonda</h1>
         </div>
         <div class="hud">
+            <button id="btnConfigNivel" class="hud__config" type="button" aria-label="Configuración de sonido" aria-haspopup="dialog" aria-controls="modalConfigNivel">
+                <img src="../RECURSOS%20GRAFICOS/Bontondeconfiguracion.png" alt="">
+            </button>
             <button id="btnAyuda" class="hud__ayuda" type="button">? AYUDA</button>
             <span id="hudTurno" class="hud__turno hud__turno--jugador">Turno del jugador</span>
             <span id="hudContador" class="hud__contador">Turno 1</span>
@@ -156,6 +160,40 @@
         </aside>
     </div>
 </main>
+
+<div id="modalConfigNivel" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalConfigTitulo" hidden>
+    <div class="modal modal--config">
+        <h2 id="modalConfigTitulo" class="config-titulo">CONFIGURACIÓN</h2>
+
+        <div class="config-opciones">
+            <div class="config-grupo">
+                <div class="grupo-titulo">◇ SONIDO ◇</div>
+                <div class="opcion">
+                    <label for="volumen-general">Volumen General</label>
+                    <input type="range" id="volumen-general" min="0" max="100" value="80">
+                </div>
+                <div class="opcion">
+                    <label for="volumen-musica">Música</label>
+                    <input type="range" id="volumen-musica" min="0" max="100" value="70">
+                </div>
+                <div class="opcion">
+                    <label for="volumen-efectos">Efectos de Sonido</label>
+                    <input type="range" id="volumen-efectos" min="0" max="100" value="70">
+                </div>
+            </div>
+
+            <div class="config-grupo">
+                <div class="grupo-titulo">◇ PANTALLA ◇</div>
+                <div class="opcion opcion-toggle">
+                    <label for="pantalla-completa">Pantalla Completa</label>
+                    <input type="checkbox" id="pantalla-completa">
+                </div>
+            </div>
+        </div>
+
+        <button id="btnCerrarConfig" class="config-listo" type="button">LISTO</button>
+    </div>
+</div>
 
 <div id="modalConfirmarSalida" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalConfirmarSalidaTitulo" hidden>
     <div class="modal">

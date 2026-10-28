@@ -1,0 +1,154 @@
+/* Botón de configuración (engranaje) en el HUD de los niveles.
+   Se fuerzan tamaño y fondo para que no los pise el CSS del HUD. */
+.hud .hud__config {
+    display: inline-block !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    cursor: pointer;
+    flex: none;
+    line-height: 0;
+    border-radius: 8px;
+    transition: transform .25s ease, filter .2s ease;
+}
+.hud .hud__config img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none;
+    display: block;
+    object-fit: contain;
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+}
+.hud .hud__config:hover { transform: rotate(30deg); filter: brightness(1.15); }
+.hud .hud__config:focus-visible { outline: 2px solid #CBB079; outline-offset: 2px; }
+
+/* =========================================
+   VENTANA DE CONFIGURACIÓN (mismo estilo que Configuracion.html)
+   ========================================= */
+.modal-overlay .modal.modal--config {
+    position: relative;
+    width: min(90%, 520px);
+    max-width: 520px;
+    max-height: 90vh;
+    max-height: 90svh;
+    overflow-y: auto;
+    padding: clamp(20px, 4vw, 32px);
+    font-family: Georgia, "Times New Roman", serif;
+    text-align: left;
+
+    background-color: #E6D8C3;
+    background-image: radial-gradient(#F3EBDD 0%, #D8C7AD 100%);
+    border: 3px solid #8C7343;
+    outline: 2px solid #3E2F1B;
+    border-radius: 6px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(100, 75, 40, 0.3);
+}
+
+.modal--config .config-titulo {
+    color: #2A2118;
+    font-family: inherit;
+    font-size: clamp(22px, 3vw, 30px);
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin: 0 0 clamp(16px, 2.5vw, 22px);
+    border-bottom: 2px solid #8C7343;
+    padding-bottom: 8px;
+}
+
+.modal--config .config-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal--config .config-grupo {
+    background-color: #172230;
+    border: 1px solid #9A804B;
+    border-radius: 4px;
+    padding: 14px 18px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.modal--config .grupo-titulo {
+    color: #CBB079;
+    font-size: clamp(13px, 1.2vw, 15px);
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.modal--config .opcion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+    color: #E6D8C3;
+    font-size: clamp(14px, 1.3vw, 16px);
+}
+
+.modal--config .opcion:last-child { margin-bottom: 0; }
+
+.modal--config .opcion label { color: #E6D8C3; }
+
+.modal--config .opcion input[type="range"] {
+    width: 50%;
+    height: 6px;
+    background: #0D141E;
+    border: 1px solid #8C7343;
+    border-radius: 3px;
+    accent-color: #7A1C1E;
+    cursor: pointer;
+}
+
+.modal--config .opcion input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #7A1C1E;
+    cursor: pointer;
+}
+
+.modal--config .config-listo {
+    display: block;
+    width: 100%;
+    margin-top: clamp(18px, 3vw, 24px);
+    padding: 12px 0;
+    background: linear-gradient(180deg, #6B1719 0%, #4A0E10 100%);
+    color: #F3EBDD;
+    font-family: inherit;
+    text-align: center;
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    border: 2px solid #9A804B;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+.modal--config .config-listo:hover { transform: scale(1.02); filter: brightness(1.25); }
+.modal--config .config-listo:active { transform: scale(0.98); }
+
+@media (max-width: 480px) {
+    .modal--config .opcion {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .modal--config .opcion-toggle {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+    .modal--config .opcion input[type="range"] { width: 100%; }
+}
