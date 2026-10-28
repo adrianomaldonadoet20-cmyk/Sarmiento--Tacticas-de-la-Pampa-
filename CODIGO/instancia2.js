@@ -2240,6 +2240,21 @@
         );
 
 
+        if (gano) {
+
+            const enlace = document.createElement("a");
+
+            enlace.href = "juego3.html";
+
+            enlace.className = "banner-resultado__link";
+
+            enlace.textContent = "SIGUIENTE NIVEL →";
+
+            elementos.bannerResultado.appendChild(enlace);
+
+        }
+
+
         registrarEvento(
 
             gano
