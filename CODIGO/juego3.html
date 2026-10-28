@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nivel 3 - La Batalla de Zonda</title>
+    <link rel="stylesheet" href="juego2.css">
+    <link rel="stylesheet" href="juego3.css">
+</head>
+<body>
+
+<!-- Música de fondo (la controla audio.js). Cambiá el src si tu mp3 tiene otro nombre/ruta -->
+<audio id="musica-fondo" src="../AUDIO/musica.mp3" loop preload="auto"></audio>
+
+<section id="portadaNivel" class="portada" aria-label="Presentación del Nivel 3">
+    <div class="portada__fondo">
+        <picture>
+            <source media="(max-width: 600px)" srcset="../RECURSOS GRAFICOS/imgPortada3Movil.png">
+            <img class="portada__imagen" src="../RECURSOS GRAFICOS/imgPortada3.png" alt="Nivel 3: La Batalla de Zonda">
+        </picture>
+        <div class="portada__velo"></div>
+    </div>
+    <a class="portada__volver" href="juego2.html">← NIVEL 2</a>
+    <div class="portada__boton">
+        <button id="btnIniciarNivel" class="portada__cta" type="button">INICIAR</button>
+    </div>
+</section>
+
+<!-- TUTORIAL -->
+<div id="tutorial" class="tutorial" role="dialog" aria-modal="true" aria-labelledby="tutTitulo" hidden>
+    <div class="tutorial__caja">
+        <div class="tutorial__cab">
+            <span class="tutorial__marca">TUTORIAL · NIVEL 3</span>
+            <span id="tutPaso" class="tutorial__paso"></span>
+        </div>
+        <span id="tutNuevo" class="tutorial__nuevo">NUEVO</span>
+        <h2 id="tutTitulo"></h2>
+        <p id="tutTexto"></p>
+        <div id="tutGrids" class="tutorial__grids"></div>
+        <div id="tutDots" class="tutorial__dots"></div>
+        <div class="tutorial__acciones">
+            <button id="tutOmitir" class="modal__boton modal__boton--cancelar" type="button">OMITIR</button>
+            <button id="tutAtras" class="modal__boton modal__boton--cancelar" type="button">ATRÁS</button>
+            <button id="tutSiguiente" class="modal__boton modal__boton--confirmar" type="button">SIGUIENTE</button>
+        </div>
+    </div>
+</div>
+
+<main id="combate" class="combate" aria-label="Combate del Nivel 3" hidden>
+    <button class="btn-volver" id="btnVolver" type="button" aria-haspopup="dialog" aria-controls="modalConfirmarSalida">
+        <span>←</span> SALIR
+    </button>
+
+    <header class="juego-header">
+        <div class="titulo-juego">
+            <span class="titulo-juego__nivel">NIVEL 3</span>
+            <h1>La Batalla de Zonda</h1>
+        </div>
+        <div class="hud">
+            <button id="btnAyuda" class="hud__ayuda" type="button">? AYUDA</button>
+            <span id="hudTurno" class="hud__turno hud__turno--jugador">Turno del jugador</span>
+            <span id="hudContador" class="hud__contador">Turno 1</span>
+        </div>
+    </header>
+
+    <div id="avisoTurno" class="aviso-turno" aria-live="polite"></div>
+
+    <div class="juego-contenido">
+        <section class="zona-tablero" aria-label="Tablero de combate">
+            <div class="tablero-marco">
+                <div class="tablero-cabecera">
+                    <span>CAMPO DE BATALLA</span>
+                    <span>QUEBRADA DE ZONDA · 1831</span>
+                </div>
+                <div id="tablero" class="tablero" role="grid" aria-label="Mapa de combate"></div>
+                <div class="tablero-pie">
+                    <span><i class="leyenda-movimiento"></i> Movimiento</span>
+                    <span><i class="leyenda-ataque"></i> Alcance de ataque</span>
+                    <span><i class="leyenda-roca"></i> Roca</span>
+                </div>
+            </div>
+            <div id="bannerResultado" class="banner-resultado" hidden></div>
+        </section>
+
+        <aside class="panel-juego" aria-label="Panel de combate">
+
+            <section class="soldado-card">
+                <div class="soldado-card__imagen">
+                    <img src="../RECURSOS GRAFICOS/Imgunitario.png" alt="Unitario">
+                </div>
+                <div class="soldado-card__datos">
+                    <span class="etiqueta">COMBATIENTE</span>
+                    <h2>UNITARIO</h2>
+                    <div class="vida-linea">
+                        <div class="vida-linea__barra"><div id="vidaJugadorRelleno" class="vida-linea__relleno"></div></div>
+                        <strong id="vidaJugadorTexto">60 / 60</strong>
+                    </div>
+                    <div class="soldado-stats">
+                        <span><b>Daño</b><em id="statDanoJugador">8 – 14</em></span>
+                        <span><b>Defensa</b><em id="statDefensaJugador">3</em></span>
+                        <span><b>Arma</b><em id="statArmaJugador">Facón</em></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="armas-panel" aria-label="Armas de combate">
+                <div class="seccion-titulo">
+                    <div>
+                        <span>ARSENAL</span>
+                        <h2>Elegí tu arma</h2>
+                    </div>
+                    <small>Seleccionada</small>
+                </div>
+
+                <div class="armas" role="group" aria-label="Seleccionar arma">
+                    <button class="arma arma--activa" id="armaFacon" type="button" aria-pressed="true">
+                        <div class="arma__imagen"><img src="../RECURSOS GRAFICOS/imgfacon.png" alt="Facón"></div>
+                        <div class="arma__info">
+                            <div class="arma__top"><h3>Facón</h3><span class="arma__check">✓</span></div>
+                            <p>+2 daño · alcance 1</p>
+                            <span class="arma__uso arma__uso--infinito">∞ USO LIBRE</span>
+                        </div>
+                    </button>
+
+                    <button class="arma" id="armaBoleadora" type="button" aria-pressed="false">
+                        <div class="arma__imagen"><img src="../RECURSOS GRAFICOS/imgboleadoras.png" alt="Boleadoras"></div>
+                        <div class="arma__info">
+                            <div class="arma__top"><h3>Boleadoras</h3><span class="arma__check">✓</span></div>
+                            <p>+4 daño · alcance 2</p>
+                            <span class="arma__uso" id="usosBoleadora">3 usos</span>
+                        </div>
+                    </button>
+
+                    <button class="arma" id="armaCarabina" type="button" aria-pressed="false">
+                        <div class="arma__imagen"><img src="../RECURSOS GRAFICOS/imgcarabina.png" alt="Carabina"></div>
+                        <div class="arma__info">
+                            <div class="arma__top"><h3>Carabina</h3><span class="arma__check">✓</span></div>
+                            <p>+6 daño · alcance 3</p>
+                            <span class="arma__uso" id="usosCarabina">4 disparos</span>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <section class="objetivo-card">
+                <span class="objetivo-card__etiqueta">MISIÓN</span>
+                <p>Derrotá a los <b>Federales (F)</b> y resistí la carga de los <b>Montoneros (M)</b>. Usá las <b>rocas</b>: bloquean el paso y los disparos.</p>
+            </section>
+
+            <section class="registro-panel" aria-label="Registro de combate">
+                <div class="seccion-titulo seccion-titulo--registro">
+                    <div><span>COMBATE</span><h2>Registro</h2></div>
+                </div>
+                <ul id="registro" class="registro" aria-live="polite"></ul>
+            </section>
+        </aside>
+    </div>
+</main>
+
+<div id="modalConfirmarSalida" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalConfirmarSalidaTitulo" hidden>
+    <div class="modal">
+        <span class="modal__marca">NIVEL 3</span>
+        <h2 id="modalConfirmarSalidaTitulo">¿Salir de la partida?</h2>
+        <p>Vas a perder el progreso del combate y volver a la pantalla de inicio del Nivel 3.</p>
+        <div class="modal__acciones">
+            <button id="btnCancelarSalida" class="modal__boton modal__boton--cancelar" type="button">CANCELAR</button>
+            <button id="btnConfirmarSalida" class="modal__boton modal__boton--confirmar" type="button">SALIR</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const $ = function (id) { return document.getElementById(id); };
+    const portada = $("portadaNivel"), combate = $("combate"), modal = $("modalConfirmarSalida");
+    const tutorial = $("tutorial");
+    let enCombate = false;
+
+    /* ---------- TUTORIAL ---------- */
+    /* U = Unitario, F = Federal, M = Montonero, r = roca, m = movimiento, a = ataque, x = tiro bloqueado */
+    const PASOS = [
+        {
+            nuevo: false, titulo: "Tu misión",
+            texto: "Sos el Unitario. Derrotá a todos los Federales (F) y resistí a los Montoneros (M) que llegan como refuerzo. Cada turno movés una casilla o atacás.",
+            grids: [{ w: 8, h: 3, items: [[0,1,"U"],[5,0,"F"],[7,2,"M"],[4,1,"r"]], cap: "Vos a la izquierda, ellos a la derecha" }]
+        },
+        {
+            nuevo: true, titulo: "Rocas del terreno",
+            texto: "Las rocas no se pueden atravesar. Además bloquean la línea de tiro: las Boleadoras y la Carabina no pueden disparar por encima de una roca. ¡Usalas para cubrirte!",
+            grids: [
+                { w: 5, h: 3, items: [[0,1,"U"],[2,1,"r"],[4,1,"F"],[4,1,"x"]], cap: "✗ Roca en el medio: tiro bloqueado" },
+                { w: 5, h: 3, items: [[0,0,"U"],[2,1,"r"],[3,0,"F"],[3,0,"a"]], cap: "✓ Línea despejada: podés disparar" }
+            ]
+        },
+        {
+            nuevo: true, titulo: "Montoneros a caballo",
+            texto: "El Montonero (M) es caballería: se mueve hasta 2 casillas por turno y siempre te busca rodeando las rocas. Si se mueve 2 casillas y te ataca, ¡carga y hace +3 de daño! Tiene menos vida, así que pegale primero.",
+            grids: [{ w: 8, h: 3, items: [[7,1,"M"],[6,1,"m"],[5,1,"m"],[6,0,"m"],[6,2,"m"],[7,0,"m"],[7,2,"m"],[4,1,"r"]], cap: "Casillas que puede alcanzar en un turno" }]
+        },
+        {
+            nuevo: false, titulo: "Cómo jugar",
+            texto: "Tocá una casilla marcada para moverte. Tocá un enemigo en rojo para atacarlo con el arma elegida. Elegí Facón, Boleadoras o Carabina en el panel (las dos últimas tienen usos limitados). Podés volver a ver esta ayuda con el botón «? AYUDA».",
+            grids: [{ w: 6, h: 3, items: [[1,1,"U"],[1,0,"m"],[0,1,"m"],[2,1,"m"],[1,2,"m"],[3,1,"F"],[3,1,"a"],[4,2,"r"]], cap: "Azul-dorado: moverte · Rojo: atacar" }]
+        }
+    ];
+    let paso = 0;
+
+    function dibujarGrid(g) {
+        const cont = document.createElement("figure");
+        cont.className = "t-fig";
+        const grid = document.createElement("div");
+        grid.className = "t-grid";
+        grid.style.setProperty("--c", g.w);
+        const mapa = {};
+        g.items.forEach(function (i) { (mapa[i[0] + "," + i[1]] = mapa[i[0] + "," + i[1]] || []).push(i[2]); });
+        for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) {
+            const d = document.createElement("div");
+            d.className = "t-cel";
+            (mapa[x + "," + y] || []).forEach(function (t) {
+                if (t === "r") d.classList.add("t-roca");
+                else if (t === "m") d.classList.add("t-mov");
+                else if (t === "a") d.classList.add("t-atk");
+                else if (t === "x") d.classList.add("t-bloq");
+                else { const s = document.createElement("span"); s.className = "t-u t-u--" + t; s.textContent = t; d.appendChild(s); }
+            });
+            grid.appendChild(d);
+        }
+        const cap = document.createElement("figcaption");
+        cap.textContent = g.cap;
+        cont.appendChild(grid); cont.appendChild(cap);
+        return cont;
+    }
+
+    function mostrarPaso() {
+        const p = PASOS[paso];
+        $("tutPaso").textContent = (paso + 1) + " / " + PASOS.length;
+        $("tutTitulo").textContent = p.titulo;
+        $("tutTexto").textContent = p.texto;
+        $("tutNuevo").hidden = !p.nuevo;
+        const gr = $("tutGrids"); gr.innerHTML = "";
+        p.grids.forEach(function (g) { gr.appendChild(dibujarGrid(g)); });
+        $("tutDots").innerHTML = PASOS.map(function (_, i) { return '<i class="' + (i === paso ? "on" : "") + '"></i>'; }).join("");
+        $("tutAtras").style.visibility = paso === 0 ? "hidden" : "visible";
+        const ultimo = paso === PASOS.length - 1;
+        $("tutSiguiente").textContent = ultimo ? (enCombate ? "CERRAR" : "COMENZAR COMBATE") : "SIGUIENTE";
+        $("tutOmitir").style.visibility = ultimo ? "hidden" : "visible";
+    }
+
+    function abrirTutorial() { paso = 0; mostrarPaso(); tutorial.hidden = false; }
+
+    function cerrarTutorial() {
+        tutorial.hidden = true;
+        if (!enCombate) {
+            enCombate = true;
+            combate.hidden = false;
+            window.dispatchEvent(new Event("nivel3:iniciado"));
+        }
+    }
+
+    $("tutSiguiente").addEventListener("click", function () {
+        if (paso < PASOS.length - 1) { paso++; mostrarPaso(); } else cerrarTutorial();
+    });
+    $("tutAtras").addEventListener("click", function () { if (paso > 0) { paso--; mostrarPaso(); } });
+    $("tutOmitir").addEventListener("click", cerrarTutorial);
+    $("btnAyuda").addEventListener("click", abrirTutorial);
+
+    /* ---------- PORTADA / SALIDA ---------- */
+    const btnIniciar = $("btnIniciarNivel");
+    btnIniciar.addEventListener("click", function () {
+        btnIniciar.disabled = true;
+        portada.classList.add("portada--saliendo");
+        setTimeout(function () { portada.hidden = true; abrirTutorial(); }, 350);
+    });
+
+    $("btnVolver").addEventListener("click", function () { modal.hidden = false; });
+    $("btnCancelarSalida").addEventListener("click", function () { modal.hidden = true; });
+    $("btnConfirmarSalida").addEventListener("click", function () {
+        modal.hidden = true;
+        combate.hidden = true;
+        tutorial.hidden = true;
+        enCombate = false;
+        portada.hidden = false;
+        portada.classList.remove("portada--saliendo");
+        btnIniciar.disabled = false;
+        window.scrollTo(0, 0);
+    });
+    modal.addEventListener("click", function (e) { if (e.target === modal) modal.hidden = true; });
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !modal.hidden) modal.hidden = true;
+    });
+});
+</script>
+<script src="audio.js"></script>
+<script src="instancia3.js"></script>
+</body>
+</html>

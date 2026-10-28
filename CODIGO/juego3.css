@@ -1,0 +1,64 @@
+/* =========================================================
+   NIVEL 3 — LA BATALLA DE ZONDA
+   Se carga DESPUÉS de juego2.css y solo agrega lo nuevo.
+   ========================================================= */
+
+/* ROCAS */
+.celda--roca{cursor:not-allowed!important;background:linear-gradient(145deg,#76664d,#54472f)!important}
+.roca{position:absolute;inset:14% 12%;background:radial-gradient(circle at 35% 30%,#b3a58f,#5e5342 72%);border-radius:42% 58% 46% 54%/55% 45% 55% 45%;box-shadow:0 4px 8px rgba(0,0,0,.55),inset -4px -5px 8px rgba(0,0,0,.35)}
+.leyenda-roca{width:9px;height:9px;border:1px solid #b99b63;display:inline-block;background:#8a7b64;border-radius:40%}
+
+/* TIRO BLOQUEADO POR ROCA */
+.celda--bloqueado{box-shadow:inset 0 0 0 3px rgba(130,130,130,.85);background:rgba(90,90,90,.35)!important}
+.celda--bloqueado:after{content:"✗";position:absolute;top:2px;right:5px;z-index:4;font-size:14px;color:#ddd;text-shadow:0 1px 3px #000;pointer-events:none}
+
+/* MONTONERO */
+.unidad--montonero .unidad__figura{background:rgba(88,30,18,.92);border-color:#d0713f;color:#f3d9b0}
+.unidad--montonero .unidad__figura:after{content:"»";position:absolute;right:-2px;top:-4px;font-size:.5em;color:#e9a46a}
+.unidad--montonero .unidad__figura{position:relative}
+.unidad--carga .unidad__figura{box-shadow:0 0 14px rgba(230,120,60,.9)}
+
+/* ARMAS AGOTADAS */
+.arma--agotada{opacity:.4;cursor:not-allowed}
+
+/* AYUDA Y BANNER */
+.hud__ayuda{padding:7px 12px;border:1px solid rgba(199,154,85,.5);background:#2b1b0f;color:#e2c98f;font-size:12px;letter-spacing:.07em;cursor:pointer}
+.hud__ayuda:hover{background:#432a17}
+.banner-resultado button{display:block;margin:14px auto 0;padding:9px 22px;border:1px solid #bb8b49;background:#553a20;color:#f2dfb7;font-weight:bold;letter-spacing:.1em;cursor:pointer}
+
+/* TUTORIAL */
+.tutorial{position:fixed;inset:0;z-index:190;display:flex;align-items:center;justify-content:center;padding:14px;background:radial-gradient(circle at 40% 20%,rgba(58,40,24,.96),rgba(12,8,5,.97))}
+.tutorial__caja{position:relative;width:min(680px,100%);max-height:100%;overflow:auto;padding:22px 24px;background:linear-gradient(145deg,#302016,#1b1009);border:1px solid #8e6839;box-shadow:0 18px 50px #000;text-align:center}
+.tutorial__cab{display:flex;justify-content:space-between;margin-bottom:10px;font-size:10px;letter-spacing:.18em;color:#b4874c;font-weight:bold}
+.tutorial__nuevo{display:inline-block;padding:3px 10px;background:#8b2f23;color:#fbe8c8;font-size:10px;font-weight:bold;letter-spacing:.2em}
+.tutorial__nuevo[hidden]{display:none}
+.tutorial h2{font-size:26px;font-weight:normal;color:#efdfbd;margin:8px 0}
+.tutorial p{font-size:14px;line-height:1.55;color:#bfae92;max-width:560px;margin:0 auto 14px}
+.tutorial__grids{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-bottom:12px}
+.t-fig{margin:0}
+.t-fig figcaption{margin-top:6px;font-size:11px;color:#a99a83;font-family:Arial,sans-serif}
+.t-grid{display:grid;grid-template-columns:repeat(var(--c),34px);gap:2px;padding:4px;background:#3a2818;border:1px solid #674824}
+.t-cel{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#8b7049,#654e30)}
+.t-mov{box-shadow:inset 0 0 0 3px rgba(222,190,123,.75);background:rgba(198,165,101,.4)}
+.t-atk{box-shadow:inset 0 0 0 3px rgba(190,70,45,.95)}
+.t-bloq{box-shadow:inset 0 0 0 3px rgba(150,150,150,.9)}
+.t-bloq:after{content:"✗";position:absolute;top:-1px;right:3px;color:#eee;font-size:12px}
+.t-roca:before{content:"";position:absolute;inset:15% 12%;background:radial-gradient(circle at 35% 30%,#b3a58f,#5e5342 72%);border-radius:42% 58% 46% 54%/55% 45% 55% 45%}
+.t-u{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:bold;font-size:14px;color:#f1dfbb;border:2px solid #8d553d;background:rgba(58,28,20,.9);z-index:2}
+.t-u--U{background:#2d4a66;border-color:#8fb0d0}
+.t-u--M{background:#581e12;border-color:#d0713f}
+.tutorial__dots{display:flex;justify-content:center;gap:7px;margin:6px 0 14px}
+.tutorial__dots i{width:8px;height:8px;border-radius:50%;background:#4a3722}
+.tutorial__dots i.on{background:#d2a45e}
+.tutorial__acciones{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+
+@media(max-width:600px){
+    .tutorial__caja{padding:16px 14px}
+    .tutorial h2{font-size:21px}
+    .tutorial p{font-size:13px}
+    .t-grid{grid-template-columns:repeat(var(--c),28px)}
+    .t-cel{width:28px;height:28px}
+    .t-u{width:22px;height:22px;font-size:12px}
+    .modal__boton{min-width:90px}
+    .hud{flex-wrap:wrap;justify-content:flex-end}
+}
