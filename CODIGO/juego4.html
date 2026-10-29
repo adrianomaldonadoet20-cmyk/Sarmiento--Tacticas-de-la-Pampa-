@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nivel 4 - La Quemazón del Pajonal</title>
+    <link rel="stylesheet" href="juego2.css">
+    <link rel="stylesheet" href="config-nivel.css">
+    <link rel="stylesheet" href="juego4.css">
+</head>
+<body>
+
+<!-- Música de fondo (la controla audio.js). Cambiá el src si tu mp3 tiene otro nombre/ruta -->
+<audio id="musica-fondo" src="../RECURSOS%20GRAFICOS/SONIDOS/Folk%20Round.mp3" loop preload="auto"></audio>
+
+<section id="portadaNivel" class="portada" aria-label="Presentación del Nivel 4">
+    <div class="portada__fondo">
+        <img class="portada__imagen" src="../RECURSOS GRAFICOS/pantalladeinicionivel4.png" alt="Nivel 4: La Quemazón del Pajonal" onerror="this.onerror=null;this.src='../RECURSOS GRAFICOS/imgPortada4.png'">
+        <div class="portada__velo"></div>
+    </div>
+    <a class="portada__volver" href="Menu.html" aria-label="Volver al menú de inicio">
+        <img src="../RECURSOS GRAFICOS/volver.png" alt="Volver">
+    </a>
+    <div class="portada__boton">
+        <button id="btnIniciarNivel" class="portada__cta portada__cta--imagen" type="button" aria-label="Iniciar nivel 4">
+            <img src="../RECURSOS GRAFICOS/iniciar.png" alt="Iniciar">
+        </button>
+    </div>
+</section>
+
+<!-- TUTORIAL -->
+<div id="tutorial" class="tutorial" role="dialog" aria-modal="true" aria-labelledby="tutTitulo" hidden>
+    <div class="tutorial__caja">
+        <div class="tutorial__cab">
+            <span class="tutorial__marca">TUTORIAL · NIVEL 4</span>
+            <span id="tutPaso" class="tutorial__paso"></span>
+        </div>
+        <span id="tutNuevo" class="tutorial__nuevo">NUEVO</span>
+        <h2 id="tutTitulo"></h2>
+        <p id="tutTexto"></p>
+        <div id="tutGrids" class="tutorial__grids"></div>
+        <div id="tutDots" class="tutorial__dots"></div>
+        <div class="tutorial__acciones">
+            <button id="tutOmitir" class="modal__boton modal__boton--cancelar" type="button">OMITIR</button>
+            <button id="tutAtras" class="modal__boton modal__boton--cancelar" type="button">ATRÁS</button>
+            <button id="tutSiguiente" class="modal__boton modal__boton--confirmar" type="button">SIGUIENTE</button>
+        </div>
+    </div>
+</div>
+
+<main id="combate" class="combate" aria-label="Combate del Nivel 4" hidden>
+    <button class="btn-volver" id="btnVolver" type="button" aria-haspopup="dialog" aria-controls="modalConfirmarSalida" aria-label="Salir de la partida">
+        <img src="../RECURSOS GRAFICOS/Boton_Salir.png" alt="Salir">
+    </button>
+
+    <header class="juego-header">
+        <div class="titulo-juego">
+            <span class="titulo-juego__nivel">NIVEL 4</span>
+            <h1>La Quemazón del Pajonal</h1>
+        </div>
+        <div class="hud">
+            <button id="btnConfigNivel" class="hud__config" type="button" aria-label="Configuración de sonido" aria-haspopup="dialog" aria-controls="modalConfigNivel">
+                <img src="../RECURSOS%20GRAFICOS/Bontondeconfiguracion.png" alt="">
+            </button>
+            <button id="btnAyuda" class="hud__ayuda" type="button">? AYUDA</button>
+            <span id="hudTurno" class="hud__turno hud__turno--jugador">Turno del jugador</span>
+            <span id="hudContador" class="hud__contador">Turno 1</span>
+        </div>
+    </header>
+
+    <div id="avisoTurno" class="aviso-turno" aria-live="polite"></div>
+
+    <div class="juego-contenido">
+        <section class="zona-tablero" aria-label="Tablero de combate">
+            <div class="tablero-marco">
+                <div class="tablero-cabecera">
+                    <span>CAMPO DE BATALLA</span>
+                    <span>EL PAJONAL</span>
+                </div>
+                <div id="tablero" class="tablero" role="grid" aria-label="Mapa de combate"></div>
+                <div class="tablero-pie">
+                    <span><i class="leyenda-movimiento"></i> Movimiento</span>
+                    <span><i class="leyenda-ataque"></i> Alcance de ataque</span>
+                    <span><i class="leyenda-roca"></i> Roca</span>
+                    <span><i class="leyenda-humo"></i> Humo (arde en 1 turno)</span>
+                </div>
+            </div>
+            <div id="bannerResultado" class="banner-resultado" hidden></div>
+        </section>
+
+        <aside class="panel-juego" aria-label="Panel de combate">
+
+            <section class="soldado-card">
+                <div class="soldado-card__imagen">
+                    <img src="../RECURSOS GRAFICOS/Imgunitario.png" alt="Unitario">
+                </div>
+                <div class="soldado-card__datos">
+                    <span class="etiqueta">COMBATIENTE</span>
+                    <h2>UNITARIO</h2>
+                    <div class="vida-linea">
+                        <div class="vida-linea__barra"><div id="vidaJugadorRelleno" class="vida-linea__relleno"></div></div>
+                        <strong id="vidaJugadorTexto">70 / 70</strong>
+                    </div>
+                    <div class="soldado-stats">
+                        <span><b>Daño</b><em id="statDanoJugador">8 – 14</em></span>
+                        <span><b>Defensa</b><em id="statDefensaJugador">3</em></span>
+                        <span><b>Arma</b><em id="statArmaJugador">Facón</em></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="armas-panel" aria-label="Armas de combate">
+                <div class="seccion-titulo">
+                    <div>
+                        <span>ARSENAL</span>
+                        <h2>Elegí tu arma</h2>
+                    </div>
+                    <small>Seleccionada</small>
+                </div>
+
+                <div class="armas" role="group" aria-label="Seleccionar arma">
+                    <button class="arma arma--activa" id="armaFacon" type="button" aria-pressed="true">
+                        <div class="arma__imagen"><img src="../RECURSOS GRAFICOS/imgfacon.png" alt="Facón"></div>
+                        <div class="arma__info">
+                            <div class="arma__top"><h3>Facón</h3><span class="arma__check">✓</span></div>
+                            <p>+2 daño · alcance 1</p>
+                            <span class="arma__uso arma__uso--infinito">∞ USO LIBRE</span>
+                        </div>
+                    </button>
+
+                    <button class="arma" id="armaBoleadora" type="button" aria-pressed="false">
+                        <div class="arma__imagen"><img src="../RECURSOS GRAFICOS/imgboleadoras.png" alt="Boleadoras"></div>
+                        <div class="arma__info">
+                            <div class="arma__top"><h3>Boleadoras</h3><span class="arma__check">✓</span></div>
+                            <p>+4 daño · alcance 2</p>
+                            <span class="arma__uso" id="usosBoleadora">3 usos</span>
+                        </div>
+                    </button>
+
+                    <button class="arma" id="armaCarabina" type="button" aria-pressed="false">
+                        <div class="arma__imagen"><img src="../RECURSOS GRAFICOS/imgcarabina.png" alt="Carabina"></div>
+                        <div class="arma__info">
+                            <div class="arma__top"><h3>Carabina</h3><span class="arma__check">✓</span></div>
+                            <p>+6 daño · alcance 3</p>
+                            <span class="arma__uso" id="usosCarabina">4 disparos</span>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <section class="objetivo-card">
+                <span class="objetivo-card__etiqueta">MISIÓN</span>
+                <p>Derrotá a los <b>Federales (F)</b> y <b>Montoneros (M)</b>. El pajonal se incendia: las casillas con <b>humo</b> arden el turno siguiente y queman a <b>todos</b>. ¡Salí del humo o atraé a los enemigos hacia él!</p>
+            </section>
+
+            <section class="registro-panel" aria-label="Registro de combate">
+                <div class="seccion-titulo seccion-titulo--registro">
+                    <div><span>COMBATE</span><h2>Registro</h2></div>
+                </div>
+                <ul id="registro" class="registro" aria-live="polite"></ul>
+            </section>
+        </aside>
+    </div>
+</main>
+
+<div id="modalConfigNivel" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalConfigTitulo" hidden>
+    <div class="modal modal--config">
+        <h2 id="modalConfigTitulo" class="config-titulo">CONFIGURACIÓN</h2>
+
+        <div class="config-opciones">
+            <div class="config-grupo">
+                <div class="grupo-titulo">◇ SONIDO ◇</div>
+                <div class="opcion">
+                    <label for="volumen-general">Volumen General</label>
+                    <input type="range" id="volumen-general" min="0" max="100" value="80">
+                </div>
+                <div class="opcion">
+                    <label for="volumen-musica">Música</label>
+                    <input type="range" id="volumen-musica" min="0" max="100" value="70">
+                </div>
+                <div class="opcion">
+                    <label for="volumen-efectos">Efectos de Sonido</label>
+                    <input type="range" id="volumen-efectos" min="0" max="100" value="70">
+                </div>
+            </div>
+
+            <div class="config-grupo">
+                <div class="grupo-titulo">◇ PANTALLA ◇</div>
+                <div class="opcion opcion-toggle">
+                    <label for="pantalla-completa">Pantalla Completa</label>
+                    <input type="checkbox" id="pantalla-completa">
+                </div>
+            </div>
+        </div>
+
+        <button id="btnCerrarConfig" class="config-listo" type="button">LISTO</button>
+    </div>
+</div>
+
+<div id="modalConfirmarSalida" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalConfirmarSalidaTitulo" hidden>
+    <div class="modal">
+        <span class="modal__marca">NIVEL 4</span>
+        <h2 id="modalConfirmarSalidaTitulo">¿Salir de la partida?</h2>
+        <p>Vas a perder el progreso del combate y volver a la pantalla de inicio del Nivel 4.</p>
+        <div class="modal__acciones">
+            <button id="btnCancelarSalida" class="modal__boton modal__boton--imagen" type="button" aria-label="Cancelar">
+                <img src="../RECURSOS GRAFICOS/cancelar.png" alt="Cancelar">
+            </button>
+            <button id="btnConfirmarSalida" class="modal__boton modal__boton--imagen" type="button" aria-label="Sí, salir del nivel">
+                <img src="../RECURSOS GRAFICOS/Boton_Salir.png" alt="Salir">
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const $ = function (id) { return document.getElementById(id); };
+    const portada = $("portadaNivel"), combate = $("combate"), modal = $("modalConfirmarSalida");
+    const tutorial = $("tutorial");
+    let enCombate = false;
+
+    /* ---------- ESCALA PROPORCIONAL ----------
+       En pantallas grandes, todo el combate (tablero + paneles + botones) se
+       dibuja en un bloque de 1180x720 que se agranda o achica como una sola
+       pieza según el tamaño de la ventana o el zoom. En celulares (<=700px)
+       se mantiene el diseño vertical con scroll. */
+    const DISENO_W = 1180, DISENO_H = 720;
+    function ajustarEscala() {
+        if (window.innerWidth <= 700) {
+            ["--escala", "--sx", "--sy"].forEach(function (v) { combate.style.removeProperty(v); });
+            return;
+        }
+        const e = Math.min(window.innerWidth / DISENO_W, window.innerHeight / DISENO_H);
+        combate.style.setProperty("--escala", e);
+        combate.style.setProperty("--sx", ((window.innerWidth - DISENO_W * e) / 2) + "px");
+        combate.style.setProperty("--sy", ((window.innerHeight - DISENO_H * e) / 2) + "px");
+    }
+    window.addEventListener("resize", ajustarEscala);
+    ajustarEscala();
+
+    /* ---------- TUTORIAL ---------- */
+    /* U = Unitario, F = Federal, M = Montonero, r = roca, m = movimiento, a = ataque, x = tiro bloqueado */
+    const PASOS = [
+        {
+            nuevo: false, titulo: "Tu misión",
+            texto: "Sos el Unitario. Derrotá a todos los Federales (F) y Montoneros (M). Cada turno movés una casilla o atacás con el arma elegida.",
+            grids: [{ w: 8, h: 3, items: [[0,1,"U"],[5,0,"F"],[7,2,"M"],[4,1,"r"]], cap: "Vos a la izquierda, ellos a la derecha" }]
+        },
+        {
+            nuevo: true, titulo: "El pajonal en llamas",
+            texto: "Cada dos turnos aparecen casillas con humo. Un turno después esas casillas arden y queman 9 de daño (sin importar la defensa) a quien esté encima: a vos... ¡y también a los enemigos!",
+            grids: [
+                { w: 5, h: 3, items: [[1,1,"U"],[1,1,"h"],[2,1,"h"],[2,0,"h"]], cap: "Humo: salí de ahí antes de que arda" },
+                { w: 5, h: 3, items: [[2,1,"F"],[2,1,"f"],[3,1,"f"],[2,0,"f"]], cap: "Fuego: quema a quien quede encima" }
+            ]
+        },
+        {
+            nuevo: true, titulo: "Usá el fuego a tu favor",
+            texto: "Los enemigos esquivan el humo al avanzar, pero si ya estaban parados ahí cuando arde, se queman. Quedate fuera del humo y dejá que el incendio trabaje por vos. Las rocas siguen bloqueando el paso y los disparos.",
+            grids: [{ w: 8, h: 3, items: [[0,1,"U"],[5,1,"F"],[5,1,"h"],[4,0,"h"],[4,2,"h"],[3,1,"r"]], cap: "El Federal queda dentro del humo" }]
+        },
+        {
+            nuevo: false, titulo: "Cómo jugar",
+            texto: "Tocá una casilla marcada para moverte. Tocá un enemigo en rojo para atacarlo. Elegí Facón, Boleadoras o Carabina en el panel (las dos últimas tienen usos limitados). Podés volver a ver esta ayuda con el botón «? AYUDA».",
+            grids: [{ w: 6, h: 3, items: [[1,1,"U"],[1,0,"m"],[0,1,"m"],[2,1,"m"],[1,2,"m"],[3,1,"F"],[3,1,"a"],[4,2,"r"]], cap: "Azul-dorado: moverte · Rojo: atacar" }]
+        }
+    ];
+    let paso = 0;
+
+    function dibujarGrid(g) {
+        const cont = document.createElement("figure");
+        cont.className = "t-fig";
+        const grid = document.createElement("div");
+        grid.className = "t-grid";
+        grid.style.setProperty("--c", g.w);
+        const mapa = {};
+        g.items.forEach(function (i) { (mapa[i[0] + "," + i[1]] = mapa[i[0] + "," + i[1]] || []).push(i[2]); });
+        for (let y = 0; y < g.h; y++) for (let x = 0; x < g.w; x++) {
+            const d = document.createElement("div");
+            d.className = "t-cel";
+            (mapa[x + "," + y] || []).forEach(function (t) {
+                if (t === "r") d.classList.add("t-roca");
+                else if (t === "m") d.classList.add("t-mov");
+                else if (t === "a") d.classList.add("t-atk");
+                else if (t === "x") d.classList.add("t-bloq");
+                else if (t === "h") d.classList.add("t-humo");
+                else if (t === "f") d.classList.add("t-fuego");
+                else { const s = document.createElement("span"); s.className = "t-u t-u--" + t; s.textContent = t; d.appendChild(s); }
+            });
+            grid.appendChild(d);
+        }
+        const cap = document.createElement("figcaption");
+        cap.textContent = g.cap;
+        cont.appendChild(grid); cont.appendChild(cap);
+        return cont;
+    }
+
+    function mostrarPaso() {
+        const p = PASOS[paso];
+        $("tutPaso").textContent = (paso + 1) + " / " + PASOS.length;
+        $("tutTitulo").textContent = p.titulo;
+        $("tutTexto").textContent = p.texto;
+        $("tutNuevo").hidden = !p.nuevo;
+        const gr = $("tutGrids"); gr.innerHTML = "";
+        p.grids.forEach(function (g) { gr.appendChild(dibujarGrid(g)); });
+        $("tutDots").innerHTML = PASOS.map(function (_, i) { return '<i class="' + (i === paso ? "on" : "") + '"></i>'; }).join("");
+        $("tutAtras").style.visibility = paso === 0 ? "hidden" : "visible";
+        const ultimo = paso === PASOS.length - 1;
+        $("tutSiguiente").textContent = ultimo ? (enCombate ? "CERRAR" : "COMENZAR COMBATE") : "SIGUIENTE";
+        $("tutOmitir").style.visibility = ultimo ? "hidden" : "visible";
+    }
+
+    function abrirTutorial() { paso = 0; mostrarPaso(); tutorial.hidden = false; }
+
+    function cerrarTutorial() {
+        tutorial.hidden = true;
+        if (!enCombate) {
+            enCombate = true;
+            combate.hidden = false;
+            window.dispatchEvent(new Event("nivel4:iniciado"));
+        }
+    }
+
+    $("tutSiguiente").addEventListener("click", function () {
+        if (paso < PASOS.length - 1) { paso++; mostrarPaso(); } else cerrarTutorial();
+    });
+    $("tutAtras").addEventListener("click", function () { if (paso > 0) { paso--; mostrarPaso(); } });
+    $("tutOmitir").addEventListener("click", cerrarTutorial);
+    $("btnAyuda").addEventListener("click", abrirTutorial);
+
+    /* ---------- PORTADA / SALIDA ---------- */
+    const btnIniciar = $("btnIniciarNivel");
+    btnIniciar.addEventListener("click", function () {
+        btnIniciar.disabled = true;
+        portada.classList.add("portada--saliendo");
+        setTimeout(function () { portada.hidden = true; abrirTutorial(); }, 350);
+    });
+
+    $("btnVolver").addEventListener("click", function () { modal.hidden = false; });
+    $("btnCancelarSalida").addEventListener("click", function () { modal.hidden = true; });
+    $("btnConfirmarSalida").addEventListener("click", function () {
+        modal.hidden = true;
+        combate.hidden = true;
+        tutorial.hidden = true;
+        enCombate = false;
+        portada.hidden = false;
+        portada.classList.remove("portada--saliendo");
+        btnIniciar.disabled = false;
+        window.scrollTo(0, 0);
+    });
+    modal.addEventListener("click", function (e) { if (e.target === modal) modal.hidden = true; });
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !modal.hidden) modal.hidden = true;
+    });
+});
+</script>
+<script src="audio.js"></script>
+<script src="instancia4.js"></script>
+</body>
+</html>

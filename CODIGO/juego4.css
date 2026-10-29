@@ -1,0 +1,174 @@
+/* =========================================================
+   NIVEL 4 — LA QUEMAZÓN DEL PAJONAL
+   Se carga DESPUÉS de juego2.css y solo agrega lo nuevo.
+   ========================================================= */
+
+/* ROCAS */
+.celda--roca{cursor:not-allowed!important;background:linear-gradient(145deg,#76664d,#54472f)!important}
+.roca{position:absolute;inset:14% 12%;background:radial-gradient(circle at 35% 30%,#b3a58f,#5e5342 72%);border-radius:42% 58% 46% 54%/55% 45% 55% 45%;box-shadow:0 4px 8px rgba(0,0,0,.55),inset -4px -5px 8px rgba(0,0,0,.35)}
+.leyenda-roca{width:9px;height:9px;border:1px solid #b99b63;display:inline-block;background:#8a7b64;border-radius:40%}
+
+/* TIRO BLOQUEADO POR ROCA */
+.celda--bloqueado{box-shadow:inset 0 0 0 3px rgba(130,130,130,.85);background:rgba(90,90,90,.35)!important}
+.celda--bloqueado:after{content:"✗";position:absolute;top:2px;right:5px;z-index:4;font-size:14px;color:#ddd;text-shadow:0 1px 3px #000;pointer-events:none}
+
+/* MONTONERO */
+.unidad--montonero .unidad__figura{background:rgba(88,30,18,.92);border-color:#d0713f;color:#f3d9b0}
+.unidad--montonero .unidad__figura:after{content:"»";position:absolute;right:-2px;top:-4px;font-size:.5em;color:#e9a46a}
+.unidad--montonero .unidad__figura{position:relative}
+.unidad--carga .unidad__figura{box-shadow:0 0 14px rgba(230,120,60,.9)}
+
+/* ARMAS AGOTADAS */
+.arma--agotada{opacity:.4;cursor:not-allowed}
+
+/* AYUDA Y BANNER */
+.hud__ayuda{padding:7px 12px;border:1px solid rgba(199,154,85,.5);background:#2b1b0f;color:#e2c98f;font-size:12px;letter-spacing:.07em;cursor:pointer}
+.hud__ayuda:hover{background:#432a17}
+.banner-resultado button{display:block;margin:14px auto 0;padding:9px 22px;border:1px solid #bb8b49;background:#553a20;color:#f2dfb7;font-weight:bold;letter-spacing:.1em;cursor:pointer}
+
+/* TUTORIAL */
+.tutorial{position:fixed;inset:0;z-index:190;display:flex;align-items:center;justify-content:center;padding:14px;background:radial-gradient(circle at 40% 20%,rgba(58,40,24,.96),rgba(12,8,5,.97))}
+.tutorial__caja{position:relative;width:min(680px,100%);max-height:100%;overflow:auto;padding:22px 24px;background:linear-gradient(145deg,#302016,#1b1009);border:1px solid #8e6839;box-shadow:0 18px 50px #000;text-align:center}
+.tutorial__cab{display:flex;justify-content:space-between;margin-bottom:10px;font-size:10px;letter-spacing:.18em;color:#b4874c;font-weight:bold}
+.tutorial__nuevo{display:inline-block;padding:3px 10px;background:#8b2f23;color:#fbe8c8;font-size:10px;font-weight:bold;letter-spacing:.2em}
+.tutorial__nuevo[hidden]{display:none}
+.tutorial h2{font-size:26px;font-weight:normal;color:#efdfbd;margin:8px 0}
+.tutorial p{font-size:14px;line-height:1.55;color:#bfae92;max-width:560px;margin:0 auto 14px}
+.tutorial__grids{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-bottom:12px}
+.t-fig{margin:0}
+.t-fig figcaption{margin-top:6px;font-size:11px;color:#a99a83;font-family:Arial,sans-serif}
+.t-grid{display:grid;grid-template-columns:repeat(var(--c),34px);gap:2px;padding:4px;background:#3a2818;border:1px solid #674824}
+.t-cel{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#8b7049,#654e30)}
+.t-mov{box-shadow:inset 0 0 0 3px rgba(222,190,123,.75);background:rgba(198,165,101,.4)}
+.t-atk{box-shadow:inset 0 0 0 3px rgba(190,70,45,.95)}
+.t-bloq{box-shadow:inset 0 0 0 3px rgba(150,150,150,.9)}
+.t-bloq:after{content:"✗";position:absolute;top:-1px;right:3px;color:#eee;font-size:12px}
+.t-roca:before{content:"";position:absolute;inset:15% 12%;background:radial-gradient(circle at 35% 30%,#b3a58f,#5e5342 72%);border-radius:42% 58% 46% 54%/55% 45% 55% 45%}
+.t-u{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:bold;font-size:14px;color:#f1dfbb;border:2px solid #8d553d;background:rgba(58,28,20,.9);z-index:2}
+.t-u--U{background:#2d4a66;border-color:#8fb0d0}
+.t-u--M{background:#581e12;border-color:#d0713f}
+.tutorial__dots{display:flex;justify-content:center;gap:7px;margin:6px 0 14px}
+.tutorial__dots i{width:8px;height:8px;border-radius:50%;background:#4a3722}
+.tutorial__dots i.on{background:#d2a45e}
+.tutorial__acciones{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+
+@media(max-width:600px){
+    .tutorial__caja{padding:16px 14px}
+    .tutorial h2{font-size:21px}
+    .tutorial p{font-size:13px}
+    .t-grid{grid-template-columns:repeat(var(--c),28px)}
+    .t-cel{width:28px;height:28px}
+    .t-u{width:22px;height:22px;font-size:12px}
+    .modal__boton{min-width:90px}
+    .hud{flex-wrap:wrap;justify-content:flex-end}
+}
+
+
+/* =========================================================
+   NOVEDAD DEL NIVEL 4: PAJONAL EN LLAMAS
+   humo = aviso (arde en el próximo turno) · fuego = daño
+   ========================================================= */
+.celda--humo{background:rgba(120,110,100,.45)!important;box-shadow:inset 0 0 0 2px rgba(210,150,70,.75)}
+.celda--humo:before{content:"♨";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;font-size:20px;color:#e8b46a;text-shadow:0 0 8px rgba(255,120,30,.9);pointer-events:none;animation:humoPulso 1s ease-in-out infinite}
+.celda--fuego{background:radial-gradient(circle,#ffb347,#d9481c 70%,#7a1c0a)!important;box-shadow:inset 0 0 14px rgba(255,200,80,.95);animation:fuegoParpadeo .25s linear infinite alternate}
+.celda--fuego:before{content:"🔥";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;font-size:24px;pointer-events:none}
+@keyframes humoPulso{0%,100%{opacity:.55;transform:scale(.9)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes fuegoParpadeo{from{filter:brightness(1)}to{filter:brightness(1.3)}}
+.leyenda-humo{width:9px;height:9px;display:inline-block;border:1px solid #d29646;background:rgba(120,110,100,.7);border-radius:50%}
+
+/* Tutorial */
+.t-humo{box-shadow:inset 0 0 0 3px rgba(210,150,70,.9);background:rgba(120,110,100,.5)}
+.t-humo:after{content:"♨";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#e8b46a;font-size:16px}
+.t-fuego{background:radial-gradient(circle,#ffb347,#d9481c 70%,#7a1c0a)}
+.t-fuego:after{content:"🔥";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+
+
+/* =========================================================
+   BOTONES DE IMAGEN (los mismos de RECURSOS GRAFICOS)
+   iniciar.png · volver.png · Boton_Salir.png · cancelar.png
+   ========================================================= */
+
+/* Portada: el botón mide un % del ANCHO REAL de la imagen de fondo
+   (que usa object-fit:cover), así crece y se achica junto con ella. */
+.portada__cta--imagen{display:block;min-width:0;padding:0;border:0;background:none;box-shadow:none;
+    width:max(120px,calc(max(100vw,100vh*1.7778)*.12))}
+.portada__cta--imagen:hover{background:none;transform:translateY(-2px);filter:brightness(1.12)}
+.portada__cta--imagen img{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55))}
+.portada__volver{position:absolute;z-index:2;top:3%;left:2%;display:block;
+    width:max(90px,calc(max(100vw,100vh*1.7778)*.08));transition:filter .2s,transform .2s}
+.portada__volver img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+.portada__volver:hover{filter:brightness(1.12);transform:translateY(-1px)}
+
+/* SALIR dentro del combate */
+.btn-volver{min-width:0;height:auto;width:100px;padding:0;border:0;background:none}
+.btn-volver img{display:block;width:100%;height:auto;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+.btn-volver:hover{background:none;filter:brightness(1.15);transform:translateY(-1px)}
+
+/* Modal de salida */
+.modal__boton--imagen{min-width:0;width:150px;padding:0;border:0;background:none}
+.modal__boton--imagen img{display:block;width:100%;height:auto}
+.modal__boton--imagen:hover{background:none}
+
+/* =========================================================
+   RESPONSIVE: el campo de juego escala como un solo bloque
+   (el JS de juego4.html calcula --escala, --sx y --sy)
+   ========================================================= */
+body{background:#120d09}
+
+@media(min-width:701px){
+    html,body{overflow:hidden}
+    .combate{position:absolute;left:0;top:0;width:1180px;height:720px;
+        transform-origin:0 0;transform:translate(var(--sx,0px),var(--sy,0px)) scale(var(--escala,1))}
+    .juego-contenido{max-width:none;grid-template-columns:minmax(0,1fr) 390px}
+    .tablero-marco{width:100%}
+    .arma__imagen{height:78px}
+    .soldado-card__imagen{width:98px}
+    .soldado-stats{gap:14px}
+    .unidad--federal .unidad__figura{font-size:22px}
+    /* el aviso de turno vive dentro del bloque escalado */
+    .aviso-turno{position:absolute;inset:0;width:100%;height:100%;font-size:40px}
+}
+
+
+/* =========================================================
+   ORDEN Y ESTÉTICA DE LOS BOTONES
+   ========================================================= */
+
+/* Portada: VOLVER arriba a la izquierda, INICIAR centrado abajo */
+.portada__volver{top:4%;left:3%;width:max(110px,calc(max(100vw,100vh*1.7778)*.095))}
+.portada__boton{bottom:6%}
+.portada__cta--imagen{width:max(150px,calc(max(100vw,100vh*1.7778)*.14))}
+
+/* Cabecera del combate: todo alineado a la misma altura */
+.juego-header{align-items:center}
+.btn-volver{top:21px;left:22px;width:104px}
+.hud{gap:12px}
+.hud__ayuda,.hud__turno,.hud__contador{height:40px;display:flex;align-items:center;justify-content:center;padding:0 16px;
+    border:1px solid rgba(199,154,85,.45);background:linear-gradient(#2e1d11,#1c120a);font-size:12px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.hud__ayuda{min-width:104px;color:#e8d3a2;font-weight:bold;transition:.2s}
+.hud__ayuda:hover{background:linear-gradient(#4a2f19,#2c1b0f);border-color:#c79a55}
+.hud__turno{min-width:170px}
+.hud__contador{min-width:92px}
+
+/* Tutorial y modales: botones parejos, con acción principal destacada */
+.tutorial__acciones{gap:12px;margin-top:4px}
+.tutorial__acciones .modal__boton{min-width:132px;height:42px;padding:0 14px;display:flex;align-items:center;justify-content:center;
+    border:1px solid #76542e;font-size:12px;letter-spacing:.1em;transition:.2s}
+.tutorial__acciones .modal__boton--cancelar{background:#21150d;color:#c2ad8b}
+.tutorial__acciones .modal__boton--confirmar{min-width:170px;background:linear-gradient(#8a5636,#5c3220);border-color:#d2a45e;color:#f8e6c4;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.tutorial__acciones .modal__boton:hover{filter:brightness(1.18);transform:translateY(-1px)}
+.modal__acciones{gap:16px;margin-top:22px}
+
+/* Botón REINTENTAR del resultado */
+.banner-resultado button{min-width:170px;height:42px;padding:0 20px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(#8a5636,#5c3220);border:1px solid #d2a45e;color:#f8e6c4;box-shadow:0 4px 14px rgba(0,0,0,.4);transition:.2s}
+.banner-resultado button:hover{filter:brightness(1.18);transform:translateY(-1px)}
+
+/* Celular */
+@media(max-width:700px){
+    .hud{flex-wrap:wrap;justify-content:flex-end;gap:6px}
+    .hud__ayuda,.hud__turno,.hud__contador{height:34px;padding:0 10px;font-size:10px;min-width:0}
+    .btn-volver{top:10px;left:10px;width:92px}
+    .tutorial__acciones .modal__boton{min-width:104px}
+    .tutorial__acciones .modal__boton--confirmar{min-width:140px}
+}
