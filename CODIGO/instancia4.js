@@ -570,6 +570,7 @@
         b.hidden = false;
         b.className = "banner-resultado" + (gano ? "" : " banner-resultado--derrota");
         b.innerHTML = (gano ? "¡Victoria en el Pajonal!" : "Unidad caída. El combate terminó.") +
+            (gano ? '<a class="banner-resultado__link" href="juego5.html">SIGUIENTE NIVEL →</a>' : '') +
             '<button type="button" id="btnReintentar">REINTENTAR</button>';
         document.getElementById("btnReintentar").addEventListener("click", iniciarPartida);
         registrar(gano ? "¡Victoria! Sobreviviste a la quemazón del pajonal." : "Derrota. El Unitario fue vencido.", null);

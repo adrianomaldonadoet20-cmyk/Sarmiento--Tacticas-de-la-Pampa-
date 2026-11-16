@@ -152,3 +152,10 @@
     }
     .modal--config .opcion input[type="range"] { width: 100%; }
 }
+
+
+/* Botón "SIGUIENTE NIVEL →" del banner de victoria (niveles 2 a 4) */
+.banner-resultado__link{display:flex;align-items:center;justify-content:center;min-width:170px;height:42px;margin:14px auto 0;padding:0 20px;
+    background:linear-gradient(#8a5636,#5c3220);border:1px solid #d2a45e;color:#f8e6c4;font-weight:bold;letter-spacing:.1em;
+    font-size:15px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.4);transition:.2s;cursor:pointer}
+.banner-resultado__link:hover{filter:brightness(1.18);transform:translateY(-1px)}

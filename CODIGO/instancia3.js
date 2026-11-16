@@ -488,6 +488,7 @@
         b.hidden = false;
         b.className = "banner-resultado" + (gano ? "" : " banner-resultado--derrota");
         b.innerHTML = (gano ? "¡Victoria en Zonda!" : "Unidad caída. El combate terminó.") +
+            (gano ? '<a class="banner-resultado__link" href="juego4.html">SIGUIENTE NIVEL →</a>' : '') +
             '<button type="button" id="btnReintentar">REINTENTAR</button>';
         document.getElementById("btnReintentar").addEventListener("click", iniciarPartida);
         registrar(gano ? "¡Victoria! Resististe el asalto caudillista." : "Derrota. El Unitario fue vencido.", null);

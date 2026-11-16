@@ -67,3 +67,9 @@ button{font:inherit}
 /* AVISO DE CAMBIO DE TURNO A PANTALLA COMPLETA */
 .aviso-turno--federal::after,.aviso-turno--jugador::after{content:"";position:absolute;inset:12px;border:1px solid rgba(199,154,85,.22);pointer-events:none}
 @media(max-width:600px){.aviso-turno{padding:24px;font-size:clamp(22px,8vw,38px);letter-spacing:.1em}}
+
+/* ---------- BOTÓN SALIR AZUL (imagen) ---------- */
+.btn-volver--img,.btn-volver--img:hover{min-width:0;height:auto;padding:0;border:0;background:none;line-height:0;filter:drop-shadow(0 3px 8px rgba(0,0,0,.6))}
+.btn-volver--img img{display:block;width:clamp(84px,6.6vw,112px);height:auto}
+.btn-volver--img:hover{transform:translateY(-2px);filter:drop-shadow(0 5px 10px rgba(0,0,0,.65)) brightness(1.15)}
+@media(max-width:700px){.btn-volver--img img{width:30vw;max-width:130px}}

@@ -14,11 +14,16 @@
     }
 
     // El volumen final de la música combina el slider "Música"
-    // con el slider "Volumen General" (0.0 a 1.0)
+    // con el slider "Volumen General" (0.0 a 1.0).
+    // audio.volume es LINEAL, pero el oído percibe el volumen de forma
+    // logarítmica: con una escala lineal, bajar el slider a la mitad casi
+    // no se nota. Por eso se eleva al cuadrado (curva perceptual), así
+    // cada movimiento del slider se escucha de verdad.
     function volumenMusicaFinal() {
         const general = obtenerValor(CLAVES.general, 80) / 100;
         const musica = obtenerValor(CLAVES.musica, 70) / 100;
-        return Math.min(1, Math.max(0, general * musica));
+        const nivel = Math.min(1, Math.max(0, general * musica));
+        return nivel * nivel;
     }
 
     // Restaura el punto exacto (en segundos) donde había quedado la
@@ -26,6 +31,7 @@
     // no vuelva a arrancar desde 0.
     function restaurarTiempoMusica(audio) {
         const guardado = parseFloat(localStorage.getItem(CLAVES.tiempoMusica));
+        tiempoRestaurado = true;
 
         if (!isNaN(guardado) && guardado > 0) {
             // Si la canción es más corta que el tiempo guardado (por el
@@ -39,8 +45,12 @@
 
     // Guarda el tiempo actual de la música. Se llama periódicamente y
     // justo antes de salir de la página (click en un link, cerrar, etc.)
+    let tiempoRestaurado = false;
+
     function guardarTiempoMusica(audio) {
-        if (audio && !isNaN(audio.currentTime)) {
+        // No se guarda hasta haber restaurado el tiempo anterior; si no,
+        // se pisaba el valor guardado con 0 antes de leerlo.
+        if (audio && tiempoRestaurado && !isNaN(audio.currentTime)) {
             localStorage.setItem(CLAVES.tiempoMusica, audio.currentTime);
         }
     }
@@ -78,12 +88,33 @@
         audio.loop = true;
         audio.volume = volumenMusicaFinal();
 
-        const intentarReproducir = () => {
-            audio.play().catch(() => {
-                // El navegador bloqueó el autoplay: se reintenta
-                // apenas el usuario haga clic en cualquier parte.
-            });
+        // Los navegadores bloquean el autoplay al cambiar de página hasta
+        // que el jugador interactúa. Se reintenta en CADA gesto (click,
+        // toque, tecla) hasta que la música efectivamente empieza.
+        const EVENTOS_GESTO = ['pointerdown', 'click', 'touchstart', 'keydown'];
+
+        const quitarGestos = () => {
+            EVENTOS_GESTO.forEach((e) => document.removeEventListener(e, alGesto, true));
         };
+
+        function alGesto() {
+            if (!audio.paused) { quitarGestos(); return; }
+            const p = audio.play();
+            if (p && p.then) {
+                p.then(quitarGestos).catch(() => { /* se reintenta en el próximo gesto */ });
+            }
+        }
+
+        const intentarReproducir = () => {
+            const p = audio.play();
+            if (p && p.catch) {
+                p.then(quitarGestos).catch(() => {
+                    // Autoplay bloqueado: queda esperando el primer gesto.
+                });
+            }
+        };
+
+        EVENTOS_GESTO.forEach((e) => document.addEventListener(e, alGesto, true));
 
         const arrancar = () => {
             restaurarTiempoMusica(audio);
@@ -91,21 +122,18 @@
         };
 
         // "loadedmetadata" asegura que audio.duration ya esté
-        // disponible antes de intentar restaurar el tiempo (si lo
-        // hacemos antes, currentTime podría no aplicarse bien en
-        // algunos navegadores).
+        // disponible antes de restaurar el tiempo.
         if (audio.readyState >= 1) {
-            // Los metadatos ya están cargados (puede pasar si el
-            // audio viene de caché).
             arrancar();
         } else {
             audio.addEventListener('loadedmetadata', arrancar, { once: true });
         }
 
-        document.addEventListener('click', function primerClick() {
-            intentarReproducir();
-            document.removeEventListener('click', primerClick);
-        }, { once: true });
+        // Si la pestaña vuelve a primer plano y la música quedó pausada
+        // por el navegador, se intenta retomar.
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && audio.paused) intentarReproducir();
+        });
 
         // Guarda el progreso cada 1 segundo mientras suena...
         setInterval(() => guardarTiempoMusica(audio), 1000);
@@ -220,6 +248,26 @@
         });
     }
 
+    // ==========================================================
+    // VENTANA DE CONFIGURACIÓN DENTRO DE LOS NIVELES (engranaje)
+    // ==========================================================
+    function inicializarConfigNivel() {
+        const boton = document.getElementById('btnConfigNivel');
+        const modal = document.getElementById('modalConfigNivel');
+        if (!boton || !modal) return;
+
+        const cerrar = document.getElementById('btnCerrarConfig');
+        const abrir = () => { modal.hidden = false; };
+        const ocultar = () => { modal.hidden = true; };
+
+        boton.addEventListener('click', abrir);
+        if (cerrar) cerrar.addEventListener('click', ocultar);
+        modal.addEventListener('click', (e) => { if (e.target === modal) ocultar(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.hidden) ocultar();
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const audio = iniciarMusica();
 
@@ -254,5 +302,6 @@
 
         inicializarPantallaCompleta();
         inicializarBotonSalir();
+        inicializarConfigNivel();
     });
 })();
