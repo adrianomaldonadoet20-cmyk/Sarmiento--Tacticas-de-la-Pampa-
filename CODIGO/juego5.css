@@ -198,3 +198,5 @@
     .hud__ayuda--img img{width:34vw}
     .hud .hud__config{width:11vw!important;height:11vw!important}
 }
+
+@media (min-aspect-ratio: 16/9) { .portada__imagen { object-fit: contain; } }

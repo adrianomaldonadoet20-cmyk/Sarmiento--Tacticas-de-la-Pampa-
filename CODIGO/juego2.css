@@ -73,3 +73,10 @@ button{font:inherit}
 .btn-volver--img img{display:block;width:clamp(84px,6.6vw,112px);height:auto}
 .btn-volver--img:hover{transform:translateY(-2px);filter:drop-shadow(0 5px 10px rgba(0,0,0,.65)) brightness(1.15)}
 @media(max-width:700px){.btn-volver--img img{width:30vw;max-width:130px}}
+
+/* Portadas: en pantallas más anchas que 16:9 (celular horizontal,
+   monitores ultra-wide) "cover" recortaba arriba y abajo el panel con el
+   texto que trae la imagen. Con "contain" se ve completa. */
+@media (min-aspect-ratio: 16/9) {
+    .portada__imagen { object-fit: contain; }
+}

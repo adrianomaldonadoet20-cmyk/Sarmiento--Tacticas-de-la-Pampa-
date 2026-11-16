@@ -347,7 +347,7 @@ body {
 
     .botones {
         width: 25%;
-        top: 22%;
+        top: 39%;
         /* Vuelve al 25% de PC, pero "top" cambia a 22% (más arriba)
            porque en landscape el alto disponible es menor y hay que
            reacomodar la posición vertical del bloque de botones. */

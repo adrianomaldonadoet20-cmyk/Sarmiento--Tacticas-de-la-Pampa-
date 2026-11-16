@@ -1519,3 +1519,35 @@ body.modal-abierto {
         font-size: 13px;
     }
 }
+
+
+/* Portada nivel 1 — ajustes responsive */
+@media (orientation: landscape) and (max-height: 520px) {
+    .portada__imagen { object-fit: contain; object-position: center; }
+    .portada__contenido { margin: 8px; padding: 10px 14px; gap: 6px; }
+    .portada__eyebrow, .portada__titulo { display: none; } /* ya vienen en la imagen */
+}
+@media (max-width: 600px) {
+    /* El título ya viene dibujado en la imagen móvil: solo queda el botón. */
+    .portada__eyebrow, .portada__titulo { display: none; }
+    .portada__contenido { background: none; backdrop-filter: none; padding: 0; }
+}
+
+/* Tutorial nivel 1 — que el engranaje no tape "Omitir" y que en celular
+   horizontal todo entre sin scroll (tablero a la izquierda, texto a la derecha). */
+.tutorial__cabecera { padding-right: 56px; }
+@media (orientation: landscape) and (max-height: 520px) {
+    .tutorial { padding: 8px 12px; }
+    .tutorial__contenedor {
+        width: min(98%, 900px);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: 14px;
+        row-gap: 6px;
+        align-items: center;
+    }
+    .tutorial__cabecera { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+    .tutorial__tablero { width: 100%; }
+    .tutorial__narracion { gap: 8px; padding: 10px 14px; }
+    .tutorial__texto { font-size: 12px; line-height: 1.35; }
+}

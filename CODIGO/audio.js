@@ -23,6 +23,9 @@
         const general = obtenerValor(CLAVES.general, 80) / 100;
         const musica = obtenerValor(CLAVES.musica, 70) / 100;
         const nivel = Math.min(1, Math.max(0, general * musica));
+        // Piso de silencio: con los sliders casi a cero el resultado es
+        // inaudible, así que se fuerza a 0 exacto (y se silencia, ver abajo).
+        if (nivel < 0.02) return 0;
         return nivel * nivel;
     }
 
@@ -86,7 +89,13 @@
         });
 
         audio.loop = true;
-        audio.volume = volumenMusicaFinal();
+        aplicarVolumen(audio);
+        // Se reaplica cuando el audio realmente arranca/carga.
+        ['loadedmetadata', 'play', 'playing'].forEach((ev) => {
+            audio.addEventListener(ev, () => aplicarVolumen(audio));
+        });
+        // Si cambia el volumen en otra pestaña/ventana del juego.
+        window.addEventListener('storage', () => actualizarVolumen(audio));
 
         // Los navegadores bloquean el autoplay al cambiar de página hasta
         // que el jugador interactúa. Se reintenta en CADA gesto (click,
@@ -99,6 +108,7 @@
 
         function alGesto() {
             if (!audio.paused) { quitarGestos(); return; }
+            if (volumenMusicaFinal() === 0) return;
             const p = audio.play();
             if (p && p.then) {
                 p.then(quitarGestos).catch(() => { /* se reintenta en el próximo gesto */ });
@@ -106,6 +116,7 @@
         }
 
         const intentarReproducir = () => {
+            if (volumenMusicaFinal() === 0) return; // volumen al mínimo: no suena
             const p = audio.play();
             if (p && p.catch) {
                 p.then(quitarGestos).catch(() => {
@@ -147,8 +158,25 @@
         return audio;
     }
 
+    // Aplica volumen y mute según los sliders (sin pausar ni reanudar).
+    function aplicarVolumen(audio) {
+        if (!audio) return;
+        const vol = volumenMusicaFinal();
+        audio.volume = vol;
+        audio.muted = vol === 0;
+    }
+
+    // Se usa al mover los sliders: con la perilla en el mínimo la
+    // música se CORTA (pausa); al subirla de nuevo, se reanuda.
     function actualizarVolumen(audio) {
-        if (audio) audio.volume = volumenMusicaFinal();
+        if (!audio) return;
+        aplicarVolumen(audio);
+        if (volumenMusicaFinal() === 0) {
+            if (!audio.paused) audio.pause();
+        } else if (audio.paused) {
+            const p = audio.play();
+            if (p && p.catch) p.catch(() => { /* se reanuda en el próximo gesto */ });
+        }
     }
 
     // ==========================================================

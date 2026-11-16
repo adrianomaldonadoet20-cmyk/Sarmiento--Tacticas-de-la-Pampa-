@@ -159,3 +159,24 @@
     background:linear-gradient(#8a5636,#5c3220);border:1px solid #d2a45e;color:#f8e6c4;font-weight:bold;letter-spacing:.1em;
     font-size:15px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.4);transition:.2s;cursor:pointer}
 .banner-resultado__link:hover{filter:brightness(1.18);transform:translateY(-1px)}
+
+/* Botón "‹ Volver" al menú en la portada de los niveles 1 y 2 */
+.portada__menu {
+    position: absolute;
+    top: clamp(10px, 2vw, 22px);
+    left: clamp(10px, 2vw, 22px);
+    z-index: 30;
+    color: #E6D8C3;
+    text-decoration: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(14px, 1.4vw, 16px);
+    font-weight: bold;
+    letter-spacing: 1px;
+    background-color: rgba(23, 34, 48, 0.75);
+    border: 1px solid #9A804B;
+    border-radius: 4px;
+    padding: 6px 14px;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+.portada__menu:hover,
+.portada__menu:focus-visible { transform: translateX(-4px); filter: brightness(1.3); }
